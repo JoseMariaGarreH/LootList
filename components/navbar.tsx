@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Logo from '@/components/ui/Logo';
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [estaAbierto, setEstaAbierto] = useState(false);
 
     return (
         <nav className="w-full">
@@ -15,12 +15,11 @@ export default function Navbar() {
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center">
-                        <Link href="/" className="flex items-center">
+                        <Link href="/" >
                             <Logo />
                         </Link>
                     </div>
 
-                    {/* Menú desktop - visible en pantallas medianas/grandes */}
                     <ul className="hidden md:flex space-x-4">
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Iniciar sesión</Link></li>
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Crear cuenta</Link></li>
@@ -30,14 +29,13 @@ export default function Navbar() {
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Sobre nosotros</Link></li>
                     </ul>
 
-                    {/* Botón hamburguesa - visible solo en móviles */}
                     <div className="md:hidden">
                         <button
-                            onClick={() => setIsOpen(!isOpen)}
+                            onClick={() => setEstaAbierto(!estaAbierto)}
                             className="text-[#1d3557] focus:outline-none"
                             aria-label="Toggle menu"
                         >
-                                {isOpen ? (
+                                {estaAbierto ? (
                                     <X
                                         className='w-6 h-6 text-[#1d3557]'
                                     >
@@ -51,8 +49,7 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Menú móvil - aparece al hacer clic en el botón hamburguesa */}
-                {isOpen && (
+                {estaAbierto && (
                     <ul className="md:hidden mt-2 space-y-2 pb-2">
                         <li><Link href="#" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Iniciar sesión</Link></li>
                         <li><Link href="#" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Crear cuenta</Link></li>
