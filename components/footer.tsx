@@ -1,0 +1,93 @@
+"use client"
+
+import Image from "next/image";
+import Link from "next/link";
+
+export default function Footer() {
+    return (
+        <footer className="w-full">
+            <div className="mx-auto max-w-6xl px-4 py-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between">
+                    <div className="flex flex-col items-start">
+                        <div className="flex flex-wrap gap-x-4 gap-y-1">
+                            <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Sobre nosotros</a>
+                            <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Juegos</a>
+                            <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Ayuda</a>
+                            <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Contacto</a>
+                        </div>
+                        <p className="text-[#a0a0a0] text-xs mt-1">© 2025 Tu Compañia. Todos los derechos reservados.</p>
+                    </div>
+
+                    {/* Redes sociales - Alineadas a la derecha */}
+                    <div className="flex gap-3 mt-3 sm:mt-0">
+                        <Link
+                            href="https://twitter.com"
+                            target="_blank"
+                            className="hover:opacity-75"
+                            aria-label="Twitter"
+                        >
+                            <Image
+                                alt="x"
+                                src="/x_light.svg"
+                                width={20}
+                                height={20}
+                            />
+                        </Link>
+                        <Link
+                            href="https://instagram.com"
+                            target="_blank"
+                            className="hover:opacity-75"
+                            aria-label="Instagram"
+                        >
+                            <Image
+                                alt="instagram"
+                                src="/instagram.svg"
+                                width={20}
+                                height={20}
+                            />
+                        </Link>
+                        <Link
+                            href="https://facebook.com"
+                            target="_blank"
+                            className="hover:opacity-75"
+                            aria-label="Facebook"
+                        >
+                            <Image
+                                alt="facebook"
+                                src="/facebook.svg"
+                                width={20}
+                                height={20}
+                            />
+                        </Link>
+                        <Link
+                            href="https://youtube.com"
+                            target="_blank"
+                            className="hover:opacity-75 mt-1"
+                            aria-label="YouTube"
+                        >
+                            <Image
+                                alt="youtube"
+                                src="/youtube.svg"
+                                width={20}
+                                height={20}
+                            />
+                        </Link>
+                        <Link
+                            href="https://tiktok.com"
+                            target="_blank"
+                            className="hover:opacity-75"
+                            aria-label="TikTok"
+                        >
+                            <Image
+                                alt="tiktok"
+                                src="/tiktok.svg"
+                                width={20}
+                                height={20}
+                            />
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    );
+}
