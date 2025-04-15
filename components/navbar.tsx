@@ -11,9 +11,9 @@ export default function Navbar() {
     return (
         <nav className="w-full">
             <div className="container mx-auto px-4 py-2">
-                {/* Contenedor principal */}
+
                 <div className="flex items-center justify-between">
-                    {/* Logo */}
+                    
                     <div className="flex items-center">
                         <Link href="/" >
                             <Logo />
@@ -24,8 +24,6 @@ export default function Navbar() {
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Iniciar sesión</Link></li>
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Crear cuenta</Link></li>
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
-                        <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Juegos</Link></li>
-                        <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Sobre nosotros</Link></li>
                     </ul>
 

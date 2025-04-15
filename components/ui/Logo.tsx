@@ -6,7 +6,7 @@ export default function Logo() {
             <Image
                 fill
                 alt="App Web Logo"
-                src="/next.svg"
+                src="/logo.svg"
             >
             </Image>
         </div>

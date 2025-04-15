@@ -7,18 +7,17 @@ export default function Footer() {
     return (
         <footer className="w-full">
             <div className="mx-auto max-w-6xl px-4 py-4">
-                <div className="flex flex-col sm:flex-row items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-center justify-center">
                     <div className="flex flex-col items-start">
                         <div className="flex flex-wrap gap-x-4 gap-y-1">
                             <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Sobre nosotros</a>
-                            <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Juegos</a>
                             <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Ayuda</a>
                             <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Contacto</a>
                         </div>
                         <p className="text-[#a0a0a0] text-xs mt-1">© 2025 . Todos los derechos reservados.</p>
                     </div>
 
-                    <div className="flex gap-3 mt-3 sm:mt-0">
+                    <div className="flex gap-3  mt-3 sm:mt-0 sm:ml-16">
                         <Link
                             href="https://twitter.com"
                             target="_blank"
