@@ -26,7 +26,7 @@ export default function Footer() {
                         >
                             <Image
                                 alt="x"
-                                src="/x_light.svg"
+                                src="/assets/x_light.svg"
                                 width={20}
                                 height={20}
                             />
@@ -39,7 +39,7 @@ export default function Footer() {
                         >
                             <Image
                                 alt="instagram"
-                                src="/instagram.svg"
+                                src="/assets/instagram.svg"
                                 width={20}
                                 height={20}
                             />
@@ -52,7 +52,7 @@ export default function Footer() {
                         >
                             <Image
                                 alt="facebook"
-                                src="/facebook.svg"
+                                src="/assets/facebook.svg"
                                 width={20}
                                 height={20}
                             />
@@ -65,7 +65,7 @@ export default function Footer() {
                         >
                             <Image
                                 alt="youtube"
-                                src="/youtube.svg"
+                                src="/assets/youtube.svg"
                                 width={20}
                                 height={20}
                             />
@@ -78,7 +78,7 @@ export default function Footer() {
                         >
                             <Image
                                 alt="tiktok"
-                                src="/tiktok.svg"
+                                src="/assets/tiktok.svg"
                                 width={20}
                                 height={20}
                             />
