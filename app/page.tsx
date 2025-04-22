@@ -1,3 +1,5 @@
+"use client"
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
@@ -90,7 +92,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="w-full max-w-[1500px] mx-auto bg-[#1d3557] m-6 rounded">
+      <div className="w-full max-w-[1870px] mx-auto bg-[#1d3557] m-6 rounded">
         <h1 className="text-center text-[#e63946] text-[26px] font-semibold mb-2">Funciones</h1>
         <div className="flex flex-wrap justify-center">
 

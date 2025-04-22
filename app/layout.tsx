@@ -6,7 +6,7 @@ export const metadata : Metadata = {
   title: "Aplicación web",
   description: "Aplicación web para presentación de proyecto de fin de grado",
   icons: {
-    icon: "/logo.svg",
+    icon: "/assets/logo.svg",
   },
 }
 
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${montserrat.className} antialiased`}>
+      <body className={`${montserrat.className} antialiase bg-[#457b9d]`}>
         {children}
       </body>
     </html>
