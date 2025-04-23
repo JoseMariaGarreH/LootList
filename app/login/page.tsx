@@ -17,9 +17,9 @@ export default function LoginPage() {
 
                 <h2 className="text-center text-xl font-semibold text-[#e63946] text-[26px]">Iniciar sesión</h2>
 
-                <form className="space-y-4">
+                <form className="space-y-4 border rounded border-[#a8dadc] shadow-lg p-5">
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-black">
+                        <label htmlFor="email" className="block text-sm font-light text-black">
                             Correo electrónico
                         </label>
                         <input
@@ -33,9 +33,14 @@ export default function LoginPage() {
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-black">
-                            Contraseña
-                        </label>
+                        <div className="flex justify-between">
+                            <label htmlFor="password" className="block text-sm font-light text-black">
+                                Contraseña
+                            </label>
+                            <Link href="#" className="text-[#a8dadc] text-sm">
+                                ¿Olvidaste tu contraseña?
+                            </Link>
+                        </div>
                         <input
                             type="password"
                             id="password"
@@ -48,20 +53,18 @@ export default function LoginPage() {
                     <div>
                         <button
                             type="submit"
-                            className="w-full py-2 px-4 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a8dadc] transition"
+                            className="w-full py-2 px-4 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
                         >
                             Iniciar sesión
                         </button>
                     </div>
                 </form>
 
-                <div className="flex justify-between text-sm text-black">
-                    <a href="#" className="hover:underline">
-                        Crear cuenta
-                    </a>
-                    <a href="#" className="hover:underline">
-                        ¿Olvidaste tu contraseña?
-                    </a>
+                <div className="flex justify-center text-sm border rounded border-[#a8dadc] shadow-lg p-5">
+                    <p className="mr-2 text-black font-light">¿No tienes una cuenta?</p>
+                    <Link href="/signup" className="text-[#a8dadc]  hover:underline">
+                        Create una cuenta
+                    </Link>
                 </div>
             </div>
         </div>
