@@ -19,7 +19,7 @@ export default function LoginPage() {
 
                 <form className="space-y-4 border rounded border-[#a8dadc] shadow-lg p-5">
                     <div>
-                        <label htmlFor="email" className="block text-sm font-light text-black">
+                        <label htmlFor="email_label" className="block text-sm font-light text-black">
                             Correo electrónico
                         </label>
                         <input
@@ -34,7 +34,7 @@ export default function LoginPage() {
 
                     <div>
                         <div className="flex justify-between">
-                            <label htmlFor="password" className="block text-sm font-light text-black">
+                            <label htmlFor="password_label" className="block text-sm font-light text-black">
                                 Contraseña
                             </label>
                             <Link href="#" className="text-[#a8dadc] text-sm">
@@ -63,7 +63,7 @@ export default function LoginPage() {
                 <div className="flex justify-center text-sm border rounded border-[#a8dadc] shadow-lg p-5">
                     <p className="mr-2 text-black font-light">¿No tienes una cuenta?</p>
                     <Link href="/signup" className="text-[#a8dadc]  hover:underline">
-                        Create una cuenta
+                        Crear cuenta
                     </Link>
                 </div>
             </div>

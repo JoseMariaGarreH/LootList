@@ -24,6 +24,8 @@ export default function Navbar() {
                         <li><Link href="/login" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Iniciar sesión</Link></li>
                         <li><Link href="/signup" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Crear cuenta</Link></li>
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
+                        <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
+                        <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Juegos</Link></li>
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Sobre nosotros</Link></li>
                     </ul>
 
@@ -52,6 +54,8 @@ export default function Navbar() {
                         <li><Link href="/login" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Iniciar sesión</Link></li>
                         <li><Link href="/signup" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Crear cuenta</Link></li>
                         <li><Link href="#" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
+                        <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
+                        <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Juegos</Link></li>
                         <li><Link href="#" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Sobre nosotros</Link></li>
                     </ul>
                 )}
