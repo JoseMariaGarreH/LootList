@@ -6,8 +6,10 @@ BEGIN TRAN;
 CREATE TABLE [dbo].[User] (
     [id] INT NOT NULL IDENTITY(1,1),
     [email] NVARCHAR(1000) NOT NULL,
+    [username] NVARCHAR(1000) NOT NULL,
     [name] NVARCHAR(1000) NOT NULL,
     [password] NVARCHAR(1000) NOT NULL,
+    [createdAt] DATETIME2 NOT NULL CONSTRAINT [User_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT [User_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
