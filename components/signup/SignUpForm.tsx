@@ -20,7 +20,7 @@ export default function UserForm() {
             return alert("Las contraseñas no coinciden");
         }
 
-        const respuesta = await fetch("/api/register", {
+        const respuesta = await fetch("/api/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

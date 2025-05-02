@@ -1,15 +1,15 @@
 import { Metadata } from "next";
 import { montserrat } from "../components/ui/font";
 import "./globals.css";
+import SessionWrapper from "@/components/menu/SessionWrapper";
 
 export const metadata : Metadata = {
-  title: "Aplicación web",
+  title: "LootList",
   description: "Aplicación web para presentación de proyecto de fin de grado",
   icons: {
     icon: "/assets/logo.svg",
   },
 }
-
 
 export default function RootLayout({
   children,
@@ -19,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} antialiase bg-[#457b9d]`}>
-        {children}
+        <SessionWrapper>
+          {children}
+        </SessionWrapper>
       </body>
     </html>
   );

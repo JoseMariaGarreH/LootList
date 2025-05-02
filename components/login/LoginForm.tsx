@@ -22,7 +22,7 @@ export default function LoginForm() {
         if (respuesta?.error) {
             setError(respuesta.error);
         } else {
-            router.push("/");
+            router.push("/profile");
         }
 
         console.log(respuesta);
