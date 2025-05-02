@@ -42,4 +42,7 @@ I installed:
 ```bash
 
 npm install lucide-react
+npm install react-hook-form
+npm install bcrypt
+npm install next-auth
 
