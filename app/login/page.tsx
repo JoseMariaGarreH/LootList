@@ -2,9 +2,20 @@
 
 import LoginForm from "@/components/login/LoginForm";
 import Logo from "@/components/ui/Logo";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+
+    const { data: session } = useSession();
+        const router = useRouter();
+    
+        if (session){
+            router.push("/profile");
+            return;
+        }
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#457b9d]">
             <div className="w-full max-w-md p-8 space-y-6">
