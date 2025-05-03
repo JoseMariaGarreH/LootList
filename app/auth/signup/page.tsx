@@ -1,23 +1,10 @@
 "use client"
 
 import SignUpForm from "@/components/signup/SignUpForm";
-import AjaxLoader from "@/components/ui/AjaxLoader";
 import Logo from "@/components/ui/Logo";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function SignupPage() {
-
-    const { data: session, status } = useSession();
-    const router = useRouter();
-
-    useEffect(() => {
-        if (session) {
-            router.push("/profile");
-        }
-    }, [session]);
 
     return (
         <>
