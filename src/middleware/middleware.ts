@@ -8,10 +8,10 @@ export async function middleware(request: NextRequest) {
 
     // Protección de rutas
     if (!token && pathname.startsWith('/profile')) {
-        return NextResponse.redirect(new URL('/login', request.url))
+        return NextResponse.redirect(new URL('/auth/login', request.url))
     }
 
-    if (token && (pathname.startsWith('/login') || pathname.startsWith('/register'))) {
+    if (token && (pathname.startsWith('/auth/login') || pathname.startsWith('/auth/signup'))) {
         return NextResponse.redirect(new URL('/profile', request.url))
     }
 

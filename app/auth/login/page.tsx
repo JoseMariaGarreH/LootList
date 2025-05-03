@@ -1,20 +1,23 @@
 "use client"
 
 import LoginForm from "@/components/login/LoginForm";
+import AjaxLoader from "@/components/ui/AjaxLoader";
 import Logo from "@/components/ui/Logo";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function LoginPage() {
 
-    const { data: session } = useSession();
-        const router = useRouter();
+    const { data: session, status } = useSession();
+    const router = useRouter();    
     
-        if (session){
+    useEffect(() => {
+        if (session) {
             router.push("/profile");
-            return;
         }
+    }, [session]);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#457b9d]">
@@ -29,11 +32,11 @@ export default function LoginPage() {
 
                 <h2 className="text-center text-xl font-semibold text-[#e63946] text-[26px]">Iniciar sesión</h2>
 
-                <LoginForm></LoginForm>
+                <LoginForm />
 
                 <div className="flex justify-center text-sm border rounded border-[#a8dadc] shadow-lg p-5">
                     <p className="mr-2 text-black font-light">¿No tienes una cuenta?</p>
-                    <Link href="/signup" className="text-[#a8dadc]  hover:underline">
+                    <Link href="/auth/signup" className="text-[#a8dadc]  hover:underline">
                         Crear cuenta
                     </Link>
                 </div>

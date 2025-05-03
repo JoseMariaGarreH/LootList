@@ -20,7 +20,7 @@ export default function UserForm() {
             return alert("Las contraseñas no coinciden");
         }
 
-        const respuesta = await fetch("/api/signup", {
+        const respuesta = await fetch("/api/auth/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -29,7 +29,7 @@ export default function UserForm() {
         })
 
         if (!respuesta.ok) {
-            router.push("/login");
+            router.push("/auth/login");
         }
 
         console.log(respuesta);

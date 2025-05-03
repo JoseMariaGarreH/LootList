@@ -3,7 +3,7 @@
 import Footer from "@/components/menu/Footer";
 import Navbar from "@/components/menu/Navbar";
 import Image from "next/image";
-import { roboto } from "@/components/ui/font";
+import { roboto } from "@/app/font";
 import { Heart, Eye, Star } from "lucide-react";
 
 export default function Home() {

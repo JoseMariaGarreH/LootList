@@ -1,10 +1,12 @@
+"use server"
+
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/src/lib/prisma";
 import bcrypt from "bcrypt";
 
 const authOptions = {
-    providers:[
+    providers: [
         CredentialsProvider({
             name: "Credentials",
             credentials: {
@@ -24,11 +26,18 @@ const authOptions = {
                     throw new Error("No existe el usuario");
                 }
 
-                const matchPassword = credentials?.password 
-                    ? await bcrypt.compare(credentials.password, userFound.password) 
-                    : false;
-                                                        
-                if (matchPassword) throw new Error("Contraseña incorrecta");
+                if (!credentials?.password) {
+                    throw new Error("No se proporcionó contraseña");
+                }
+
+                const matchPassword = await bcrypt.compare(
+                    credentials.password,
+                    userFound.password
+                );
+
+                if (!matchPassword) {
+                    throw new Error("Contraseña incorrecta");
+                }
 
                 return {
                     id: userFound.id.toString(),
@@ -38,8 +47,8 @@ const authOptions = {
             }
         })
     ],
-    pages:{
-        signIn: "/login",
+    pages: {
+        signIn: "/auth/login",
     }
 }
 

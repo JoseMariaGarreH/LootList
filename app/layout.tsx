@@ -1,7 +1,8 @@
 import { Metadata } from "next";
-import { montserrat } from "../components/ui/font";
+import { montserrat } from "./font";
 import "./globals.css";
 import SessionWrapper from "@/components/menu/SessionWrapper";
+import PageLoader from "@/components/ui/PageLoader";
 
 export const metadata : Metadata = {
   title: "LootList",
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.className} antialiase bg-[#457b9d]`}>
         <SessionWrapper>
-          {children}
+          <PageLoader>
+              {children}
+          </PageLoader>
         </SessionWrapper>
       </body>
     </html>
