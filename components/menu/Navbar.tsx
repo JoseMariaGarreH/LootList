@@ -24,14 +24,16 @@ export default function Navbar() {
 
                     <ul className="hidden md:flex space-x-4">
                         {(session) ? (
-                            <li><Link href="/profile" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
+                            <>
+                                <li><Link href="/profile" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
+                                <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
+                            </>
                         ) : (
                             <>
                                 <li><Link href="/auth/login" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Iniciar sesión</Link></li>
                                 <li><Link href="/auth/signup" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Crear cuenta</Link></li>
                             </>
                         )}
-                        <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Juegos</Link></li>
                         <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Sobre nosotros</Link></li>
                     </ul>
@@ -59,14 +61,17 @@ export default function Navbar() {
                 {estaAbierto && (
                     <ul className="md:hidden mt-2 space-y-2 pb-2">
                         {(session) ? (
-                            <li><Link href="/profile" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
+                            <>
+                                <li><Link href="/profile" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
+                                <li><Link href="#" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
+                            </>
                         ) : (
                             <>
                                 <li><Link href="/auth/login" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Iniciar sesión</Link></li>
                                 <li><Link href="/auth/signup" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Crear cuenta</Link></li>
                             </>
                         )}
-                        <li><Link href="#" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
+                        
                         <li><Link href="#" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Juegos</Link></li>
                         <li><Link href="#" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Sobre nosotros</Link></li>
                     </ul>

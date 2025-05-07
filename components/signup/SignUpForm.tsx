@@ -28,7 +28,7 @@ export default function UserForm() {
             body: JSON.stringify({ username, email, password })
         })
 
-        if (!respuesta.ok) {
+        if (respuesta.ok) {
             router.push("/auth/login");
         }
 
@@ -39,7 +39,7 @@ export default function UserForm() {
     return (
         <form onSubmit={onSubmit} className="space-y-4 border rounded border-[#a8dadc] shadow-lg p-5">
             <div>
-                <label htmlFor="username_label" className="block text-sm font-light text-black">
+                <label htmlFor="username_label" className="block text-sm font-semibold text-white">
                     Nombre de usuario
                 </label>
                 <input
@@ -69,7 +69,7 @@ export default function UserForm() {
             </div>
 
             <div>
-                <label htmlFor="email_label" className="block text-sm font-light text-black">
+                <label htmlFor="email_label" className="block text-sm font-semibold text-white">
                     Correo electrónico
                 </label>
                 <input
@@ -99,7 +99,7 @@ export default function UserForm() {
             </div>
 
             <div>
-                <label htmlFor="password_label" className="block text-sm font-light text-black">
+                <label htmlFor="password_label" className="block text-sm font-semibold text-white">
                     Contraseña
                 </label>
                 <input
@@ -128,7 +128,7 @@ export default function UserForm() {
             </div>
 
             <div>
-                <label htmlFor="confirmPassword_label" className="block text-sm font-light text-black">
+                <label htmlFor="confirmPassword_label" className="block text-sm font-semibold text-white">
                     Confirmar contraseña
                 </label>
                 <input

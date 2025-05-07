@@ -43,7 +43,7 @@ export default function LoginForm() {
                 }
 
                 <div>
-                    <label htmlFor="email_label" className="block text-sm font-light text-black">
+                    <label htmlFor="email_label" className="block text-sm font-semibold text-white">
                         Correo electrónico
                     </label>
                     <input
@@ -73,7 +73,7 @@ export default function LoginForm() {
 
                 <div>
                     <div className="flex justify-between">
-                        <label htmlFor="password_label" className="block text-sm font-light text-black">
+                        <label htmlFor="password_label" className="block text-sm font-semibold text-white">
                             Contraseña
                         </label>
                         <Link href="#" className="text-[#a8dadc] text-sm">

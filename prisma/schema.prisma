@@ -15,11 +15,25 @@ datasource db {
 }
 
 model Users {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String   @unique
-  password  String
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  username String    @unique
+  password String
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  updatedAt DateTime @updatedAt
+  profile  Profiles?
+}
+
+model Profiles {
+  id       Int     @id @default(autoincrement())
+  userId   Int     @unique
+  name     String   @default("")
+  firstSurname  String  @default("")
+  SecondSurname String  @default("")
+  bio      String  @default("")
+  location String  @default("")
+  pronoun  String  @default("")
+  profileImage String  @default("https://example.com/default-profile.png")
+  user     Users   @relation(fields: [userId], references: [id])
 }
 
