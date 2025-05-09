@@ -33,7 +33,7 @@ model Profiles {
   bio      String  @default("")
   location String  @default("")
   pronoun  String  @default("")
-  profileImage String  @default("https://example.com/default-profile.png")
+  profileImage String  @default("")
   user     Users   @relation(fields: [userId], references: [id])
 }
 

@@ -11,7 +11,7 @@ export default function Navbar() {
     const { data: session }  = useSession();
 
     return (
-        <nav className="w-full bg-[#457b9d]">
+        <nav className="w-full bg-[#457b9d] shadow-md">
             <div className="container mx-auto px-4 py-2">
 
                 <div className="flex items-center justify-between">
