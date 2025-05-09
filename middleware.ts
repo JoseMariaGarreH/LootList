@@ -6,7 +6,6 @@ export async function middleware(request: NextRequest) {
     const token = await getToken({ req: request })
     const { pathname } = request.nextUrl
 
-    // Protección de rutas
     if (!token && pathname.startsWith('/profile')) {
         return NextResponse.redirect(new URL('/', request.url))
     }

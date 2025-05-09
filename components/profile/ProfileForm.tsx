@@ -24,30 +24,28 @@ export default function ProfileForm() {
         }
     });
 
-    useEffect(() => {
-        const loadUserDetails = async () => {
-            if (session?.user?.email) {
-                console.log("Session User ID:", session);   
-                console.log("Session User Email:", session.user.email);
-                const response = await fetch(`/api/users/by-email/${session.user.email}`);
-                const data = await response.json();
-                console.log("User Data:", data);
-                if (data.user) {
-                    setValue('username', data.user.username);
-                    setValue('email', data.user.email);
-                    setValue('name', data.user.name ?? '');
-                    setValue('firstName', data.user.firstName ?? '');
-                    setValue('secondName', data.user.secondName ?? '');
-                    setValue('location', data.user.location ?? '');
-                    setValue('bio', data.user.bio ?? '');
-                    setValue('pronoun', data.user.pronoun ?? 'any');
-                    setValue('favoriteGames', data.user.favoriteGames ?? []);
-                    setValue('profileImage', data.user.profileImage ?? null);
-                }
-            }
-        };
-        loadUserDetails();
-    }, [session]);
+    // useEffect(() => {
+    //     const loadUserDetails = async () => {
+    //         if (session?.user?.email) {
+    //             const response = await fetch(`/api/users/by-email/${session.user.email}`);
+    //             const data = await response.json();
+    //             console.log("User Data:", data);
+    //             if (data.user) {
+    //                 setValue('username', data.user.username);
+    //                 setValue('email', data.user.email);
+    //                 setValue('name', data.user.name ?? '');
+    //                 setValue('firstName', data.user.firstName ?? '');
+    //                 setValue('secondName', data.user.secondName ?? '');
+    //                 setValue('location', data.user.location ?? '');
+    //                 setValue('bio', data.user.bio ?? '');
+    //                 setValue('pronoun', data.user.pronoun ?? 'any');
+    //                 setValue('favoriteGames', data.user.favoriteGames ?? []);
+    //                 setValue('profileImage', data.user.profileImage ?? null);
+    //             }
+    //         }
+    //     };
+    //     loadUserDetails();
+    // }, [session]);
 
 
     const onSubmit = handleSubmit( async (data) => {

@@ -16,7 +16,7 @@
     "next-auth": "^4.24.11",
     "react": "^18",
     "react-dom": "^18",
-    "react-hook-form": "^7.56.1"
+    "react-hook-form": "^7.56.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[Profiles] (
     [bio] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_bio_df] DEFAULT '',
     [location] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_location_df] DEFAULT '',
     [pronoun] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_pronoun_df] DEFAULT '',
-    [profileImage] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_profileImage_df] DEFAULT 'https://example.com/default-profile.png',
+    [profileImage] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_profileImage_df] DEFAULT '',
     CONSTRAINT [Profiles_pkey] PRIMARY KEY CLUSTERED ([id]),
     CONSTRAINT [Profiles_userId_key] UNIQUE NONCLUSTERED ([userId])
 );
