@@ -122,7 +122,7 @@ export default function Home() {
 
           <div className="w-full md:w-1/3 order-4 md:order-5 p-4">
             <h4 className="text-center text-[16px] text-[#f1faee]">
-            Lleva la cuenta de todos los juegos que has jugado. Asignando en cada juego una etiqueta los juegos que has jugado.
+              Lleva la cuenta de todos los juegos que has jugado. Asignando en cada juego una etiqueta los juegos que has jugado.
             </h4>
           </div>
 

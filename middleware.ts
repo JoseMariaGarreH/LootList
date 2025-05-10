@@ -6,12 +6,12 @@ export async function middleware(request: NextRequest) {
     const token = await getToken({ req: request })
     const { pathname } = request.nextUrl
 
-    if (!token && pathname.startsWith('/profile')) {
-        return NextResponse.redirect(new URL('/', request.url))
+    if (!token && (pathname.startsWith('/settings/profile') || pathname.startsWith('/settings/password'))) {
+        return NextResponse.redirect(new URL('/', request.url));
     }
 
     if (token && (pathname.startsWith('/auth/login') || pathname.startsWith('/auth/signup'))) {
-        return NextResponse.redirect(new URL('/profile', request.url))
+        return NextResponse.redirect(new URL('/settings/profile', request.url))
     }
 
     return NextResponse.next()
@@ -19,5 +19,10 @@ export async function middleware(request: NextRequest) {
 
 
 export const config = {
-    matcher: ["/profile","/auth/login","/auth/signup"],
+    matcher: [
+        '/settings/profile',
+        '/settings/password',
+        '/auth/login',
+        '/auth/signup',
+    ],
 }

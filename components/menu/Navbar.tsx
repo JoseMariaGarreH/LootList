@@ -25,7 +25,7 @@ export default function Navbar() {
                     <ul className="hidden md:flex space-x-4">
                         {(session) ? (
                             <>
-                                <li><Link href="/profile" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
+                                <li><Link href="/settings/profile" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
                                 <li><Link href="#" className="text-[#a8dadc] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
                             </>
                         ) : (
@@ -62,7 +62,7 @@ export default function Navbar() {
                     <ul className="md:hidden mt-2 space-y-2 pb-2">
                         {(session) ? (
                             <>
-                                <li><Link href="/profile" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
+                                <li><Link href="/settings/profile" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
                                 <li><Link href="#" className="block py-2 text-[#a8dadc] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
                             </>
                         ) : (

@@ -29,7 +29,7 @@ model Profiles {
   userId        Int    @unique
   name          String @default("")
   firstSurname  String @default("")
-  SecondSurname String @default("")
+  secondSurname String @default("")
   bio           String @default("")
   location      String @default("")
   pronoun       String @default("")

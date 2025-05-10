@@ -5,12 +5,12 @@ import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginForm() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const router = useRouter();
-    const [error, setError] = useState("");    
 
     const onSubmit = handleSubmit(async (data) => {
 
@@ -21,9 +21,9 @@ export default function LoginForm() {
         })
 
         if (respuesta?.error) {
-            setError(respuesta.error);
+            toast.error("Error al iniciar sesión");
         } else {
-            router.push("/profile");
+            router.push("/settings/profile");
         }
 
         console.log(respuesta);
@@ -31,17 +31,8 @@ export default function LoginForm() {
 
     return (
         <>
+            <Toaster position="top-left" reverseOrder={false} />
             <form onSubmit={onSubmit} className="space-y-4 border rounded border-[#a8dadc] shadow-lg p-5">
-
-                {
-                    error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                            <strong className="font-bold">Error: </strong>
-                            <span className="block sm:inline">{error}</span>
-                        </div>
-                    )
-                }
-
                 <div>
                     <label htmlFor="email_label" className="block text-sm font-semibold text-white">
                         Correo electrónico
@@ -64,7 +55,7 @@ export default function LoginForm() {
 
                     {
                         errors.email && (
-                            <span className="text-red-500 text-xs mt-1">
+                            <span className="text-red-800 text-xs font-semibold mt-2">
                                 {typeof errors.email?.message === "string" && errors.email.message}
                             </span>
                         )
@@ -76,7 +67,7 @@ export default function LoginForm() {
                         <label htmlFor="password_label" className="block text-sm font-semibold text-white">
                             Contraseña
                         </label>
-                        <Link href="#" className="text-[#a8dadc] text-sm">
+                        <Link href="/settings/password" className="text-[#a8dadc] text-sm">
                             ¿Olvidaste tu contraseña?
                         </Link>
                     </div>
@@ -98,7 +89,7 @@ export default function LoginForm() {
 
                     {
                         errors.password && (
-                            <span className="text-red-500 text-xs mt-1">
+                            <span className="text-red-800 text-xs font-semibold mt-2">
                                 {typeof errors.password?.message === "string" && errors.password.message}
                             </span>
                         )
