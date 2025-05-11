@@ -14,7 +14,7 @@ export default function Footer() {
                             <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Ayuda</a>
                             <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Contacto</a>
                         </div>
-                        <p className="text-[#a0a0a0] text-xs mt-1">© 2025 . Todos los derechos reservados.</p>
+                        <p className="text-[#a0a0a0] text-xs mt-1">© LootList hecho por gente que hace lo que le gusta.</p>
                     </div>
 
                     <div className="flex gap-3  mt-3 sm:mt-0 sm:ml-16">

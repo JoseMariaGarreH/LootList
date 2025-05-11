@@ -32,6 +32,8 @@ export default function UserForm() {
 
         if (respuesta.ok) {
             router.push("/auth/login");
+        } else {
+            toast.error("Error al registrarse, el nombre de usuario o el correo ya están en uso");
         }
 
         console.log(respuesta);

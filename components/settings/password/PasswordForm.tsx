@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import VentanaEmergente from "../../ui/VentanaEmergente";
+import AuthPopup from "../../ui/AuthPopup";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function PasswordForm() {
@@ -94,7 +94,7 @@ export default function PasswordForm() {
     return (
         <>
             <Toaster position="top-left" reverseOrder={false} />
-            <form onSubmit={onSubmit} className="space-y-4">
+            <form onSubmit={onSubmit} className="space-y-4 mb-[228px]">
                 <div>
                     <label htmlFor="current-password-label" className="text-white block text-sm font-semibold">Contraseña actual</label>
                     <input
@@ -142,14 +142,14 @@ export default function PasswordForm() {
                 </button>
             </form>
 
-            <VentanaEmergente
+            <AuthPopup
                 abierto={seAbreVentana}
                 cerrado={handleCancel}
                 confirmar={handleConfirm}
                 titulo="Confirmación"
             >
                 <p>{mensajeVentana}</p>
-            </VentanaEmergente>
+            </AuthPopup>
         </>
     );
 }

@@ -3,13 +3,13 @@
 import { useForm } from 'react-hook-form';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import VentanaEmergente from '../../ui/VentanaEmergente';
+import AuthPopup from '../../ui/AuthPopup';
 import toast, { Toaster } from 'react-hot-toast';
+import { Pencil } from 'lucide-react';
+import ProfileAuthPopup from './ProfileAuthPopup';
 
 export default function ProfileForm() {
     const { data: session } = useSession();
-    const router = useRouter();
     const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
         defaultValues: {
             username: '',
@@ -25,13 +25,18 @@ export default function ProfileForm() {
         }
     });
 
-    const [seAbreVentana, setSeAbreVentana] = useState(false);
+    const [seAbreVentanaProfile, setSeAbreVentanaProfile] = useState(false);
+    const [seAbreVentanaConfirmacion, setSeAbreVentanaConfirmacion] = useState(false);
     const [mensajeVentana, setMensajeVentana] = useState('');
+    const [campoEditable, setCampoEditable] = useState<'username' | 'email' | null>(null);
+    const [modificarUsername, setModificarUsername] = useState(false);
+    const [modificarEmail, setModificarEmail] = useState(false);
 
     useEffect(() => {
         const loadUserDetails = async () => {
             if (session?.user?.email) {
                 try {
+                    
                     const responseUser = await fetch(`/api/users/by-email/${session.user.email}`, {
                         method: 'GET',
                         headers: {
@@ -40,11 +45,10 @@ export default function ProfileForm() {
                     });
 
                     if (!responseUser.ok) {
-                        throw new Error('Error al cargar los datos del usuario');
+                        toast.error("Error al cargar los datos del usuario");
                     }
 
                     const dataUser = await responseUser.json();
-                    console.log("User Data:", dataUser);
 
                     const reponseProfile = await fetch(`/api/profile/${session.user.email}`, {
                         method: 'GET',
@@ -54,7 +58,7 @@ export default function ProfileForm() {
                     });
 
                     if (!reponseProfile.ok) {
-                        throw new Error('Error al cargar los datos del perfil');
+                        console.error("Error al cargar el perfil del usuario");
                     }
 
                     const dataProfile = await reponseProfile.json();
@@ -71,6 +75,7 @@ export default function ProfileForm() {
                         setValue('favoriteGames', dataProfile.favoriteGames ?? []);
                         setValue('profileImage', dataProfile.profileImage ?? null);
                     }
+
                 } catch (error) {
                     console.error(error);
                 }
@@ -80,14 +85,58 @@ export default function ProfileForm() {
         loadUserDetails();
     }, [session, setValue]);
 
+    const handleEditClick = (campo: 'username' | 'email') => {
+        setCampoEditable(campo);
+        setSeAbreVentanaProfile(true); // Abre solo ProfileVentanaEmergente
+    };
+
+    const handleAuthenticate = async (password: string) => {
+        if (!campoEditable) return;
+
+        try {
+            // Verificar la contraseña
+            const verifyResponse = await fetch(`/api/users/verify-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: session?.user?.email,
+                    password,
+                }),
+            });
+
+            if (!verifyResponse.ok) {
+                toast.error("La contraseña es incorrecta");
+                return;
+            }
+
+            if (campoEditable === 'username') {
+                setModificarUsername(true);
+            } else if (campoEditable === 'email') {
+                setModificarEmail(true);
+            }
+
+            setCampoEditable(null);
+            setSeAbreVentanaProfile(false); // Cierra ProfileVentanaEmergente
+        } catch (error) {
+            console.error(`Error al actualizar el ${campoEditable}:`, error);
+            toast.error(`Error al actualizar el ${campoEditable}`);
+        }
+    };
+
+    const handleCancelProfile = () => {
+        setSeAbreVentanaProfile(false); // Cierra ProfileVentanaEmergente
+        setCampoEditable(null);
+    };
+
     const onSubmit = handleSubmit(() => {
         setMensajeVentana('¿Estás seguro de que quieres guardar tus datos?');
-        setSeAbreVentana(true);
-        // La confirmación se maneja en la ventana emergente
+        setSeAbreVentanaConfirmacion(true); // Abre solo VentanaEmergente
     });
 
     const handleConfirm = async () => {
-        setSeAbreVentana(false);
+        setSeAbreVentanaConfirmacion(false); // Cierra VentanaEmergente
 
         const data = getValues();
         const {
@@ -100,8 +149,6 @@ export default function ProfileForm() {
             location,
             pronoun,
         } = data;
-
-        console.log("Form Data:", data);
 
         try {
             const response = await fetch(`/api/profile/${email}`, {
@@ -132,8 +179,8 @@ export default function ProfileForm() {
         }
     };
 
-    const handleCancel = () => {
-        setSeAbreVentana(false);
+    const handleCancelConfirmacion = () => {
+        setSeAbreVentanaConfirmacion(false); // Cierra VentanaEmergente
     };
 
     return (
@@ -143,7 +190,10 @@ export default function ProfileForm() {
                 <h1 className="text-2xl font-bold">Perfil</h1>
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <label htmlFor="username" className="block text-sm font-semibold">Username</label>
+                        <div className='flex justify-between'>
+                            <label htmlFor="username" className="block text-sm font-semibold">Username</label>
+                            <Pencil onClick={() => handleEditClick('username')} className='w-5 h-5 mb-1' ></Pencil>
+                        </div>
                         <input
                             id="username"
                             {...register('username', {
@@ -153,11 +203,15 @@ export default function ProfileForm() {
                                 },
                             })}
                             className="w-full px-4 py-2 rounded transition-all bg-[#1d3557] text-[#F1FAEE] focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none"
+                            disabled={!modificarUsername}
                         />
                         {errors.username && <span className="text-red-800 text-xs font-semibold mt-2">{errors.username.message}</span>}
                     </div>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-semibold">Correo electrónico</label>
+                        <div className='flex justify-between'>
+                            <label htmlFor="email" className="block text-sm font-semibold">Correo electrónico</label>
+                            <Pencil onClick={() => handleEditClick('email')} className='w-5 h-5 mb-1' ></Pencil>
+                        </div>
                         <input
                             id="email"
                             type="email"
@@ -168,7 +222,7 @@ export default function ProfileForm() {
                                 },
                             })}
                             className="w-full px-4 py-2 rounded transition-all bg-[#1d3557] text-[#F1FAEE] focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none"
-                            disabled
+                            disabled={!modificarEmail}
                         />
                         {errors.email && <span className="text-red-800 text-xs font-semibold mt-2">{errors.email.message}</span>}
                     </div>
@@ -239,14 +293,19 @@ export default function ProfileForm() {
                     Guardar cambios
                 </button>
             </form>
-            <VentanaEmergente
-                abierto={seAbreVentana}
-                cerrado={handleCancel}
+            <ProfileAuthPopup
+                onClose={handleCancelProfile}
+                onAuthenticate={handleAuthenticate}
+                open={seAbreVentanaProfile && campoEditable !== null}
+            />
+            <AuthPopup
+                abierto={seAbreVentanaConfirmacion}
+                cerrado={handleCancelConfirmacion}
                 confirmar={handleConfirm}
                 titulo="Confirmación"
             >
                 <p>{mensajeVentana}</p>
-            </VentanaEmergente>
+            </AuthPopup>
         </>
     );
 }
