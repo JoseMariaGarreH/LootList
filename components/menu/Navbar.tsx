@@ -18,7 +18,10 @@ export default function Navbar() {
                     
                     <div className="flex items-center">
                         <Link href="/" >
-                            <Logo />
+                            <div className="flex items-center">
+                                <Logo />
+                                <h1 className='ml-2 text-2xl text-white font-bold' >LootList</h1>
+                            </div>
                         </Link>
                     </div>
 
