@@ -13,7 +13,7 @@ export default function LoginForm() {
     const router = useRouter();
 
     const onSubmit = handleSubmit(async (data) => {
-
+        
         const respuesta = await signIn("credentials",{
             email: data.email,
             password: data.password,
@@ -23,7 +23,7 @@ export default function LoginForm() {
         if (respuesta?.error) {
             toast.error("Error al iniciar sesión");
         } else {
-            router.push("/settings/profile");
+            router.push("/");
         }
 
         console.log(respuesta);

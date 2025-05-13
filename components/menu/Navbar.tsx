@@ -1,82 +1,222 @@
-"use client"
+"use client";
 
-import { useState } from 'react';
-import { AlignJustify, X } from 'lucide-react'
-import Link from 'next/link';
-import Logo from '@/components/ui/Logo';
-import { useSession } from 'next-auth/react';
+import { useState } from "react";
+import { AlignJustify, X, ChevronDown } from "lucide-react";
+import Link from "next/link";
+import Logo from "@/components/ui/Logo";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
     const [estaAbierto, setEstaAbierto] = useState(false);
-    const { data: session }  = useSession();
+    const [dropdownAbierto, setDropdownAbierto] = useState(false);
+    const { data: session } = useSession();
 
     return (
         <nav className="w-full bg-[#e63946] shadow-md">
             <div className="container mx-auto px-4 py-2">
-
                 <div className="flex items-center justify-between">
-                    
                     <div className="flex items-center">
-                        <Link href="/" >
+                        <Link href="/">
                             <div className="flex items-center">
                                 <Logo />
-                                <h1 className='ml-2 text-2xl text-white font-bold' >LootList</h1>
+                                <h1 className="ml-2 text-2xl text-white font-bold">LootList</h1>
                             </div>
                         </Link>
                     </div>
 
-                    <ul className="hidden md:flex space-x-4">
-                        {(session) ? (
+                    <ul className="hidden md:flex space-x-4 items-center">
+                        {session ? (
                             <>
-                                <li><Link href="/settings/profile" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
-                                <li><Link href="#" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
+                                <li className="relative">
+                                    <button
+                                        onClick={() => setDropdownAbierto(!dropdownAbierto)}
+                                        className="flex items-center text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                                    >
+                                        {session.user?.username}
+                                        <ChevronDown className="ml-1 w-4 h-4" />
+                                    </button>
+                                    {dropdownAbierto && (
+                                        <ul
+                                            className="absolute right-0 mt-2 w-48 bg-[#1d3557] rounded shadow-lg z-50"
+                                            style={{ top: "100%" }}
+                                        >
+                                            <li>
+                                                <Link
+                                                    href={`/${session.user?.username}`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Perfil
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href="/"
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Menu
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href="/settings/profile"
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Configuración
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    )}
+                                </li>
+                                <li>
+                                    <Link
+                                        href="#"
+                                        className="text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                                    >
+                                        Biblioteca
+                                    </Link>
+                                </li>
                             </>
                         ) : (
                             <>
-                                <li><Link href="/auth/login" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">Iniciar sesión</Link></li>
-                                <li><Link href="/auth/signup" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">Crear cuenta</Link></li>
+                                <li>
+                                    <Link
+                                        href="/auth/login"
+                                        className="text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                                    >
+                                        Iniciar sesión
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/auth/signup"
+                                        className="text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                                    >
+                                        Crear cuenta
+                                    </Link>
+                                </li>
                             </>
                         )}
-                        <li><Link href="#" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">Juegos</Link></li>
-                        <li><Link href="#" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">Sobre nosotros</Link></li>
+                        <li>
+                            <Link
+                                href="#"
+                                className="text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                            >
+                                Juegos
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="#"
+                                className="text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                            >
+                                Sobre nosotros
+                            </Link>
+                        </li>
                     </ul>
 
+                    {/* Mobile Menu Toggle */}
                     <div className="md:hidden">
                         <button
                             onClick={() => setEstaAbierto(!estaAbierto)}
                             className="text-[#1d3557] focus:outline-none"
                             aria-label="Toggle menu"
                         >
-                                {estaAbierto ? (
-                                    <X
-                                        className='w-6 h-6 text-[#1d3557]'
-                                    >
-                                    </X>
-                                ) : (
-                                    <AlignJustify
-                                        className='w-6 h-6 text-[#1d3557]'
-                                    ></AlignJustify>
-                                )}
+                            {estaAbierto ? (
+                                <X className="w-6 h-6 text-[#1d3557]" />
+                            ) : (
+                                <AlignJustify className="w-6 h-6 text-[#1d3557]" />
+                            )}
                         </button>
                     </div>
                 </div>
 
+                {/* Mobile Menu */}
                 {estaAbierto && (
                     <ul className="md:hidden mt-2 space-y-2 pb-2">
-                        {(session) ? (
+                        {session ? (
                             <>
-                                <li><Link href="/settings/profile" className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors">Perfil</Link></li>
-                                <li><Link href="#" className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors">Biblioteca</Link></li>
+                                <li>
+                                    <button
+                                        onClick={() => setDropdownAbierto(!dropdownAbierto)}
+                                        className="flex items-center justify-between w-full text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                                    >
+                                        {session.user?.username}
+                                        <ChevronDown className="ml-1 w-4 h-4" />
+                                    </button>
+                                    {dropdownAbierto && (
+                                        <ul className="mt-2 space-y-2 bg-[#1d3557] rounded shadow-lg">
+                                            <li>
+                                                <Link
+                                                    href={`/${session.user?.username}`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Perfil
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href="/"
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Menu
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href="/settings/profile"
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Configuración
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    )}
+                                </li>
+                                <li>
+                                    <Link
+                                        href="#"
+                                        className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                                    >
+                                        Biblioteca
+                                    </Link>
+                                </li>
                             </>
                         ) : (
                             <>
-                                <li><Link href="/auth/login" className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors">Iniciar sesión</Link></li>
-                                <li><Link href="/auth/signup" className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors">Crear cuenta</Link></li>
+                                <li>
+                                    <Link
+                                        href="/auth/login"
+                                        className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                                    >
+                                        Iniciar sesión
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/auth/signup"
+                                        className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                                    >
+                                        Crear cuenta
+                                    </Link>
+                                </li>
                             </>
                         )}
-                        
-                        <li><Link href="#" className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors">Juegos</Link></li>
-                        <li><Link href="#" className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors">Sobre nosotros</Link></li>
+                        <li>
+                            <Link
+                                href="#"
+                                className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                            >
+                                Juegos
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="#"
+                                className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                            >
+                                Sobre nosotros
+                            </Link>
+                        </li>
                     </ul>
                 )}
             </div>

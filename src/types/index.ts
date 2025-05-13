@@ -7,7 +7,6 @@ export type User = Users & {
     password: string;
     createdAt: Date;
     updatedAt: Date;
-    profile?: Profile | null;
 }
 
 export type Profile = Profiles & {
@@ -19,5 +18,4 @@ export type Profile = Profiles & {
     bio: string;
     location: string;
     pronoun: string;
-    profileImage: string;
 }

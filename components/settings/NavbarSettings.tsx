@@ -9,7 +9,7 @@ export default function NavbarSettings() {
 
     return (
         <>
-            <div className="max-w-4xl mx-auto mt-2 p-4 bg-[#1d3557] shadow-md rounded-sm">
+            <div className="max-w-4xl mx-auto mt-8 p-4 bg-[#1d3557] shadow-md rounded-sm">
                 <div className="flex flex-col space-y-4">
                     <div className="border-b border-gray-200">
                         <nav className="flex space-x-8">

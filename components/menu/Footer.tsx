@@ -18,7 +18,7 @@ export default function Footer() {
                         <p className="text-[#a0a0a0] text-xs mt-1">© LootList hecho por gente que hace lo que le gusta.</p>
                     </div>
 
-                    <div className="flex gap-3  mt-3 sm:mt-0 sm:ml-16">
+                    <div className="flex gap-3 mt-3 sm:mt-0 sm:ml-16">
                         <Link
                             href="https://twitter.com"
                             target="_blank"

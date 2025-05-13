@@ -1,7 +1,25 @@
+"use server"
+
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/src/lib/prisma";
 import bcrypt from "bcrypt";
+
+declare module "next-auth" {
+    interface Session {
+        user: {
+            id: string;
+            email: string;
+            username: string;
+        };
+    }
+
+    interface User {
+        id: string;
+        email: string;
+        username: string;
+    }
+}
 
 const authOptions: NextAuthOptions = {
     providers: [
@@ -12,6 +30,7 @@ const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
+                // Buscar el usuario en la base de datos
                 const userFound = await prisma.users.findUnique({
                     where: { email: credentials?.email }
                 });
@@ -19,14 +38,45 @@ const authOptions: NextAuthOptions = {
                 if (!userFound) throw new Error("No existe el usuario");
                 if (!credentials?.password) throw new Error("No se proporcionó contraseña");
 
+                // Verificar la contraseña
                 const matchPassword = await bcrypt.compare(credentials.password, userFound.password);
                 if (!matchPassword) throw new Error("Contraseña incorrecta");
 
-                return { id: userFound.id.toString(), username: userFound.username, email: userFound.email };
+                // Retornar el usuario con los campos necesarios
+                return {
+                    id: userFound.id.toString(),
+                    email: userFound.email,
+                    username: userFound.username
+                };
             }
         })
     ],
-    pages: { signIn: "/auth/login" },
+    callbacks: {
+        async session({ session, token }) {
+            // Agregar el username al objeto session.user
+            if (token) {
+                session.user = {
+                    id: token.id as string,
+                    email: token.email as string,
+                    username: token.username as string
+                };
+            }
+            return session;
+        },
+        async jwt({ token, user }) {
+            // Agregar el username al token JWT
+            if (user) {
+                token.id = user.id;
+                token.email = user.email;
+                token.username = user.username; 
+            }
+            return token;
+        }
+    },
+    pages: {
+        signIn: "/auth/login",
+    },
+    secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);

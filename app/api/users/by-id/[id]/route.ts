@@ -1,3 +1,5 @@
+"use server"
+
 import { prisma } from "@/src/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
