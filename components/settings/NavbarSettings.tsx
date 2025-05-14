@@ -34,9 +34,9 @@ export default function NavbarSettings() {
                                 CONTRASEÑA
                             </Link>
                             <Link
-                                href="/profile/photo"
+                                href="/settings/avatar"
                                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                                    pathname === "/profile/photo"
+                                    pathname === "/settings/avatar"
                                         ? "text-[#e63946] border-[#e63946]"
                                         : "text-[#a8dadc] border-transparent hover:text-[#e63946]"
                                 }`}

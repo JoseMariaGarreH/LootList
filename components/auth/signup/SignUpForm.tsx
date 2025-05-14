@@ -168,7 +168,7 @@ export default function UserForm() {
                 <div>
                     <button
                         type="submit"
-                        className="w-full py-2 px-4 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
+                        className="w-full py-2 px-4 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a8dadc] transition"
                     >
                         Registrarse
                     </button>

@@ -53,7 +53,7 @@ export default function Navbar() {
                                                     href="/"
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
-                                                    Menu
+                                                    Inicio
                                                 </Link>
                                             </li>
                                             <li>
@@ -158,7 +158,7 @@ export default function Navbar() {
                                                     href="/"
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
-                                                    Menu
+                                                    Inicio
                                                 </Link>
                                             </li>
                                             <li>

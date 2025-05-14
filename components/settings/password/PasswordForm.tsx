@@ -94,7 +94,7 @@ export default function PasswordForm() {
     return (
         <>
             <Toaster position="top-left" reverseOrder={false} />
-            <form onSubmit={onSubmit} className="space-y-4 mb-[228px]">
+            <form onSubmit={onSubmit} className="space-y-4">
                 <div>
                     <label htmlFor="current-password-label" className="text-white block text-sm font-semibold">Contraseña actual</label>
                     <input
@@ -136,7 +136,7 @@ export default function PasswordForm() {
 
                 <button
                     type="submit"
-                    className="w-full py-2 px-4 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
+                    className="w-full py-2 px-4 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a8dadc] transition"
                 >
                     Actualizar contraseña
                 </button>
