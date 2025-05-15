@@ -112,7 +112,7 @@ export default function AvatarUploader() {
                     </div>
                 ) : (
                     // Si no hay imagen, muestra el mensaje para cargar una
-                    <p>Coloca una imagen</p>
+                    <p>Arrastrar y soltar una imagen</p>
                 )}
             </div>
             {/* Input de archivo oculto */}
