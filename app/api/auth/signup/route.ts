@@ -6,6 +6,7 @@ import bcrypt from "bcrypt"
 
 export async function POST(request: Request) {
     try {
+        const DEFAULT_AVATAR_URL = ""
         const { username, email, password } = await request.json()
 
         const userEmailFound = await prisma.users.findUnique({
@@ -54,7 +55,7 @@ export async function POST(request: Request) {
                     bio: "",
                     location: "",
                     pronoun: "",
-                    profileImage: "",
+                    profileImage: DEFAULT_AVATAR_URL,
                 },
             });
 

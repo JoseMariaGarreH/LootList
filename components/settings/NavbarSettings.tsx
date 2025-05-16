@@ -58,7 +58,7 @@ export default function NavbarSettings() {
 
                     <button
                         onClick={() => signOut()}
-                        className="px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600"
+                        className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-red-600 text-sm text-white font-medium rounded transition"
                     >
                         Desconectar cuenta
                     </button>
