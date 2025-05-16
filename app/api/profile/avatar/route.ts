@@ -9,7 +9,7 @@ import { prisma } from '@/src/lib/prisma';
 cloudinary.config({ 
     cloud_name: 'dyczqjlew', 
     api_key: '388522924768573', 
-    api_secret: 'OnJd78B-4af0HQrAd7zbIa7N11w' // Click 'View API Keys' above to copy your API secret
+    api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
 });
 
 export async function POST(request: Request) {
