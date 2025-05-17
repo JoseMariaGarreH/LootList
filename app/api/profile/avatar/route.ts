@@ -1,15 +1,11 @@
 import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
-import path from 'path';
 import { v2 as cloudinary } from 'cloudinary';
-import { error } from 'console';
 import { prisma } from '@/src/lib/prisma';
 
-// Configuration
 cloudinary.config({ 
     cloud_name: 'dyczqjlew', 
     api_key: '388522924768573', 
-    api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 export async function POST(request: Request) {
@@ -27,9 +23,6 @@ export async function POST(request: Request) {
     const bytes = await image.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // const filePath = path.join(process.cwd(), 'public', image.name);
-    // guardar en un archivo
-    // await writeFile(filePath, buffer)
     const response = await new Promise<any>((resolve, reject) => {
         cloudinary.uploader.upload_stream({}, (error, result) => {
             if (error) {
@@ -43,8 +36,8 @@ export async function POST(request: Request) {
     console.log('response', response);
     // guardar en la base de datos
     const userIdValue = data.get('userId');
-    if (!userIdValue || typeof userIdValue !== 'string' || isNaN(Number(userIdValue))) {
-        return NextResponse.json('Invalid or missing userId', {
+    if (!userIdValue) {
+        return NextResponse.json('No se ha recibido el id del usuario', {
             status: 400
         });
     }

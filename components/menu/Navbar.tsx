@@ -5,11 +5,15 @@ import { AlignJustify, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 export default function Navbar() {
     const [estaAbierto, setEstaAbierto] = useState(false);
     const [dropdownAbierto, setDropdownAbierto] = useState(false);
+
     const { data: session } = useSession();
+    const profile = useUserProfile();
 
     return (
         <nav className="w-full bg-[#e63946] shadow-md">
@@ -32,6 +36,15 @@ export default function Navbar() {
                                         onClick={() => setDropdownAbierto(!dropdownAbierto)}
                                         className="flex items-center text-[#f1faee] hover:text-[#1d3557] transition-colors"
                                     >
+                                        {profile?.profileImage && (
+                                            <Image
+                                                src={profile.profileImage}
+                                                width={30}
+                                                height={30}
+                                                alt="Avatar"
+                                                className="rounded-full object-cover mx-2"
+                                            />
+                                        )}
                                         {session.user?.username}
                                         <ChevronDown className="ml-1 w-4 h-4" />
                                     </button>

@@ -1,11 +1,15 @@
 import Image from "next/image";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Cropper from "react-easy-crop";
 import { getCroppedImg } from "@/src/utils/cropImage";
 import styles from "@/app/home.module.css"
 import { useSession } from "next-auth/react";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 export default function AvatarUploader() {
+
+    const { data: session } = useSession();
+    const profile = useUserProfile();
 
     const [preview, setPreview] = useState<string | null>(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -14,8 +18,18 @@ export default function AvatarUploader() {
     const [croppedImage, setCroppedImage] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [imageName, setImageName] = useState<string | null>(null);
+    const [hasInteracted, setHasInteracted] = useState(false);
 
-    const { data: session } = useSession();
+
+    useEffect(() => {
+        if (
+            profile?.profileImage &&
+            !hasInteracted
+        ) {
+            setPreview(profile.profileImage);
+            setCroppedImage(profile.profileImage);
+        }
+    }, [profile?.profileImage, preview, croppedImage]);
 
     // Maneja el cambio de archivo (cuando el usuario selecciona una imagen)
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,7 +105,6 @@ export default function AvatarUploader() {
                     });
 
                     const data = await res.json();
-                    console.log(data);
                     setPreview(data.url);
                 }}
             >
@@ -100,7 +113,9 @@ export default function AvatarUploader() {
                     <div
                         className="relative w-full h-96 border-2 border-dashed border-gray-600 rounded-md flex items-center justify-center cursor-pointer"
                         onClick={() => {
-                            if (!preview && !croppedImage) fileInputRef.current?.click();
+                            if (!preview && !croppedImage) {
+                                fileInputRef.current?.click();
+                            }
                         }}
                         onDrop={handleDrop}
                         onDragOver={handleDragOver}
@@ -172,6 +187,7 @@ export default function AvatarUploader() {
                             type="button"
                             className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-green-600 text-sm text-white font-medium rounded transition"
                             onClick={() => {
+                                setHasInteracted(true);
                                 setPreview(null);
                                 setCroppedImage(null);
                                 setCrop({ x: 0, y: 0 });
@@ -185,6 +201,7 @@ export default function AvatarUploader() {
                             type="button"
                             className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-red-600 text-sm text-white font-medium rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
                             onClick={() => {
+                                setHasInteracted(true);
                                 setPreview(null);
                                 setCroppedImage(null);
                                 setCrop({ x: 0, y: 0 });
