@@ -6,6 +6,7 @@ import Cropper from "react-easy-crop";
 import { getCroppedImg } from "@/src/utils/cropImage";
 import { useSession } from "next-auth/react";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { useAvatar } from "@/hooks/useAvatar";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function AvatarUploader() {
@@ -14,6 +15,7 @@ export default function AvatarUploader() {
 
     const { data: session } = useSession();
     const profile = useUserProfile();
+    const { updateAvatar, deleteAvatar, loading } = useAvatar(session?.user?.id ?? "");
 
     const [preview, setPreview] = useState<string | null>(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -32,31 +34,15 @@ export default function AvatarUploader() {
         }
     }, [profile?.profileImage, hasInteracted]);
 
-    const handleDeleteAvatar = useCallback(async () => {
-        if (!session) return;
-
+    const handleDeleteAvatar = async () => {
         setPreview(DEFAULT_AVATAR_URL);
         setCroppedImage(DEFAULT_AVATAR_URL);
-        try {
-            const formData = new FormData();
-            formData.append("userId", session.user.id);
-            formData.append("image", DEFAULT_AVATAR_URL);
-
-            const res = await fetch("/api/profile/avatar", {
-                method: "PUT",
-                body: formData,
-            });
-
-            const data = await res.json();
-
-            setPreview(data.url);
-            setCroppedImage(data.url);
-
-            toast.success("Avatar borrado correctamente");
-        } catch (error) {
-            toast.error("Error al borrar el avatar");
-        }
-    }, [session]);
+        setImageName(null);
+        setCrop({ x: 0, y: 0 });
+        setZoom(1);
+        setCroppedAreaPixels(null);
+        await deleteAvatar(DEFAULT_AVATAR_URL);
+    };
 
     // Maneja el cambio de archivo (cuando el usuario selecciona una imagen)
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,48 +71,19 @@ export default function AvatarUploader() {
         try {
             const croppedImg = await getCroppedImg(preview, croppedAreaPixels);
 
+            let fileToUpload: File | string;
             if (croppedImg instanceof Blob) {
-                const reader = new FileReader();
-                reader.onloadend = async () => {
-                    setCroppedImage(reader.result as string);
+                fileToUpload = new File([croppedImg], imageName, { type: croppedImg.type });
+            } else {
+                // Si por alguna razón getCroppedImg devuelve string (no debería), se maneja igual
+                fileToUpload = croppedImg;
+            }
 
-                    // Subida directa al backend
-                    const formData = new FormData();
-                    const file = new File([croppedImg], imageName, { type: croppedImg.type });
-                    formData.append("image", file);
-                    formData.append("userId", session?.user.id);
+            const url = await updateAvatar(fileToUpload);
 
-                    const res = await fetch("/api/profile/avatar", {
-                        method: "PUT",
-                        body: formData,
-                    });
-
-                    const data = await res.json();
-                    setPreview(data.url);
-                    setCroppedImage(data.url);
-                    toast.success("Avatar actualizado correctamente");
-                };
-                reader.readAsDataURL(croppedImg);
-            } else if (typeof croppedImg === "string") {
-                setCroppedImage(croppedImg);
-
-                // Subida directa al backend
-                const res = await fetch(croppedImg);
-                const blob = await res.blob();
-                const formData = new FormData();
-                const file = new File([blob], imageName, { type: blob.type });
-                formData.append("image", file);
-                formData.append("userId", session?.user.id);
-
-                const uploadRes = await fetch("/api/profile/avatar", {
-                    method: "POST",
-                    body: formData,
-                });
-
-                const data = await uploadRes.json();
-                setPreview(data.url);
-                setCroppedImage(data.url);
-                toast.success("Avatar actualizado correctamente");
+            if (url) {
+                setPreview(url);
+                setCroppedImage(url);
             }
         } catch (error) {
             toast.error("Error al guardar el avatar");
