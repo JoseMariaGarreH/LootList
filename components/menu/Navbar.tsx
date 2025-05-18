@@ -13,7 +13,7 @@ export default function Navbar() {
     const [dropdownAbierto, setDropdownAbierto] = useState(false);
 
     const { data: session } = useSession();
-    const profile = useUserProfile();
+    const profile  = useUserProfile();
 
     return (
         <nav className="w-full bg-[#e63946] shadow-md">

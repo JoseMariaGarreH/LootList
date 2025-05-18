@@ -1,12 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import { useState, useRef, useCallback, useEffect } from "react";
 import Cropper from "react-easy-crop";
 import { getCroppedImg } from "@/src/utils/cropImage";
-import styles from "@/app/home.module.css"
 import { useSession } from "next-auth/react";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function AvatarUploader() {
+
+    const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg";
 
     const { data: session } = useSession();
     const profile = useUserProfile();
@@ -22,25 +26,51 @@ export default function AvatarUploader() {
 
 
     useEffect(() => {
-        if (
-            profile?.profileImage &&
-            !hasInteracted
-        ) {
+        if (profile?.profileImage && !hasInteracted) {
             setPreview(profile.profileImage);
             setCroppedImage(profile.profileImage);
         }
-    }, [profile?.profileImage, preview, croppedImage]);
+    }, [profile?.profileImage, hasInteracted]);
+
+    const handleDeleteAvatar = useCallback(async () => {
+        if (!session) return;
+
+        setPreview(DEFAULT_AVATAR_URL);
+        setCroppedImage(DEFAULT_AVATAR_URL);
+        try {
+            const formData = new FormData();
+            formData.append("userId", session.user.id);
+            formData.append("image", DEFAULT_AVATAR_URL);
+
+            const res = await fetch("/api/profile/avatar", {
+                method: "PUT",
+                body: formData,
+            });
+
+            const data = await res.json();
+
+            setPreview(data.url);
+            setCroppedImage(data.url);
+
+            toast.success("Avatar borrado correctamente");
+        } catch (error) {
+            toast.error("Error al borrar el avatar");
+        }
+    }, [session]);
 
     // Maneja el cambio de archivo (cuando el usuario selecciona una imagen)
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
+        if (file && file.type.startsWith("image/")) {
+            setHasInteracted(true);
             setImageName(file.name);
+            setCroppedImage(null);
             const reader = new FileReader();
             reader.onloadend = () => setPreview(reader.result as string);
             reader.readAsDataURL(file);
+        } else if (file) {
+            toast.error("El archivo seleccionado no es una imagen válida.");
         }
-        // Limpia el valor del input para permitir seleccionar el mismo archivo de nuevo
         e.target.value = "";
     };
 
@@ -49,27 +79,72 @@ export default function AvatarUploader() {
         setCroppedAreaPixels(croppedAreaPixels);
     }, []);
 
-    // Genera la imagen recortada usando los datos del cropper
+    // Cambia showCroppedImage para subir el imagen al confirmar el recorte
     const showCroppedImage = useCallback(async () => {
-        if (!preview || !croppedAreaPixels) return;
-        const croppedImg = await getCroppedImg(preview, croppedAreaPixels);
-        if (croppedImg instanceof Blob) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setCroppedImage(reader.result as string);
-            };
-            reader.readAsDataURL(croppedImg);
-        } else if (typeof croppedImg === "string") {
-            setCroppedImage(croppedImg);
-        }
-    }, [preview, croppedAreaPixels]);
+        if (!preview || !croppedAreaPixels || !imageName || !session) return;
+        try {
+            const croppedImg = await getCroppedImg(preview, croppedAreaPixels);
 
-    // Maneja el drop de archivos (drag & drop)
+            if (croppedImg instanceof Blob) {
+                const reader = new FileReader();
+                reader.onloadend = async () => {
+                    setCroppedImage(reader.result as string);
+
+                    // Subida directa al backend
+                    const formData = new FormData();
+                    const file = new File([croppedImg], imageName, { type: croppedImg.type });
+                    formData.append("image", file);
+                    formData.append("userId", session?.user.id);
+
+                    const res = await fetch("/api/profile/avatar", {
+                        method: "PUT",
+                        body: formData,
+                    });
+
+                    const data = await res.json();
+                    setPreview(data.url);
+                    setCroppedImage(data.url);
+                    toast.success("Avatar actualizado correctamente");
+                };
+                reader.readAsDataURL(croppedImg);
+            } else if (typeof croppedImg === "string") {
+                setCroppedImage(croppedImg);
+
+                // Subida directa al backend
+                const res = await fetch(croppedImg);
+                const blob = await res.blob();
+                const formData = new FormData();
+                const file = new File([blob], imageName, { type: blob.type });
+                formData.append("image", file);
+                formData.append("userId", session?.user.id);
+
+                const uploadRes = await fetch("/api/profile/avatar", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const data = await uploadRes.json();
+                setPreview(data.url);
+                setCroppedImage(data.url);
+                toast.success("Avatar actualizado correctamente");
+            }
+        } catch (error) {
+            toast.error("Error al guardar el avatar");
+        }
+    }, [preview, croppedAreaPixels, imageName, session]);
+
+    // Maneja el lanzamiento de archivos hacia el área de recorte
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
         const file = e.dataTransfer.files?.[0];
         if (file && file.type.startsWith("image/")) {
+            setHasInteracted(true);
+            setPreview(null);
+            setCroppedImage(null);
+            setCrop({ x: 0, y: 0 });
+            setZoom(1);
+            setImageName(file.name);
             const reader = new FileReader();
             reader.onloadend = () => setPreview(reader.result as string);
             reader.readAsDataURL(file);
@@ -84,143 +159,112 @@ export default function AvatarUploader() {
 
     return (
         <>
-            <form
-                onSubmit={async (e) => {
-                    e.preventDefault();
-
-                    const formData = new FormData();
-                    // Convierte la imagen recortada a un blob y lo agrega al FormData
-                    if (croppedImage && imageName && session) {
-                        const res = await fetch(croppedImage);
-                        const blob = await res.blob();
-                        const file = new File([blob], imageName, { type: blob.type });
-                        formData.append("image", file);
-                        formData.append("userId", session?.user.id);
-                    }
-
-                    if (!croppedImage) return;
-                    const res = await fetch("/api/profile/avatar", {
-                        method: "POST",
-                        body: formData,
-                    });
-
-                    const data = await res.json();
-                    setPreview(data.url);
-                }}
-            >
-                <div className="max-w-2xl mt-32 mb-32 mx-auto p-6 bg-[#1d3557] rounded-lg shadow-lg text-white">
-                    <h2 className="text-xl font-semibold mb-4">Avatar</h2>
-                    <div
-                        className="relative w-full h-96 border-2 border-dashed border-gray-600 rounded-md flex items-center justify-center cursor-pointer"
-                        onClick={() => {
-                            if (!preview && !croppedImage) {
-                                fileInputRef.current?.click();
-                            }
-                        }}
-                        onDrop={handleDrop}
-                        onDragOver={handleDragOver}
-                    >
-                        {/* Si hay preview pero no imagen recortada, muestra el cropper */}
-                        {preview && !croppedImage ? (
-                            <div className="flex flex-col items-center gap-4">
-                                <div className="w-60 h-60 rounded-full overflow-hidden relative flex items-center justify-center border-4 border-white shadow-lg">
-                                    <Cropper
-                                        image={preview}
-                                        crop={crop}
-                                        zoom={zoom}
-                                        aspect={1}
-                                        cropShape="round"
-                                        showGrid={false}
-                                        onCropChange={setCrop}
-                                        onZoomChange={setZoom}
-                                        onCropComplete={onCropComplete}
-                                        classes={{
-                                            containerClassName: styles.cropperContainer,
-                                            cropAreaClassName: styles.cropperArea,
-                                        }}
-                                    />
-                                </div>
-                                {/* Barra de zoom */}
-                                <input
-                                    type="range"
-                                    min={1}
-                                    max={3}
-                                    step={0.01}
-                                    value={zoom}
-                                    onChange={(e) => setZoom(Number(e.target.value))}
-                                    className="w-48 h-2 rounded bg-[#a8dadc] outline-none accent-[#a8dadc] transition"
+            <Toaster position="top-left" reverseOrder={false} />
+            <div className="max-w-2xl mt-32 mb-32 mx-auto p-6 bg-[#1d3557] rounded-lg shadow-lg text-white">
+                <h2 className="text-xl font-semibold mb-4">Avatar</h2>
+                <div
+                    className="relative w-full h-96 border-2 border-dashed border-gray-600 rounded-md flex items-center justify-center cursor-pointer"
+                    onClick={() => {
+                        if (!preview && !croppedImage) {
+                            fileInputRef.current?.click();
+                        }
+                    }}
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                >
+                    {/* Si hay preview pero no imagen recortada, muestra el cropper */}
+                    {preview && !croppedImage ? (
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="w-60 h-60 rounded-full overflow-hidden relative flex items-center justify-center border-4 border-white shadow-lg">
+                                <Cropper
+                                    image={preview}
+                                    crop={crop}
+                                    zoom={zoom}
+                                    aspect={1}
+                                    cropShape="round"
+                                    showGrid={false}
+                                    onCropChange={setCrop}
+                                    onZoomChange={setZoom}
+                                    onCropComplete={onCropComplete}
                                 />
+                            </div>
+                            <input
+                                type="range"
+                                min={1}
+                                max={3}
+                                step={0.01}
+                                value={zoom}
+                                onChange={(e) => setZoom(Number(e.target.value))}
+                                className="w-48 h-2 rounded bg-[#a8dadc] outline-none accent-[#a8dadc] transition"
+                            />
+                            <div className="flex gap-2">
                                 <button
-                                    className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-green-600 text-sm text-white font-medium rounded transition"
+                                    className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-blue-600 text-sm text-white font-medium rounded transition"
                                     onClick={showCroppedImage}
                                 >
-                                    Confirmar recorte
+                                    Guardar imagen
+                                </button>
+                                <button
+                                    className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-red-600 text-sm text-white font-medium rounded transition"
+                                    onClick={() => {
+                                        setPreview(profile?.profileImage || DEFAULT_AVATAR_URL);
+                                        setCroppedImage(profile?.profileImage || DEFAULT_AVATAR_URL);
+                                        setImageName(null);
+                                        setCrop({ x: 0, y: 0 });
+                                        setZoom(1);
+                                        setCroppedAreaPixels(null);
+                                    }}
+                                >
+                                    Cancelar
                                 </button>
                             </div>
-                        ) : croppedImage ? (
-                            <div className="flex flex-col items-center gap-4">
-                                <div className="rounded-full overflow-hidden flex items-center justify-center bg-[linear-gradient(45deg,#e0e0e0_25%,transparent_25%,transparent_75%,#e0e0e0_75%,#e0e0e0),linear-gradient(-45deg,#f8f8f8_25%,transparent_25%,transparent_75%,#f8f8f8_75%,#f8f8f8)] bg-[length:24px_24px] border-4 border-white shadow-lg">
-                                    <Image
-                                        src={croppedImage}
-                                        width={180}
-                                        height={180}
-                                        alt="Avatar Preview"
-                                        className="object-cover"
-                                    />
-                                </div>
+                        </div>
+                    ) : croppedImage ? (
+                        // ...existing code...
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="rounded-full overflow-hidden flex items-center justify-center bg-[linear-gradient(45deg,#e0e0e0_25%,transparent_25%,transparent_75%,#e0e0e0_75%,#e0e0e0),linear-gradient(-45deg,#f8f8f8_25%,transparent_25%,transparent_75%,#f8f8f8_75%,#f8f8f8)] bg-[length:24px_24px] border-4 border-white shadow-lg">
+                                <Image
+                                    src={croppedImage}
+                                    width={180}
+                                    height={180}
+                                    alt="Avatar Preview"
+                                    className="object-cover"
+                                />
                             </div>
-                        ) : (
-                            // Si no hay imagen, muestra el mensaje para cargar una
-                            <p>Arrastrar y soltar una imagen</p>
-                        )}
-                    </div>
-                    {/* Input de archivo oculto */}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        ref={fileInputRef}
-                        className="hidden"
-                    />
-                    <div className="flex gap-4 mt-4 justify-center">
-                        <button
-                            type="button"
-                            className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-green-600 text-sm text-white font-medium rounded transition"
-                            onClick={() => {
-                                setHasInteracted(true);
-                                setPreview(null);
-                                setCroppedImage(null);
-                                setCrop({ x: 0, y: 0 });
-                                setZoom(1);
-                                fileInputRef.current?.click();
-                            }}
-                        >
-                            Seleccionar nueva imagen
-                        </button>
-                        <button
-                            type="button"
-                            className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-red-600 text-sm text-white font-medium rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
-                            onClick={() => {
-                                setHasInteracted(true);
-                                setPreview(null);
-                                setCroppedImage(null);
-                                setCrop({ x: 0, y: 0 });
-                                setZoom(1);
-                            }}
-                            disabled={!preview && !croppedImage}
-                        >
-                            Borrar imagen
-                        </button>
-                        <button
-                            type="submit"
-                            className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-blue-600 text-sm text-white font-medium rounded transition"
-                            disabled={!croppedImage}
-                        >
-                            Guardar avatar
-                        </button>
-                    </div>
+                        </div>
+                    ) : (
+                        // Si no hay imagen, muestra el mensaje para cargar una
+                        <p>Arrastrar y soltar una imagen</p>
+                    )}
                 </div>
-            </form>
+                {/* Input de archivo oculto */}
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                    className="hidden"
+                />
+                <div className="flex gap-4 mt-4 justify-center">
+                    <button
+                        type="button"
+                        className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-green-600 text-sm text-white font-medium rounded transition"
+                        onClick={() => {
+                            fileInputRef.current?.click();
+                        }}
+                    >
+                        Seleccionar nueva imagen
+                    </button>
+                    <button
+                        type="button"
+                        className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-red-600 text-sm text-white font-medium rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={handleDeleteAvatar}
+                        disabled={!preview && !croppedImage}
+                    >
+                        Borrar imagen
+                    </button>
+                </div>
+            </div >
         </>
     );
 }
