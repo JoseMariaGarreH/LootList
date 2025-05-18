@@ -82,7 +82,7 @@ export default function Navbar() {
                                 </li>
                                 <li>
                                     <Link
-                                        href="#"
+                                        href={`/${session.user?.username}/library`}
                                         className="text-[#f1faee] hover:text-[#1d3557] transition-colors"
                                     >
                                         Biblioteca
@@ -111,7 +111,7 @@ export default function Navbar() {
                         )}
                         <li>
                             <Link
-                                href="#"
+                                href="/games"
                                 className="text-[#f1faee] hover:text-[#1d3557] transition-colors"
                             >
                                 Juegos
@@ -119,7 +119,7 @@ export default function Navbar() {
                         </li>
                         <li>
                             <Link
-                                href="#"
+                                href="/about"
                                 className="text-[#f1faee] hover:text-[#1d3557] transition-colors"
                             >
                                 Sobre nosotros
@@ -127,7 +127,6 @@ export default function Navbar() {
                         </li>
                     </ul>
 
-                    {/* Mobile Menu Toggle */}
                     <div className="md:hidden">
                         <button
                             onClick={() => setEstaAbierto(!estaAbierto)}
@@ -143,7 +142,6 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
                 {estaAbierto && (
                     <ul className="md:hidden mt-2 space-y-2 pb-2">
                         {session ? (
@@ -187,7 +185,7 @@ export default function Navbar() {
                                 </li>
                                 <li>
                                     <Link
-                                        href="#"
+                                        href={`/${session.user?.username}/library`}
                                         className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors"
                                     >
                                         Biblioteca
@@ -216,7 +214,7 @@ export default function Navbar() {
                         )}
                         <li>
                             <Link
-                                href="#"
+                                href="/games"
                                 className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors"
                             >
                                 Juegos
@@ -224,7 +222,7 @@ export default function Navbar() {
                         </li>
                         <li>
                             <Link
-                                href="#"
+                                href="/about"
                                 className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors"
                             >
                                 Sobre nosotros

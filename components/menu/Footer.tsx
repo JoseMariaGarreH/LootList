@@ -10,12 +10,11 @@ export default function Footer() {
                 <div className="flex flex-col sm:flex-row items-center justify-center">
                     <div className="flex flex-col items-start">
                         <div className="flex flex-wrap gap-x-4 gap-y-1">
-                            <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Sobre nosotros</a>
-                            <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Ayuda</a>
-                            <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Contacto</a>
-                            <a href="#" className="text-[#a8dadc] hover:text-white font-medium text-sm">Juegos</a>
+                            <a href="/about" className="text-[#a8dadc] hover:text-white font-medium text-sm">Sobre nosotros</a>
+                            <a href="/help" className="text-[#a8dadc] hover:text-white font-medium text-sm">Ayuda</a>
+                            <a href="/games" className="text-[#a8dadc] hover:text-white font-medium text-sm">Juegos</a>
                         </div>
-                        <p className="text-[#a0a0a0] text-xs mt-1">© LootList hecho por gente que hace lo que le gusta.</p>
+                        <p className="text-[#a0a0a0] text-xs mt-1">©LootList hecho por gente que hace lo que le gusta.</p>
                     </div>
 
                     <div className="flex gap-3 mt-3 sm:mt-0 sm:ml-16">

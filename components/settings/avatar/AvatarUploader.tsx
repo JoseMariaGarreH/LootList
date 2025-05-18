@@ -9,9 +9,9 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { useAvatar } from "@/hooks/useAvatar";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function AvatarUploader() {
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg";
 
-    const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg";
+export default function AvatarUploader() {
 
     const { data: session } = useSession();
     const profile = useUserProfile();

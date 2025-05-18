@@ -4,9 +4,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 import bcrypt from "bcrypt"
 
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg"
+
 export async function POST(request: Request) {
     try {
-        const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg"
         const { username, email, password } = await request.json()
 
         const userEmailFound = await prisma.users.findUnique({
