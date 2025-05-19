@@ -177,7 +177,6 @@ export default function AvatarUploader() {
                             </div>
                         </div>
                     ) : croppedImage ? (
-                        // ...existing code...
                         <div className="flex flex-col items-center gap-4">
                             <div className="rounded-full overflow-hidden flex items-center justify-center bg-[linear-gradient(45deg,#e0e0e0_25%,transparent_25%,transparent_75%,#e0e0e0_75%,#e0e0e0),linear-gradient(-45deg,#f8f8f8_25%,transparent_25%,transparent_75%,#f8f8f8_75%,#f8f8f8)] bg-[length:24px_24px] border-4 border-white shadow-lg">
                                 <Image
