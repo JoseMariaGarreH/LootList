@@ -3,6 +3,8 @@
 import { prisma } from "@/src/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
+
 
 interface Params {
     params: {
@@ -79,8 +81,36 @@ export async function DELETE(request : Request, { params }: Params){
     }
 }
 
-export function PUT(){
-    return NextResponse.json({
-        message: "updating a single user"
-    })
-}  
+export async function PUT(request: Request, { params }: Params) {
+    try {
+        const { password } = await request.json();
+
+        console.log("password", password);
+
+        // Hashear la nueva contraseña
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const updateUserPassword = await prisma.users.update({
+            where: {
+                id: Number(params.id),
+            },
+            data: {
+                password: hashedPassword, // Guardar la contraseña hasheada
+            },
+        });
+
+        console.log("updateUserPassword", updateUserPassword);
+
+        return NextResponse.json(updateUserPassword);
+    } catch (error) {
+        console.error("Error al actualizar la contraseña:", error);
+        return NextResponse.json(
+            {
+                message: "Error al actualizar la contraseña",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+}

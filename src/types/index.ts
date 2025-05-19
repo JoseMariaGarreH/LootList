@@ -1,4 +1,4 @@
-export type User = {
+export interface User {
     id: number;
     email: string;
     username: string;
@@ -7,7 +7,7 @@ export type User = {
     updatedAt: Date;
 }
 
-export type Profile = {
+export interface Profile {
     id: number;
     userId: number;
     name: string;
@@ -16,4 +16,14 @@ export type Profile = {
     bio: string;
     location: string;
     pronoun: string;
+}
+
+export interface Games {
+    id: number;
+    title: string;
+    description: string;
+    platform: string;
+    releaseDate: Date;
+    imageUrl: string;
+    profiles?: Profile[];
 }

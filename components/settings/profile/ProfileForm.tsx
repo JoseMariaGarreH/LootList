@@ -37,7 +37,7 @@ export default function ProfileForm() {
             if (session?.user?.email) {
                 try {
                     
-                    const responseUser = await fetch(`/api/users/by-email/${session.user.email}`, {
+                    const responseUser = await fetch(`/api/users/${session.user.id}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',

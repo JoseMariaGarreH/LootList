@@ -58,7 +58,7 @@ export default function PasswordForm() {
             }
 
             // Actualizar la contraseña
-            const updateResponse = await fetch(`/api/users/by-email/${session?.user?.email}`, {
+            const updateResponse = await fetch(`/api/users/${session?.user?.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

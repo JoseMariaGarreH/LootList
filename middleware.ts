@@ -6,8 +6,6 @@ export async function middleware(request: NextRequest) {
     const token = await getToken({ req: request })
     const { pathname } = request.nextUrl
 
-    // Solo pide login en rutas tipo /[username] que no sean reservadas
-
     const publicPaths = [
         "/settings", 
         "/auth", 

@@ -2,16 +2,13 @@ BEGIN TRY
 
 BEGIN TRAN;
 
--- AlterTable
-ALTER TABLE [dbo].[Users] DROP CONSTRAINT [Users_updatedAt_df];
-
 -- CreateTable
 CREATE TABLE [dbo].[Profiles] (
     [id] INT NOT NULL IDENTITY(1,1),
     [userId] INT NOT NULL,
     [name] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_name_df] DEFAULT '',
     [firstSurname] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_firstSurname_df] DEFAULT '',
-    [SecondSurname] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_SecondSurname_df] DEFAULT '',
+    [secondSurname] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_secondSurname_df] DEFAULT '',
     [bio] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_bio_df] DEFAULT '',
     [location] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_location_df] DEFAULT '',
     [pronoun] NVARCHAR(1000) NOT NULL CONSTRAINT [Profiles_pronoun_df] DEFAULT '',
