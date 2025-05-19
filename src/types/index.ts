@@ -1,6 +1,4 @@
-import { Users, Profiles } from "@prisma/client";
-
-export type User = Users & {
+export type User = {
     id: number;
     email: string;
     username: string;
@@ -9,7 +7,7 @@ export type User = Users & {
     updatedAt: Date;
 }
 
-export type Profile = Profiles & {
+export type Profile = {
     id: number;
     userId: number;
     name: string;
