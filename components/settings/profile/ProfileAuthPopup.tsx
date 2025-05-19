@@ -1,3 +1,5 @@
+"use client"
+
 import { Lock, X } from "lucide-react"
 import { useState } from "react";
 
