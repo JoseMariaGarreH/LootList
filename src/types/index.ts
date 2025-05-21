@@ -21,9 +21,9 @@ export interface Profile {
 export interface Games {
     id: number;
     title: string;
-    description: string;
-    platform: string;
-    releaseDate: Date;
-    imageUrl: string;
+    description: string | null;
+    platform: string | null;
+    releaseDate: Date | null;
+    imageUrl: string | null;
     profiles?: Profile[];
 }

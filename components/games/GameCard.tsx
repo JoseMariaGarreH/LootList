@@ -1,16 +1,28 @@
+"use client";
+
 import { Games } from "@/src/types";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function GameCard({ game }: { game: Games }) {
     return (
-        <div className="p-1 flex flex-col items-center w-44">
+        <Link
+            href={`/games/${game.id}`}
+            className="relative w-44 h-64 overflow-hidden rounded border border-[#1d3557] bg-[#0b1c2c] group hover:shadow-lg transition-shadow"
+        >
             <Image
                 src={game.imageUrl || "/img/default_game.jpg"}
                 alt={game.title}
-                width={200}
-                height={200}
-                className="rounded mb-2 object-cover hover:scale-105 transition-transform duration-300"
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
-        </div>
+
+            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <p className="text-[#f1faee] text-center px-2 font-semibold drop-shadow">
+                    {game.title}
+                </p>
+            </div>
+        </Link>
+
     );
 }

@@ -13,23 +13,23 @@ export default function GameList() {
         return <p className="text-center text-[#f1faee]">No hay juegos disponibles.</p>;
     }
 
-    // Obtener plataformas únicas
-    const platforms = Array.from(new Set(games.map((g: Games) => g.platform).filter(Boolean)));
+    // Obtener plataformas
+    const platforms = Array.from(new Set(games.map((g) => g.platform).filter((p): p is string => typeof p === "string" && !!p)));
 
     // Filtrado
-    const filteredGames = games.filter((game: Games) => {
+    const filteredGames = games.filter((game) => {
         const matchesPlatform = platform ? game.platform === platform : true;
         const matchesSearch = search ? game.title.toLowerCase().includes(search.toLowerCase()) : true;
         const matchesYear = year ? (game.releaseDate && new Date(game.releaseDate).getFullYear().toString() === year) : true;
         return matchesPlatform && matchesSearch && matchesYear;
     });
 
-    // Obtener años únicos
+    // Obtener años
     const years = Array.from(
         new Set(
             games
-                .map((g: Games) => g.releaseDate && new Date(g.releaseDate).getFullYear().toString())
-                .filter(Boolean)
+                .map((g) => g.releaseDate ? new Date(g.releaseDate).getFullYear().toString() : null)
+                .filter((y): y is string => y !== null)
         )
     );
 
@@ -81,12 +81,25 @@ export default function GameList() {
                         ))}
                     </select>
                 </div>
+                <div className="flex flex-col justify-end mx-2">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setSearch("");
+                            setPlatform("");
+                            setYear("");
+                        }}
+                        className="p-2 rounded bg-[#e63946] text-[#f1faee] font-semibold hover:bg-[#a4161a] transition"
+                    >
+                        Limpiar filtros
+                    </button>
+                </div>
             </div>
             <div className="flex flex-wrap gap-6 justify-center p-4">
                 {filteredGames.length === 0 ? (
                     <p className="text-center text-[#f1faee] w-full">No hay juegos que coincidan con los filtros.</p>
                 ) : (
-                    filteredGames.map((game: Games) => (
+                    filteredGames.map((game) => (
                         <GameCard key={game.id} game={game} />
                     ))
                 )}
