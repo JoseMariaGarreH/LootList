@@ -18,9 +18,8 @@ CREATE TABLE [dbo].[ProfileGame] (
     [id] INT NOT NULL IDENTITY(1,1),
     [profileId] INT NOT NULL,
     [gameId] INT NOT NULL,
-    [type] NVARCHAR(1000) NOT NULL,
     CONSTRAINT [ProfileGame_pkey] PRIMARY KEY CLUSTERED ([id]),
-    CONSTRAINT [ProfileGame_profileId_gameId_type_key] UNIQUE NONCLUSTERED ([profileId],[gameId],[type])
+    CONSTRAINT [ProfileGame_profileId_gameId_key] UNIQUE NONCLUSTERED ([profileId],[gameId])
 );
 
 -- AddForeignKey

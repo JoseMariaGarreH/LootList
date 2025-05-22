@@ -27,3 +27,12 @@ export interface Games {
     imageUrl: string | null;
     profiles?: Profile[];
 }
+
+export interface ProfileGame {
+    id: number;
+    profileId: number;
+    gameId: number;
+    rating: number | null;
+    liked: boolean | null;
+    status: string | null;
+}

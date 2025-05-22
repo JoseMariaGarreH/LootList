@@ -8,11 +8,11 @@ export function useUserProfile() {
     const [profile, setProfile] = useState<{ profileImage?: string } | null>(null);
 
     useEffect(() => {
-        if (!session?.user?.email) return;
-        fetch(`/api/profile/${session.user.email}`)
+        if (!session?.user) return;
+        fetch(`/api/profile/${session.user.id}`)
             .then(res => res.json())
             .then(data => setProfile(data));
-    }, [session?.user?.email]);
+    }, [session?.user?.id]);
 
     return profile;
 }

@@ -3,29 +3,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 
-export async function GET(request: Request, { params }: { params: { email: string } }) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
     try {
-        console.log("params", params);
-        if (!params.email) {
+        if (!params.id) {
             return NextResponse.json(
                 { message: "No autorizado" },
                 { status: 401 }
             );
         }
 
-        const user = await prisma.users.findUnique({
-            where: { email: params.email },
-        });
-
-        if (!user) {
-            return NextResponse.json(
-                { message: "Usuario no encontrado" },
-                { status: 404 }
-            );
-        }
-
         const profile = await prisma.profiles.findUnique({
-            where: { userId: user.id },
+            where: { userId: Number(params.id) },
         });
 
         if (!profile) {

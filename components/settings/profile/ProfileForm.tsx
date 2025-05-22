@@ -20,8 +20,6 @@ export default function ProfileForm() {
             location: '',
             bio: '',
             pronoun: '',
-            favoriteGames: [],
-            profileImage: null,
         }
     });
 
@@ -34,9 +32,8 @@ export default function ProfileForm() {
 
     useEffect(() => {
         const loadUserDetails = async () => {
-            if (session?.user?.email) {
+            if (session?.user) {
                 try {
-                    
                     const responseUser = await fetch(`/api/users/${session.user.id}`, {
                         method: 'GET',
                         headers: {
@@ -44,24 +41,16 @@ export default function ProfileForm() {
                         },
                     });
 
-                    if (!responseUser.ok) {
-                        toast.error("Error al cargar los datos del usuario");
-                    }
-
                     const dataUser = await responseUser.json();
 
-                    const reponseProfile = await fetch(`/api/profile/${session.user.email}`, {
+                    const responseProfile = await fetch(`/api/profile/${session.user.id}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     });
 
-                    if (!reponseProfile.ok) {
-                        console.error("Error al cargar el perfil del usuario");
-                    }
-
-                    const dataProfile = await reponseProfile.json();
+                    const dataProfile = await responseProfile.json();
 
                     if (dataUser.user) {
                         setValue('username', dataUser.user.username);
@@ -72,8 +61,6 @@ export default function ProfileForm() {
                         setValue('location', dataProfile.location);
                         setValue('bio', dataProfile.bio);
                         setValue('pronoun', dataProfile.pronoun);
-                        setValue('favoriteGames', dataProfile.favoriteGames ?? []);
-                        setValue('profileImage', dataProfile.profileImage ?? null);
                     }
 
                 } catch (error) {

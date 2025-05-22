@@ -48,12 +48,15 @@ model ProfileGame {
   id         Int           @id @default(autoincrement())
   profileId  Int
   gameId     Int
-  type       String      
+
+  rating     Float?  
+  liked      Boolean?
+  status     String?
 
   profile    Profiles      @relation(fields: [profileId], references: [id], onDelete: Cascade)
   game       Games         @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
-  @@unique([profileId, gameId, type])
+  @@unique([profileId, gameId])
 }
 
 

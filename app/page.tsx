@@ -4,7 +4,7 @@ import Footer from "@/components/menu/Footer";
 import Navbar from "@/components/menu/Navbar";
 import Image from "next/image";
 import { roboto } from "@/app/font";
-import { Heart, Eye, Star } from "lucide-react";
+import { Heart, Star, Gamepad2 } from "lucide-react";
 
 export default function Home() {
   return (
@@ -112,12 +112,12 @@ export default function Home() {
           </div>
 
           <div className="w-full md:w-1/3 order-3 md:order-2 p-4 flex justify-center">
-            <Eye
+            <Gamepad2
               className="text-[#a8dadc]"
               width={200}
               height={200}
             >
-            </Eye>
+            </Gamepad2>
           </div>
 
           <div className="w-full md:w-1/3 order-4 md:order-5 p-4">
