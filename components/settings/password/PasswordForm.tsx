@@ -10,8 +10,13 @@ import { useUpdatePassword } from "@/hooks/useUpdatePassword";
 
 export default function PasswordForm() {
     const { data: session } = useSession();
-    const { checkPassword, loading } = useVerifyPassword();
-    const { changePassword, loading: loadingUpdate } = useUpdatePassword();
+
+    if (!session?.user) {
+        return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
+    }
+
+    const { checkPassword } = useVerifyPassword();
+    const { changePassword } = useUpdatePassword();
 
     const { register, handleSubmit, getValues, reset, formState: { errors } } = useForm({
         defaultValues: {
@@ -51,7 +56,7 @@ export default function PasswordForm() {
 
             // Actualizar la contraseña usando el hook/action
             const updateResponse = await changePassword(
-                session?.user?.id ?? "",
+                session.user.id,
                 newPassword,
             );
 

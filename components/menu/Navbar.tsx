@@ -6,14 +6,53 @@ import Link from "next/link";
 import Logo from "@/components/ui/Logo";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useUserProfile } from "@/hooks/useUserProfile";
+import { useProfileById } from "@/hooks/useProfileById";
 
 export default function Navbar() {
     const [estaAbierto, setEstaAbierto] = useState(false);
     const [dropdownAbierto, setDropdownAbierto] = useState(false);
 
     const { data: session } = useSession();
-    const profile  = useUserProfile();
+
+    if (!session?.user) {
+        // Muestra un menú reducido o solo opciones de login/registro
+        return (
+            <nav className="w-full bg-[#e63946] shadow-md">
+                <div className="container mx-auto px-4 py-2 flex items-center justify-between">
+                    <Link href="/">
+                        <div className="flex items-center">
+                            <Logo />
+                            <h1 className="ml-2 text-2xl text-white font-bold">LootList</h1>
+                        </div>
+                    </Link>
+                    <ul className="flex space-x-4 items-center">
+                        <li>
+                            <Link href="/auth/login" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">
+                                Iniciar sesión
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/auth/signup" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">
+                                Crear cuenta
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/games" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">
+                                Juegos
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/about" className="text-[#f1faee] hover:text-[#1d3557] transition-colors">
+                                Sobre nosotros
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        );
+    }
+
+    const { profile } = useProfileById(session.user.id);
 
     return (
         <nav className="w-full bg-[#e63946] shadow-md">
@@ -36,7 +75,7 @@ export default function Navbar() {
                                         onClick={() => setDropdownAbierto(!dropdownAbierto)}
                                         className="flex items-center text-[#f1faee] hover:text-[#1d3557] transition-colors"
                                     >
-                                        {profile?.profileImage && (
+                                        {profile.profileImage && (
                                             <Image
                                                 src={profile.profileImage}
                                                 width={30}

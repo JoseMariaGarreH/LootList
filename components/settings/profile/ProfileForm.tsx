@@ -10,15 +10,22 @@ import ProfileAuthPopup from './ProfileAuthPopup';
 import { useUserById } from '@/hooks/useUserById';
 import { useProfileById } from '@/hooks/useProfileById';
 import { useVerifyPassword } from "@/hooks/useVerifyPassword";
-import { Profile } from '@/src/types';
+import { useUpdateProfile } from "@/hooks/useUpdateProfile";
 
 export default function ProfileForm() {
-    // hooks
-    
+
+    // Datos de la sesión
     const { data: session } = useSession();
-    const { user } = useUserById(session?.user?.id ?? "");
-    const { profile } = useProfileById(session?.user?.id ?? "");
-    const { checkPassword, loading } = useVerifyPassword();
+
+    if (!session?.user) {
+        return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
+    }
+
+    // hooks
+    const { user } = useUserById(session.user.id);
+    const { profile } = useProfileById(session.user.id);
+    const { checkPassword } = useVerifyPassword();
+    const { changeProfile } = useUpdateProfile();
 
     // hooks react-hook-form
     const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
@@ -90,12 +97,10 @@ export default function ProfileForm() {
     });
 
     const handleConfirm = async () => {
-        setSeAbreVentanaConfirmacion(false); // Cierra VentanaEmergente
+        setSeAbreVentanaConfirmacion(false);
 
         const data = getValues();
         const {
-            username,
-            email,
             name,
             firstSurname,
             secondSurname,
@@ -105,31 +110,19 @@ export default function ProfileForm() {
         } = data;
 
         try {
-            const response = await fetch(`/api/profile/${session?.user?.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username,
-                    email,
-                    name,
-                    firstSurname,
-                    secondSurname,
-                    bio,
-                    location,
-                    pronoun,
-                }),
-            });
+            const updateResponse = await changeProfile(
+                session.user.id,
+                { name, firstSurname, secondSurname, bio, location, pronoun }
+            );
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.log("Error al actualizar el perfil:", errorData.message);
+            if (!updateResponse) {
+                toast.error("Error al actualizar el perfil");
                 return;
             }
             toast.success("Perfil actualizado correctamente");
         } catch (error) {
             console.error("Error al actualizar el perfil:", error);
+            toast.error("Error al actualizar el perfil");
         }
     };
 

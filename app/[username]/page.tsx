@@ -2,20 +2,25 @@
 
 import Footer from "@/components/menu/Footer";
 import Navbar from "@/components/menu/Navbar";
-import { useUserProfile } from "@/hooks/useUserProfile";
+import { useProfileById } from "@/hooks/useProfileById";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function UsernamePage() {
     const { data: session } = useSession();
-    const profile = useUserProfile();
+
+    if (!session?.user) {
+        return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
+    }
+
+    const { profile } = useProfileById(session.user.id);
 
     return (
         <>
             <Navbar />
             <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
-                {profile?.profileImage && (
+                {profile.profileImage && (
                     <Image
                         src={profile.profileImage}
                         width={200}

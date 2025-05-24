@@ -36,10 +36,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function PUT(request: Request, { params }: { params: { email: string } }) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
     try {
         console.log("params", params);
-        if (!params.email) {
+        if (!params.id) {
             return NextResponse.json(
                 { message: "No autorizado" },
                 { status: 401 }
@@ -47,7 +47,7 @@ export async function PUT(request: Request, { params }: { params: { email: strin
         }
 
         const user = await prisma.users.findUnique({
-            where: { email: params.email },
+            where: { id: Number(params.id) },
         });
 
         if (!user) {

@@ -1,23 +1,17 @@
+"use client"
+
 import { useEffect, useState } from "react";
 import getUserById from "@/src/actions/get-usersById-action";
 import { User } from "@/src/types";
 
-export function useUserById(userId: string) {
+export function useUserById(userId: string) : { user: User} {
     const [user, setUser] = useState<User>({} as User);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (!userId) {
-            setUser({} as User);
-            setLoading(false);
-            return;
-        }
-        setLoading(true);
         getUserById(userId)
             .then(data => setUser(data.user))
-            .catch(() => setUser({} as User))
-            .finally(() => setLoading(false));
+            .catch(() => setUser({} as User));
     }, [userId]);
 
-    return { user, loading };
+    return { user };
 }

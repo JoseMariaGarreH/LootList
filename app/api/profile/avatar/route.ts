@@ -15,8 +15,6 @@ export async function PUT(request: Request) {
     const image = data.get('image');
     const userIdValue = data.get('userId');
 
-    console.log("data: ",data)
-
     if (!userIdValue) {
         return NextResponse.json('No se ha recibido el id del usuario', { status: 400 });
     }

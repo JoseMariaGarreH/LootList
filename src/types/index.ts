@@ -16,6 +16,7 @@ export interface Profile {
     bio: string;
     location: string;
     pronoun: string;
+    profileImage: string | null;
 }
 
 export interface Games {
@@ -34,5 +35,9 @@ export interface ProfileGame {
     gameId: number;
     rating: number | null;
     liked: boolean | null;
-    status: string | null;
+    played: boolean | null;
+    playing: boolean | null;
+    whishlist: boolean | null;
+    createdAt: Date;
+    updatedAt: Date;
 }

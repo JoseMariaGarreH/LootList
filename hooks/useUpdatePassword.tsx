@@ -1,15 +1,14 @@
-import { useState } from "react";
+"use client"
+
 import updatePassword from "@/src/actions/put-updatePassword-action";
 
-export function useUpdatePassword() {
-    const [loading, setLoading] = useState(false);
-
+export function useUpdatePassword() : {
+    changePassword: (userId: string, newPassword: string) => Promise<boolean>;
+} {
     const changePassword = async (userId: string, newPassword: string) => {
-        setLoading(true);
         const result = await updatePassword(userId, newPassword);
-        setLoading(false);
         return result;
     };
 
-    return { changePassword, loading };
+    return { changePassword };
 }

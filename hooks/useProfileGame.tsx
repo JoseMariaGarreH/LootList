@@ -1,22 +1,18 @@
-import { ProfileGame } from "@/src/types";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+"use client"
 
-export function useProfileGame() : { profile : ProfileGame[] } {
-    const { data: session } = useSession();
+import { ProfileGame } from "@/src/types";
+import { useEffect, useState } from "react";
+import getProfileGameById from "@/src/actions/get-profileGameById-action";
+
+export function useProfileGame(id : string): { profile: ProfileGame[] } {
     const [profile, setProfile] = useState<ProfileGame[]>([]);
 
     useEffect(() => {
-        if (!session?.user) return;
-        fetch(`/api/profileGame/${session.user.id}`,{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then(res => res.json())
-            .then(data => setProfile(data));
-    }, [session?.user?.id]);
+        if (!id) return;
+        getProfileGameById(id)
+            .then(data => setProfile(data))
+            .catch(() => setProfile([]));
+    }, [id]);
 
-    return {profile};
+    return { profile };
 }

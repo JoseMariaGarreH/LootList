@@ -5,17 +5,22 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import Cropper from "react-easy-crop";
 import { getCroppedImg } from "@/src/utils/cropImage";
 import { useSession } from "next-auth/react";
-import { useUserProfile } from "@/hooks/useUserProfile";
 import { useAvatar } from "@/hooks/useAvatar";
 import toast, { Toaster } from "react-hot-toast";
+import { useProfileById } from "@/hooks/useProfileById";
 
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg";
 
 export default function AvatarUploader() {
 
     const { data: session } = useSession();
-    const profile = useUserProfile();
-    const { updateAvatar, deleteAvatar, loading } = useAvatar(session?.user?.id ?? "");
+
+    if (!session?.user.id) {
+        return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
+    }
+
+    const { profile } = useProfileById(session.user.id);
+    const { updateAvatar, deleteAvatar, loading } = useAvatar(session.user.id);
 
     const [preview, setPreview] = useState<string | null>(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -28,11 +33,11 @@ export default function AvatarUploader() {
 
 
     useEffect(() => {
-        if (profile?.profileImage && !hasInteracted) {
+        if (profile.profileImage && !hasInteracted) {
             setPreview(profile.profileImage);
             setCroppedImage(profile.profileImage);
         }
-    }, [profile?.profileImage, hasInteracted]);
+    }, [profile.profileImage, hasInteracted]);
 
     const handleDeleteAvatar = async () => {
         setPreview(DEFAULT_AVATAR_URL);

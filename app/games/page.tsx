@@ -9,7 +9,6 @@ export default function GamesPage() {
         <>
             <Navbar />
             <div className="max-w-6xl mx-auto py-8">
-                <h1 className="text-4xl font-bold mb-8 text-center text-[#e63946]">Juegos</h1>
                 <GameList />
             </div>
             <Footer />
