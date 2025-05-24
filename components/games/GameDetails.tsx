@@ -1,6 +1,6 @@
 import useGames from "@/hooks/useGames";
 import { useProfileGame } from "@/hooks/useProfileGame";
-import { Games, ProfileGame } from "@/src/types";
+import { Games } from "@/src/types";
 import { Calendar, Gamepad2, Gift, Heart, Play, Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";

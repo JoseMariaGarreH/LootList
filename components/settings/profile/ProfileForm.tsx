@@ -1,15 +1,26 @@
 "use client";
 
 import { useForm } from 'react-hook-form';
-import { useSession } from 'next-auth/react';
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from 'react';
 import AuthPopup from '../../ui/AuthPopup';
 import toast, { Toaster } from 'react-hot-toast';
 import { Pencil } from 'lucide-react';
 import ProfileAuthPopup from './ProfileAuthPopup';
+import { useUserById } from '@/hooks/useUserById';
+import { useProfileById } from '@/hooks/useProfileById';
+import { useVerifyPassword } from "@/hooks/useVerifyPassword";
+import { Profile } from '@/src/types';
 
 export default function ProfileForm() {
+    // hooks
+    
     const { data: session } = useSession();
+    const { user } = useUserById(session?.user?.id ?? "");
+    const { profile } = useProfileById(session?.user?.id ?? "");
+    const { checkPassword, loading } = useVerifyPassword();
+
+    // hooks react-hook-form
     const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
         defaultValues: {
             username: '',
@@ -23,6 +34,7 @@ export default function ProfileForm() {
         }
     });
 
+    // hooks de estado
     const [seAbreVentanaProfile, setSeAbreVentanaProfile] = useState(false);
     const [seAbreVentanaConfirmacion, setSeAbreVentanaConfirmacion] = useState(false);
     const [mensajeVentana, setMensajeVentana] = useState('');
@@ -31,85 +43,40 @@ export default function ProfileForm() {
     const [modificarEmail, setModificarEmail] = useState(false);
 
     useEffect(() => {
-        const loadUserDetails = async () => {
-            if (session?.user) {
-                try {
-                    const responseUser = await fetch(`/api/users/${session.user.id}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-
-                    const dataUser = await responseUser.json();
-
-                    const responseProfile = await fetch(`/api/profile/${session.user.id}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-
-                    const dataProfile = await responseProfile.json();
-
-                    if (dataUser.user) {
-                        setValue('username', dataUser.user.username);
-                        setValue('email', dataUser.user.email);
-                        setValue('name', dataProfile.name);
-                        setValue('firstSurname', dataProfile.firstSurname);
-                        setValue('secondSurname', dataProfile.secondSurname);
-                        setValue('location', dataProfile.location);
-                        setValue('bio', dataProfile.bio);
-                        setValue('pronoun', dataProfile.pronoun);
-                    }
-
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-        };
-
-        loadUserDetails();
-    }, [session, setValue]);
+        if (user && profile) {
+            setValue('username', user.username);
+            setValue('email', user.email);
+            setValue('name', profile.name);
+            setValue('firstSurname', profile.firstSurname);
+            setValue('secondSurname', profile.secondSurname);
+            setValue('location', profile.location);
+            setValue('bio', profile.bio);
+            setValue('pronoun', profile.pronoun);
+        }
+    }, [user, profile, setValue]);
 
     const handleEditClick = (campo: 'username' | 'email') => {
         setCampoEditable(campo);
-        setSeAbreVentanaProfile(true); // Abre solo ProfileVentanaEmergente
+        setSeAbreVentanaProfile(true);
     };
 
     const handleAuthenticate = async (password: string) => {
         if (!campoEditable) return;
 
-        try {
-            // Verificar la contraseña
-            const verifyResponse = await fetch(`/api/users/verify-password`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: session?.user?.email,
-                    password,
-                }),
-            });
-
-            if (!verifyResponse.ok) {
-                toast.error("La contraseña es incorrecta");
-                return;
-            }
-
-            if (campoEditable === 'username') {
-                setModificarUsername(true);
-            } else if (campoEditable === 'email') {
-                setModificarEmail(true);
-            }
-
-            setCampoEditable(null);
-            setSeAbreVentanaProfile(false); // Cierra ProfileVentanaEmergente
-        } catch (error) {
-            console.error(`Error al actualizar el ${campoEditable}:`, error);
-            toast.error(`Error al actualizar el ${campoEditable}`);
+        const ok = await checkPassword(session?.user?.email ?? '', password);
+        if (!ok) {
+            toast.error("La contraseña es incorrecta");
+            return;
         }
+
+        if (campoEditable === 'username') {
+            setModificarUsername(true);
+        } else if (campoEditable === 'email') {
+            setModificarEmail(true);
+        }
+
+        setCampoEditable(null);
+        setSeAbreVentanaProfile(false);
     };
 
     const handleCancelProfile = () => {
@@ -138,7 +105,7 @@ export default function ProfileForm() {
         } = data;
 
         try {
-            const response = await fetch(`/api/profile/${email}`, {
+            const response = await fetch(`/api/profile/${session?.user?.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -5,9 +5,14 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import AuthPopup from "../../ui/AuthPopup";
 import toast, { Toaster } from "react-hot-toast";
+import { useVerifyPassword } from "@/hooks/useVerifyPassword";
+import { useUpdatePassword } from "@/hooks/useUpdatePassword";
 
 export default function PasswordForm() {
     const { data: session } = useSession();
+    const { checkPassword, loading } = useVerifyPassword();
+    const { changePassword, loading: loadingUpdate } = useUpdatePassword();
+
     const { register, handleSubmit, getValues, reset, formState: { errors } } = useForm({
         defaultValues: {
             currentPassword: '',
@@ -30,8 +35,6 @@ export default function PasswordForm() {
         const data = getValues();
         const { currentPassword, newPassword, confirmPassword } = data;
 
-        console.log("Datos del formulario:", data);
-
         if (newPassword !== confirmPassword) {
             toast.error("La contraseña nueva y la confirmación no coinciden");
             return;
@@ -39,39 +42,21 @@ export default function PasswordForm() {
 
         try {
             // Verificar la contraseña actual
-            const verifyResponse = await fetch(`/api/users/verify-password`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: session?.user?.email,
-                    password: currentPassword,
-                }),
-            });
+            const verifyResponse = await checkPassword(session?.user?.email ?? '', currentPassword);
 
-            console.log("verifyResponse:", verifyResponse);
-
-            if (!verifyResponse.ok) {
+            if (!verifyResponse) {
                 toast.error("La contraseña actual es incorrecta");
                 return;
             }
 
-            // Actualizar la contraseña
-            const updateResponse = await fetch(`/api/users/${session?.user?.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    password: newPassword,
-                }),
-            });
-            console.log("updateResponse:", updateResponse);
+            // Actualizar la contraseña usando el hook/action
+            const updateResponse = await changePassword(
+                session?.user?.id ?? "",
+                newPassword,
+            );
 
-            if (!updateResponse.ok) {
-                const errorData = await updateResponse.json();
-                console.log(`Error: ${errorData.message}`);
+            if (!updateResponse) {
+                toast.error("Error al actualizar la contraseña");
                 return;
             }
 

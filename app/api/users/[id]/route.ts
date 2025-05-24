@@ -85,8 +85,6 @@ export async function PUT(request: Request, { params }: Params) {
     try {
         const { password } = await request.json();
 
-        console.log("password", password);
-
         // Hashear la nueva contraseña
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -95,11 +93,9 @@ export async function PUT(request: Request, { params }: Params) {
                 id: Number(params.id),
             },
             data: {
-                password: hashedPassword, // Guardar la contraseña hasheada
+                password: hashedPassword,
             },
         });
-
-        console.log("updateUserPassword", updateUserPassword);
 
         return NextResponse.json(updateUserPassword);
     } catch (error) {
