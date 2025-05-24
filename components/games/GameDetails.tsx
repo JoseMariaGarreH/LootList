@@ -99,8 +99,8 @@ export default function GameDetails({ id }: { id: string }) {
 
     return (
         <>
-            <Toaster position="top-right" reverseOrder={false} />
-            <div className="bg-[#1d3557] rounded-3xl shadow-2xl flex flex-col md:flex-row overflow-hidden border border-[#a8dadc]/20 max-w-6xl mx-auto my-10">
+            <Toaster position="top-left" reverseOrder={false} />
+            <div className="bg-[#1d3557] rounded-xl shadow-2xl flex flex-col md:flex-row overflow-hidden border border-[#a8dadc]/20 max-w-6xl mx-auto">
 
                 {/* Izquierda: imagen, rating y botones */}
                 <div className="flex-shrink-0 flex flex-col items-center justify-start bg-[#457b9d] p-8 md:p-10 text-white w-full md:w-[360px]">
