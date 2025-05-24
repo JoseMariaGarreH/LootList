@@ -19,8 +19,7 @@
     "react-dom": "^18",
     "react-easy-crop": "^5.4.1",
     "react-hook-form": "^7.56.3",
-    "react-hot-toast": "^2.5.2",
-    "react-select": "^5.10.1"
+    "react-hot-toast": "^2.5.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
