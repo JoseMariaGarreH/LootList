@@ -94,6 +94,7 @@ export async function PUT(request: Request, { params }: Params) {
             },
             data: {
                 password: hashedPassword,
+                updatedAt: new Date(),
             },
         });
 

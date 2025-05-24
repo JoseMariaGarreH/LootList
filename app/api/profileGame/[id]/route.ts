@@ -25,6 +25,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
                 whishlist,
                 liked,
                 rating,
+                updatedAt: new Date(),
             },
             create: {
                 profileId: Number(params.id),
