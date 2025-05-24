@@ -10,19 +10,15 @@ import Link from "next/link";
 export default function UsernamePage() {
     const { data: session } = useSession();
 
-    if (!session?.user) {
-        return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
-    }
-
-    const { profile } = useProfileById(session.user.id);
+    const { profile } = useProfileById(session?.user?.id || "");
 
     return (
         <>
             <Navbar />
             <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
-                {profile.profileImage && (
+                {profile?.profileImage && (
                     <Image
-                        src={profile.profileImage}
+                        src={profile?.profileImage}
                         width={200}
                         height={200}
                         alt="Avatar"

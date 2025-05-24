@@ -17,13 +17,9 @@ export default function ProfileForm() {
     // Datos de la sesión
     const { data: session } = useSession();
 
-    if (!session?.user) {
-        return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
-    }
-
     // hooks
-    const { user } = useUserById(session.user.id);
-    const { profile } = useProfileById(session.user.id);
+    const { user } = useUserById(session?.user?.id || "");
+    const { profile } = useProfileById(session?.user?.id || "");
     const { checkPassword } = useVerifyPassword();
     const { changeProfile } = useUpdateProfile();
 
@@ -111,7 +107,7 @@ export default function ProfileForm() {
 
         try {
             const updateResponse = await changeProfile(
-                session.user.id,
+                session?.user?.id || '',
                 { name, firstSurname, secondSurname, bio, location, pronoun }
             );
 

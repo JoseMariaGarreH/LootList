@@ -15,12 +15,8 @@ export default function AvatarUploader() {
 
     const { data: session } = useSession();
 
-    if (!session?.user.id) {
-        return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
-    }
-
-    const { profile } = useProfileById(session.user.id);
-    const { updateAvatar, deleteAvatar, loading } = useAvatar(session.user.id);
+    const { profile } = useProfileById(session?.user?.id || "");
+    const { updateAvatar, deleteAvatar, loading } = useAvatar(session?.user?.id || "");
 
     const [preview, setPreview] = useState<string | null>(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -33,11 +29,11 @@ export default function AvatarUploader() {
 
 
     useEffect(() => {
-        if (profile.profileImage && !hasInteracted) {
+        if (profile?.profileImage && !hasInteracted) {
             setPreview(profile.profileImage);
             setCroppedImage(profile.profileImage);
         }
-    }, [profile.profileImage, hasInteracted]);
+    }, [profile?.profileImage, hasInteracted]);
 
     const handleDeleteAvatar = async () => {
         setPreview(DEFAULT_AVATAR_URL);
