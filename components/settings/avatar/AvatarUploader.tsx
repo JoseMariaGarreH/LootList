@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { useAvatar } from "@/hooks/useAvatar";
 import toast, { Toaster } from "react-hot-toast";
 import { useProfileById } from "@/hooks/useProfileById";
+import AjaxLoader from "@/components/ui/AjaxLoader";
 
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg";
 
@@ -26,7 +27,6 @@ export default function AvatarUploader() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [imageName, setImageName] = useState<string | null>(null);
     const [hasInteracted, setHasInteracted] = useState(false);
-
 
     useEffect(() => {
         if (profile?.profileImage && !hasInteracted) {
@@ -131,7 +131,10 @@ export default function AvatarUploader() {
                     onDragOver={handleDragOver}
                 >
                     {/* Si hay preview pero no imagen recortada, muestra el cropper */}
-                    {preview && !croppedImage ? (
+                    {
+                        loading ? (
+                                <AjaxLoader />
+                        ) : preview && !croppedImage ? (
                         <div className="flex flex-col items-center gap-4">
                             <div className="w-60 h-60 rounded-full overflow-hidden relative flex items-center justify-center border-4 border-white shadow-lg">
                                 <Cropper

@@ -5,15 +5,13 @@ import { Search, FilterX } from "lucide-react";
 import AjaxLoader from "../ui/AjaxLoader";
 
 export default function GameList() {
-    const { games } = useGames();
+
+    const { games, loading } = useGames();
+
     const [platform, setPlatform] = useState("");
     const [search, setSearch] = useState("");
     const [year, setYear] = useState("");
-    const [order, setOrder] = useState(""); // Nuevo estado para el orden
-
-    if (!games || games.length === 0) {
-        return <AjaxLoader />;
-    }
+    const [order, setOrder] = useState("");
 
     const platforms = [
         "PlayStation 5",
@@ -160,15 +158,21 @@ export default function GameList() {
 
 
             {/* Listado de juegos */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 px-12 pb-10 max-w-7xl mx-auto">
-                {displayedGames.length === 0 ? (
-                    <p className="text-center text-[#f1faee] w-full col-span-full">No hay juegos que coincidan con los filtros.</p>
-                ) : (
-                    displayedGames.map((game) => (
-                        <GameCard key={game.id} game={game} />
-                    ))
-                )}
-            </div>
+            { loading ? (
+                <div className="flex items-center justify-center min-h-screen">
+                    <AjaxLoader />
+                </div>
+            ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 px-12 pb-10 max-w-7xl mx-auto">
+                    {displayedGames.length === 0 ? (
+                        <p className="text-center text-[#f1faee] w-full col-span-full">No hay juegos que coincidan con los filtros.</p>
+                    ) : (
+                        displayedGames.map((game) => (
+                            <GameCard key={game.id} game={game} />
+                        ))
+                    )}
+                </div>
+            )}
         </>
     );
 }

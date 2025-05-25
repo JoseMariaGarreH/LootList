@@ -4,13 +4,13 @@ import { Lock, X } from "lucide-react"
 import { useState } from "react";
 
 
-interface ProfileVentanaEmergenteProps {
+interface EditProfileVentanaEmergenteProps {
     onClose: () => void,
     onAuthenticate: (password: string) => void;
     open: boolean;
 }
 
-export default function ProfileVentanaEmergente({ onClose, onAuthenticate, open }: ProfileVentanaEmergenteProps) {
+export default function EditProfileVentanaEmergente({ onClose, onAuthenticate, open }: EditProfileVentanaEmergenteProps) {
     if (!open) return null;
 
     const [password, setPassword] = useState('');

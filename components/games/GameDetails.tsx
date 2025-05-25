@@ -14,12 +14,12 @@ export default function GameDetails({ id }: { id: string }) {
     const userId = session?.user?.id || "";
 
     const { games } = useGames();
-    const { profile } = useProfileGame(userId);
+    const { profileGames } = useProfileGame(userId);
 
     const { setRating, setPlayed, setPlaying, setWhishlist, setLike } = useUpdateProfileGame(userId);
 
     const game: Games | undefined = games.find((g) => g.id.toString() === id);
-    const profileGame: ProfileGame | undefined = profile.find((pg) => pg.gameId.toString() === id);
+    const profileGame: ProfileGame | undefined = profileGames.find((pg) => pg.gameId.toString() === id);
 
     const [rating, setRatingState] = useState(0);
     const [hover, setHover] = useState(0);

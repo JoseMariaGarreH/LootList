@@ -4,15 +4,15 @@ import { ProfileGame } from "@/src/types";
 import { useEffect, useState } from "react";
 import getProfileGameById from "@/src/actions/get-profileGameById-action";
 
-export function useProfileGame(id : string): { profile: ProfileGame[] } {
-    const [profile, setProfile] = useState<ProfileGame[]>([]);
+export function useProfileGame(id : string): { profileGames: ProfileGame[] } {
+    const [profileGames, setProfileGames] = useState<ProfileGame[]>([]);
 
     useEffect(() => {
         if (!id) return;
         getProfileGameById(id)
-            .then(data => setProfile(data))
-            .catch(() => setProfile([]));
+            .then(data => setProfileGames(data))
+            .catch(() => setProfileGames([]));
     }, [id]);
 
-    return { profile };
+    return { profileGames };
 }

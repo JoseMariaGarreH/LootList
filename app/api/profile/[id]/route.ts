@@ -5,9 +5,7 @@ import { prisma } from "@/src/lib/prisma";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
     try {
-
-        console.log("params", params);
-
+        
         if (!params.id) {
             return NextResponse.json(
                 { message: "No autorizado" },

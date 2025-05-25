@@ -3,10 +3,10 @@
 import { useForm } from 'react-hook-form';
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from 'react';
-import AuthPopup from '../../ui/AuthPopup';
+import AuthPopup from '../../../ui/AuthPopup';
 import toast, { Toaster } from 'react-hot-toast';
 import { Pencil } from 'lucide-react';
-import ProfileAuthPopup from './ProfileAuthPopup';
+import EditProfileAuthPopup from './EditProfileAuthPopup';
 import { useUserById } from '@/hooks/useUserById';
 import { useProfileById } from '@/hooks/useProfileById';
 import { useVerifyPassword } from "@/hooks/useVerifyPassword";
@@ -236,7 +236,7 @@ export default function ProfileForm() {
                     Guardar cambios
                 </button>
             </form>
-            <ProfileAuthPopup
+            <EditProfileAuthPopup
                 onClose={handleCancelProfile}
                 onAuthenticate={handleAuthenticate}
                 open={seAbreVentanaProfile && campoEditable !== null}
