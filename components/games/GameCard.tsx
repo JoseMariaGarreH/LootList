@@ -15,6 +15,7 @@ export default function GameCard({ game }: { game: Games }) {
                 alt={game.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
+                priority
             />
 
             <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

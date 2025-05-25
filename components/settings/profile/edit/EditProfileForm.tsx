@@ -83,13 +83,13 @@ export default function ProfileForm() {
     };
 
     const handleCancelProfile = () => {
-        setSeAbreVentanaProfile(false); // Cierra ProfileVentanaEmergente
+        setSeAbreVentanaProfile(false);
         setCampoEditable(null);
     };
 
     const onSubmit = handleSubmit(() => {
         setMensajeVentana('¿Estás seguro de que quieres guardar tus datos?');
-        setSeAbreVentanaConfirmacion(true); // Abre solo VentanaEmergente
+        setSeAbreVentanaConfirmacion(true);
     });
 
     const handleConfirm = async () => {

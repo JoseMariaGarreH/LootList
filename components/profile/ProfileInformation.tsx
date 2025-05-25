@@ -18,7 +18,7 @@ export default function ProfileInformation({ profileGames, profile }: ProfileInf
             <div className="max-w-7xl mx-auto mt-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* Biografía */}
-                    <div className="p-4 rounded-lg flex flex-col">
+                    <div className="flex flex-col">
                         <h3 className="text-lg font-semibold text-white mb-2">Biografía</h3>
                         <hr className="border-t border-[#f1faee] mb-4" />
                         <p className="text-[#f1faee] italic">{profile.bio || "Nothing here!"}</p>
