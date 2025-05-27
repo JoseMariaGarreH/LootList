@@ -95,7 +95,13 @@ export default function PasswordForm() {
                         })}
                         className="w-full px-4 py-2 rounded transition-all bg-[#1d3557] text-[#F1FAEE] focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none"
                     />
-                    {errors.currentPassword && <span className="text-red-800 text-xs font-semibold mt-2">{errors.currentPassword.message}</span>}
+                    {
+                        errors.currentPassword && (
+                            <span className="text-red-800 text-xs font-semibold mt-2">
+                                {typeof errors.currentPassword?.message === "string" && errors.currentPassword.message}
+                            </span>
+                        )
+                    }
                 </div>
 
                 <div>
@@ -104,11 +110,24 @@ export default function PasswordForm() {
                         type="password"
                         id="new-password"
                         {...register("newPassword", {
-                            required: "La nueva contraseña es obligatoria",
+                            required: {
+                                value: true,
+                                message: "La nueva contraseña es obligatoria"
+                            },
+                            pattern: {
+                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+                                message: "Debes tener al menos 8 caracteres, una mayúscula, una minúscula y un número"
+                            }
                         })}
                         className="w-full px-4 py-2 rounded transition-all bg-[#1d3557] text-[#F1FAEE] focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none"
                     />
-                    {errors.newPassword && <span className="text-red-800 text-xs font-semibold mt-2">{errors.newPassword.message}</span>}
+                    {
+                        errors.newPassword && (
+                            <span className="text-red-800 text-xs font-semibold mt-2">
+                                {typeof errors.newPassword?.message === "string" && errors.newPassword.message}
+                            </span>
+                        )
+                    }
                 </div>
 
                 <div>
@@ -121,7 +140,13 @@ export default function PasswordForm() {
                         })}
                         className="w-full px-4 py-2 rounded transition-all bg-[#1d3557] text-[#F1FAEE] focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none"
                     />
-                    {errors.confirmPassword && <span className="text-red-800 text-xs font-semibold mt-2">{errors.confirmPassword.message}</span>}
+                    {
+                        errors.confirmPassword && (
+                            <span className="text-red-800 text-xs font-semibold mt-2">
+                                {typeof errors.confirmPassword?.message === "string" && errors.confirmPassword.message}
+                            </span>
+                        )
+                    }
                 </div>
 
                 <button
