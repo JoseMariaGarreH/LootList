@@ -16,7 +16,7 @@ export default function GameDetails({ id }: { id: string }) {
     const { games } = useGames();
     const { profileGames } = useProfileGame(userId);
 
-    const { setRating, setPlayed, setPlaying, setWhishlist, setLike } = useUpdateProfileGame(userId);
+    const { setRating, setPlayed, setPlaying, setWishlist, setLike } = useUpdateProfileGame(userId);
 
     const game: Games | undefined = games.find((g) => g.id.toString() === id);
     const profileGame: ProfileGame | undefined = profileGames.find((pg) => pg.gameId.toString() === id);
@@ -25,7 +25,7 @@ export default function GameDetails({ id }: { id: string }) {
     const [hover, setHover] = useState(0);
     const [played, setPlayedState] = useState(false);
     const [playing, setPlayingState] = useState(false);
-    const [whishlist, setWhishlistState] = useState(false);
+    const [wishlist, setWishlistState] = useState(false);
     const [liked, setLikedState] = useState(false);
 
     useEffect(() => {
@@ -33,13 +33,13 @@ export default function GameDetails({ id }: { id: string }) {
             setRatingState(profileGame.rating || 0);
             setPlayedState(!!profileGame.played);
             setPlayingState(!!profileGame.playing);
-            setWhishlistState(!!profileGame.whishlist);
+            setWishlistState(!!profileGame.wishlist);
             setLikedState(!!profileGame.liked);
         } else {
             setRatingState(0);
             setPlayedState(false);
             setPlayingState(false);
-            setWhishlistState(false);
+            setWishlistState(false);
             setLikedState(false);
         }
     }, [profileGame, id]);
@@ -77,14 +77,14 @@ export default function GameDetails({ id }: { id: string }) {
         await setPlaying(game.id, newValue);
     };
 
-    const handleToggleWhishlist = async () => {
+    const handleToggleWishlist = async () => {
         if (!session?.user?.id) {
             toast.error("Debes iniciar sesión para añadir a la lista de deseos.");
             return;
         }
-        const newValue = !whishlist;
-        setWhishlistState(newValue);
-        await setWhishlist(game.id, newValue);
+        const newValue = !wishlist;
+        setWishlistState(newValue);
+        await setWishlist(game.id, newValue);
     };
 
     const handleToggleLike = async () => {
@@ -178,8 +178,8 @@ export default function GameDetails({ id }: { id: string }) {
                         </button>
 
                         <button
-                            onClick={handleToggleWhishlist}
-                            className={`px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm transition shadow-md ${whishlist
+                            onClick={handleToggleWishlist}
+                            className={`px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm transition shadow-md ${wishlist
                                     ? "bg-[#8338ec] text-white font-semibold"
                                     : "bg-white/10 text-gray-200 hover:bg-white/20"
                                 }`}

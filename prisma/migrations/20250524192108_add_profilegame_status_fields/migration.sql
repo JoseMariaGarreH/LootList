@@ -14,7 +14,7 @@ ALTER TABLE [dbo].[ProfileGame] ADD [createdAt] DATETIME2 NOT NULL CONSTRAINT [P
 [played] BIT,
 [playing] BIT,
 [updatedAt] DATETIME2 NOT NULL CONSTRAINT [ProfileGame_updatedAt_df] DEFAULT CURRENT_TIMESTAMP,
-[whishlist] BIT;
+[wishlist] BIT;
 
 COMMIT TRAN;
 

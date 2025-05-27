@@ -1,0 +1,79 @@
+import { NextResponse } from "next/server";
+import { v4 as uuidv4 } from "uuid";
+import nodemailer from "nodemailer";
+import { prisma } from "@/src/lib/prisma";
+
+export async function POST(request: Request) {
+    try {
+        const { email } = await request.json();
+
+        // Verifica que el email exista en la base de datos
+        const user = await prisma.users.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            return NextResponse.json(
+                { success: false, message: "No existe un usuario registrado con ese correo" },
+                { status: 404 }
+            );
+        }
+
+        const token = uuidv4();
+        const expires = new Date(Date.now() + 60 * 60 * 1000); // 1h
+
+        // Guardar el token en la base de datos
+        await prisma.passwordResetToken.create({
+            data: { email, token, expires },
+        });
+
+        // Enviar email
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.EMAIL_FROM,
+                pass: process.env.EMAIL_PASSWORD,
+            },
+            tls: {
+                rejectUnauthorized: false, // Solo para desarrollo
+            },
+        });
+
+        const resetLink = `${process.env.NEXT_PUBLIC_URL}/auth/resetpassword?token=${token}`;
+
+        await transporter.sendMail({
+            to: email,
+            subject: 'Restablecimiento de contraseña',
+            html: `
+                <div style="font-family: 'Segoe UI', Roboto, sans-serif; background: #457b9d; padding: 32px; border-radius: 10px; max-width: 600px; margin: auto; color: #f1faee;">
+                    <h2 style="color: #f1faee; margin-bottom: 12px;">Restablece tu contraseña</h2>
+                    <p style="margin: 0 0 16px;">Hola,</p>
+                    <p style="margin: 0 0 16px;">
+                        Hemos recibido una solicitud para restablecer la contraseña de tu cuenta. Si no fuiste tú, puedes ignorar este correo.
+                    </p>
+                    <p style="margin: 0 0 16px;">
+                        Para cambiar tu contraseña, haz clic en el botón a continuación:
+                    </p>
+                    <div style="text-align: center; margin: 24px 0;">
+                        <a href="${resetLink}" style="background-color: #e63946; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                            Cambiar contraseña
+                        </a>
+                    </div>
+                    <p style="font-size: 12px; color: #a8dadc; margin-top: 16px;">
+                        Este enlace expirará en 1 hora.
+                    </p>
+                    <p style="font-size: 12px; color: #a8dadc; margin-top: 32px;">
+                        Si tienes problemas, contacta con el equipo de soporte de <strong style="color: #f1faee;">LootList</strong>.
+                    </p>
+                </div>
+            `,
+        });
+
+        return NextResponse.json({ success: true, message: "Correo enviado con éxito" });
+    } catch (error: any) {
+        return NextResponse.json(
+            { success: false, message: error.message || "No se pudo enviar el correo" },
+            { status: 500 }
+        );
+    }
+}

@@ -10,15 +10,15 @@ import { useSession } from "next-auth/react";
 import AjaxLoader from "@/components/ui/AjaxLoader";
 import ProfileGameListSection from "@/components/profile/ProfileGameListSection";
 
-export default function PlayedPage() {
+export default function PlayingPage() {
     const { data: session } = useSession();
     const userId = session?.user?.id || "";
     const { profile } = useProfileById(userId);
     const { profileGames } = useProfileGame(userId);
     const { games } = useGames();
 
-    const playedGameIds = profileGames.filter(pg => pg.played).map(pg => pg.gameId);
-    const playedGames = games.filter(game => playedGameIds.includes(game.id));
+    const playingGameIds = profileGames.filter(pg => pg.playing).map(pg => pg.gameId);
+    const playingGames = games.filter(game => playingGameIds.includes(game.id));
 
     return (
         <>
@@ -26,9 +26,9 @@ export default function PlayedPage() {
             {profile ? (
                 <UserProfileLayout profile={profile} session={session}>
                     <ProfileGameListSection
-                        games={playedGames}
-                        emptyText="No tienes juegos marcados como jugados."
-                        title="Juegos que has jugado"
+                        games={playingGames}
+                        emptyText="No tienes juegos marcados como jugando."
+                        title="Juegos que estás jugando"
                     />
                 </UserProfileLayout>
             ) : (

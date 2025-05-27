@@ -52,8 +52,8 @@ model ProfileGame {
   rating     Float?  
   liked      Boolean?
   played    Boolean?
-  playing  Boolean?
-  whishlist Boolean?
+  playing   Boolean?
+  wishlist  Boolean?
 
   createdAt DateTime     @default(now())
   updatedAt DateTime     @default(now())
@@ -64,5 +64,11 @@ model ProfileGame {
   @@unique([profileId, gameId])
 }
 
-
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+}
 

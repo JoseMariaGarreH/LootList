@@ -1,0 +1,27 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- CreateTable
+CREATE TABLE [dbo].[PasswordResetToken] (
+    [id] INT NOT NULL IDENTITY(1,1),
+    [email] NVARCHAR(1000) NOT NULL,
+    [token] NVARCHAR(1000) NOT NULL,
+    [expires] DATETIME2 NOT NULL,
+    [createdAt] DATETIME2 NOT NULL CONSTRAINT [PasswordResetToken_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT [PasswordResetToken_pkey] PRIMARY KEY CLUSTERED ([id]),
+    CONSTRAINT [PasswordResetToken_token_key] UNIQUE NONCLUSTERED ([token])
+);
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

@@ -37,7 +37,7 @@ export interface ProfileGame {
     liked: boolean | null;
     played: boolean | null;
     playing: boolean | null;
-    whishlist: boolean | null;
+    wishlist: boolean | null;
     createdAt: Date;
     updatedAt: Date;
 }

@@ -9,7 +9,7 @@ interface Params {
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
     try {
-        const { gameId, played, playing, whishlist, liked, rating } = await request.json();
+        const { gameId, played, playing, wishlist, liked, rating } = await request.json();
 
         // Busca el registro ProfileGame
         const profileGame = await prisma.profileGame.upsert({
@@ -22,7 +22,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
             update: {
                 played,
                 playing,
-                whishlist,
+                wishlist,
                 liked,
                 rating,
                 updatedAt: new Date(),
@@ -32,7 +32,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
                 gameId: Number(gameId),
                 played: !!played,
                 playing: !!playing,
-                whishlist: !!whishlist,
+                wishlist: !!wishlist,
                 liked: !!liked,
                 rating: rating ?? null,
             },

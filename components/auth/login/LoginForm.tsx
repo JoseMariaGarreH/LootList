@@ -67,7 +67,7 @@ export default function LoginForm() {
                         <label htmlFor="password_label" className="block text-sm font-semibold text-white">
                             Contraseña
                         </label>
-                        <Link href="/settings/password" className="text-[#a8dadc] text-sm">
+                        <Link href="/auth/requestemail" className="text-[#a8dadc] hover:underline text-sm">
                             ¿Olvidaste tu contraseña?
                         </Link>
                     </div>

@@ -5,7 +5,7 @@ import updateProfileGame from "@/src/actions/post-updateProfileGame";
 export function useUpdateProfileGame(userId: string, currentState?: {
     played?: boolean;
     playing?: boolean;
-    whishlist?: boolean;
+    wishlist?: boolean;
     liked?: boolean;
     rating?: number;
 }) {
@@ -31,10 +31,10 @@ export function useUpdateProfileGame(userId: string, currentState?: {
         });
     };
 
-    const setWhishlist = async (gameId: number, whishlist: boolean) => {
+    const setWishlist = async (gameId: number, wishlist: boolean) => {
         await updateProfileGame(userId, gameId, {
             ...currentState,
-            whishlist,
+            wishlist,
         });
     };
 
@@ -45,5 +45,5 @@ export function useUpdateProfileGame(userId: string, currentState?: {
         });
     };
 
-    return { setRating, setPlayed, setPlaying, setWhishlist, setLike };
+    return { setRating, setPlayed, setPlaying, setWishlist, setLike };
 }

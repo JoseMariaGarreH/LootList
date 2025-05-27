@@ -7,7 +7,7 @@ export default async function updateProfileGame(
         rating?: number;
         played?: boolean;
         playing?: boolean;
-        whishlist?: boolean;
+        wishlist?: boolean;
         liked?: boolean;
     }
 ) {

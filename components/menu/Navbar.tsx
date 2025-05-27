@@ -61,12 +61,37 @@ export default function Navbar() {
                                                     Perfil
                                                 </Link>
                                             </li>
+                                            <li></li>
                                             <li>
                                                 <Link
-                                                    href="/"
+                                                    href={`/${session.user?.username}/likes`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
-                                                    Inicio
+                                                    Me Gustas
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={`/${session.user?.username}/played`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Jugados
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={`/${session.user?.username}/playing`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Jugando
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={`/${session.user?.username}/wishlist`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Lista de Deseos
                                                 </Link>
                                             </li>
                                             <li>
@@ -79,14 +104,6 @@ export default function Navbar() {
                                             </li>
                                         </ul>
                                     )}
-                                </li>
-                                <li>
-                                    <Link
-                                        href={`/${session.user?.username}/library`}
-                                        className="text-[#f1faee] hover:text-[#1d3557] transition-colors"
-                                    >
-                                        Biblioteca
-                                    </Link>
                                 </li>
                             </>
                         ) : (
@@ -182,14 +199,6 @@ export default function Navbar() {
                                             </li>
                                         </ul>
                                     )}
-                                </li>
-                                <li>
-                                    <Link
-                                        href={`/${session.user?.username}/library`}
-                                        className="block py-2 text-[#f1faee] hover:text-[#1d3557] transition-colors"
-                                    >
-                                        Biblioteca
-                                    </Link>
                                 </li>
                             </>
                         ) : (

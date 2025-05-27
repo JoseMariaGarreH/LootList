@@ -21,7 +21,7 @@ export default function ProfileInformation({ profileGames, profile }: ProfileInf
                     <div className="flex flex-col">
                         <h3 className="text-lg font-semibold text-white mb-2">Biografía</h3>
                         <hr className="border-t border-[#f1faee] mb-4" />
-                        <p className="text-[#f1faee] italic">{profile.bio || "Nothing here!"}</p>
+                        <p className="text-[#f1faee] italic">{profile.bio || "¡Nada por aquí!"}</p>
                     </div>
 
                     {/* Estadísticas */}
