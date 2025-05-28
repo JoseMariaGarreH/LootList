@@ -5,7 +5,6 @@ import Navbar from "@/components/menu/Navbar";
 import Image from "next/image";
 import { roboto } from "@/app/font";
 import { Heart, Star, Gamepad2 } from "lucide-react";
-import { useEffect } from "react";
 
 export default function Home() {
 
@@ -14,7 +13,7 @@ export default function Home() {
       <Navbar></Navbar>
       <div className="relative w-full h-[500px]">
         <Image
-          src="/img/img_juego1.jpeg"
+          src="https://media.rawg.io/media/games/20a/20aa03a10cda45239fe22d035c0ebe64.jpg"
           alt="Imagen portada del juego Split Fiction"
           fill
           className="object-cover"

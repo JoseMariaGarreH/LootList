@@ -29,7 +29,7 @@ export default function RequestEmailPage() {
         <>
             <Toaster position="top-left" reverseOrder={false} />
             <div className="flex items-center justify-center min-h-screen text-white">
-                <div className="bg-[#457b9d] rounded-xl shadow-xl p-8 w-full max-w-md text-center border border-[#a8dadc]/30">
+                <div className="bg-[#355f7a] rounded-xl shadow-xl p-8 w-full max-w-md text-center border border-[#a8dadc]/30">
                     <div className="flex justify-center mb-4">
                         <div className="flex space-x-1">
                             <Link href="/">

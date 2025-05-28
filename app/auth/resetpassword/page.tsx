@@ -39,7 +39,7 @@ export default function ResetPasswordForm() {
         <>
             <Toaster position="top-left" reverseOrder={false} />
             <div className="flex items-center justify-center min-h-screen text-white">
-                <div className="bg-[#457b9d] rounded-xl shadow-xl p-8 w-full max-w-md text-center border border-[#a8dadc]/30">
+                <div className="bg-[#355f7a] rounded-xl shadow-xl p-8 w-full max-w-md text-center border border-[#a8dadc]/30">
                     <div className="flex justify-center mb-4">
                         <div className="flex space-x-1">
                             <Link href="/">
@@ -82,9 +82,9 @@ export default function ResetPasswordForm() {
                                 type="password"
                                 id="confirmPassword"
                                 className="w-full px-4 py-2 rounded transition-all
-                            bg-[#1d3557] text-[#F1FAEE]
-                            focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none
-                            disabled:bg-[#D9D9D9] disabled:text-[#A0A0A0]"
+                                        bg-[#1d3557] text-[#F1FAEE]
+                                        focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none
+                                        disabled:bg-[#D9D9D9] disabled:text-[#A0A0A0]"
                                 autoComplete="new-password"
                                 {...register("confirmPassword", {
                                     required: "La confirmación de contraseña es obligatoria"

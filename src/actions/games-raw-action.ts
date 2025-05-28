@@ -1,18 +1,20 @@
+import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function gamesRawAction() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/games`, {
+
+  const URL = process.env.RAWG_API;
+  console.log("RAWG API URL:", URL);
+
+  const response = await axios.get(`${process.env.RAWG_API}/games`, {
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `${process.env.NEXT_PUBLIC_API_TOKEN}`,
+        "Accept": "application/json",
+        "Authorization": "Bearer " + process.env.RAWG_API_KEY,
+        "Access-Control-Allow-Origin": "*",
     },
   });
 
-  if (!response.ok) {
-    return NextResponse.json({ message: "Error al obtener juegos" }, { status: response.status });
-  }
-
-  const data = await response.json();
+  const data = response;
   return NextResponse.json(data);
 }
