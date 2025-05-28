@@ -8,12 +8,12 @@ import { usePathname } from "next/navigation";
 export default function UserProfileLayout({ profile, session, children }: { profile: any, session: any, children: React.ReactNode }) {
     const pathname = usePathname();
     const tabs = [
-        { name: "Perfil", href: `/${session?.user.username}` },
-        { name: "Jugados", href: `/${session?.user.username}/played` },
-        { name: "Jugando", href: `/${session?.user.username}/playing` },
-        { name: "Lista de Deseos", href: `/${session?.user.username}/wishlist` },
-        { name: "Listas", href: `/${session?.user.username}/lists` },
-        { name: "Me Gusta", href: `/${session?.user.username}/likes` },
+        { name: "Perfil", href: `/user/${session?.user.username}` },
+        { name: "Jugados", href: `/user/${session?.user.username}/played` },
+        { name: "Jugando", href: `/user/${session?.user.username}/playing` },
+        { name: "Lista de Deseos", href: `/user/${session?.user.username}/wishlist` },
+        { name: "Listas", href: `/user/${session?.user.username}/lists` },
+        { name: "Me Gusta", href: `/user/${session?.user.username}/likes` },
     ];
 
     return (

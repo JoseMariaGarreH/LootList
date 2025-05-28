@@ -12,7 +12,7 @@ export default function PageLoader({ children }: { children: React.ReactNode }) 
     useEffect(() => {
         setIsLoading(true);
         // Simulamos un tiempo de carga mínimo
-        const timer = setTimeout(() => setIsLoading(false), 1000);
+        const timer = setTimeout(() => setIsLoading(false), 500);
         return () => clearTimeout(timer);
     }, [pathname, searchParams]);
 

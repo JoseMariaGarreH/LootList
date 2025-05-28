@@ -5,19 +5,35 @@ import Navbar from "@/components/menu/Navbar";
 import Image from "next/image";
 import { roboto } from "@/app/font";
 import { Heart, Star, Gamepad2 } from "lucide-react";
+import useGames from "@/hooks/useGames";
+import { useMemo } from "react";
 
 export default function Home() {
+  const { games } = useGames();
+
+  // Devuelve un array de N juegos aleatorios (sin repetir)
+  function getRandomGames(arr: any[], n: number) {
+    if (arr.length < n) return arr;
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, n);
+  }
+
+  // Memoriza los juegos aleatorios para que no cambien en cada render
+  const [img1, img2, img3, img4] = useMemo(() => getRandomGames(games, 4), [games]);
 
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar />
       <div className="relative w-full h-[500px]">
-        <Image
-          src="https://media.rawg.io/media/games/20a/20aa03a10cda45239fe22d035c0ebe64.jpg"
-          alt="Imagen portada del juego Split Fiction"
-          fill
-          className="object-cover"
-        />
+        {img1?.imageUrl && (
+          <Image
+            src={img1.imageUrl}
+            alt={img1.title || "Imagen aleatoria de juego"}
+            fill
+            className="object-cover"
+            priority
+          />
+        )}
 
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 ">
           <h2 className={`${roboto.className} text-[#f1faee] text-[26px] font-semibold drop-shadow border p-2 bg-black bg-opacity-75`}>
@@ -41,13 +57,15 @@ export default function Home() {
         </div>
 
         <div className="w-full md:w-1/2  md:order-2 px-4 py-4">
-          <Image
-            src="/img/img_juego2.jpg"
-            alt="Portada de juego de Batman Arkham Knight"
-            className="w-full h-auto rounded-lg shadow-md object-cover"
-            width={600}
-            height={600}
-          />
+          {img2?.imageUrl && (
+            <Image
+              src={img2.imageUrl}
+              alt={img2.title || "Imagen aleatoria de juego"}
+              className="w-full h-auto rounded-lg shadow-md object-cover"
+              width={600}
+              height={600}
+            />
+          )}
         </div>
 
         <div className="w-full md:w-1/2 md:order-4 px-4 py-4">
@@ -61,13 +79,15 @@ export default function Home() {
         </div>
 
         <div className="w-full md:w-1/2 md:order-3 px-4 py-4">
-          <Image
-            src="/img/img_juego3.jpg"
-            alt="Portada de juego de Zelda Breath of the Wild"
-            className="w-full h-auto rounded-lg shadow-md object-cover"
-            width={600}
-            height={600}
-          />
+          {img3?.imageUrl && (
+            <Image
+              src={img3.imageUrl}
+              alt={img3.title || "Imagen aleatoria de juego"}
+              className="w-full h-auto rounded-lg shadow-md object-cover"
+              width={600}
+              height={600}
+            />
+          )}
         </div>
 
         <div className="w-full md:w-1/2 md:order-5 px-4 py-4">
@@ -82,13 +102,15 @@ export default function Home() {
         </div>
 
         <div className="w-full md:w-1/2 md:order-6 px-4 py-4">
-          <Image
-            src="/img/img_juego4.jpg"
-            alt="Portada de juego de Bioshock Infinite"
-            className="w-full h-auto rounded-lg shadow-md object-cover"
-            width={600}
-            height={600}
-          />
+          {img4?.imageUrl && (
+            <Image
+              src={img4.imageUrl}
+              alt={img4.title || "Imagen aleatoria de juego"}
+              className="w-full h-auto rounded-lg shadow-md object-cover"
+              width={600}
+              height={600}
+            />
+          )}
         </div>
       </div>
 

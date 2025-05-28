@@ -9,6 +9,8 @@ import useGames from "@/hooks/useGames";
 import { useSession } from "next-auth/react";
 import AjaxLoader from "@/components/ui/AjaxLoader";
 import ProfileGameListSection from "@/components/profile/ProfileGameListSection";
+import { useState } from "react";
+import Pagination from "@/components/games/Pagination";
 
 export default function PlayedPage() {
     const { data: session } = useSession();
@@ -17,8 +19,16 @@ export default function PlayedPage() {
     const { profileGames } = useProfileGame(userId);
     const { games } = useGames();
 
+    const [page, setPage] = useState(1);
+    const pageSize = 20;
+
     const playedGameIds = profileGames.filter(pg => pg.played).map(pg => pg.gameId);
     const playedGames = games.filter(game => playedGameIds.includes(game.id));
+
+    const countPlayedGames = playedGames.length;
+
+    const totalPages = Math.ceil(playedGames.length / pageSize);
+    const displayedGames = playedGames.slice((page - 1) * pageSize, page * pageSize);
 
     return (
         <>
@@ -26,10 +36,11 @@ export default function PlayedPage() {
             {profile ? (
                 <UserProfileLayout profile={profile} session={session}>
                     <ProfileGameListSection
-                        games={playedGames}
+                        games={displayedGames}
                         emptyText="No tienes juegos marcados como jugados."
-                        title="Juegos que has jugado"
+                        title={`${countPlayedGames} juego${countPlayedGames !== 1 ? "s" : ""} que has jugado`}
                     />
+                    <Pagination page={page} totalPages={totalPages} setPage={setPage} />
                 </UserProfileLayout>
             ) : (
                 <AjaxLoader />

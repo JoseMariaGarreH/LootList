@@ -10,7 +10,7 @@ export default function ProfileGameListSection({ games, emptyText, title }: Prof
     return (
         <div className="max-w-7xl mx-auto mt-8">
             <h2 className="text-xl font-bold mb-4">{title}</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 pb-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-1 pb-10">
                 {games.length === 0 ? (
                     <p className="text-center text-[#f1faee] w-full col-span-full">
                         {emptyText}

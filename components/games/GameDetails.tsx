@@ -47,7 +47,7 @@ export default function GameDetails({ id }: { id: string }) {
     if (!game) {
         return <p className="text-center text-[#f1faee]">Juego no encontrado.</p>;
     }
-    
+
     const handleSetRating = async (newRating: number) => {
         if (!session?.user?.id) {
             toast.error("Debes iniciar sesión para valorar un juego.");
@@ -101,20 +101,24 @@ export default function GameDetails({ id }: { id: string }) {
         <>
             <Toaster position="top-left" reverseOrder={false} />
             <div className="bg-[#1d3557] rounded-xl shadow-2xl flex flex-col md:flex-row overflow-hidden border border-[#a8dadc]/20 max-w-6xl mx-auto">
-
-                {/* Izquierda: imagen, rating y botones */}
+            
                 <div className="flex-shrink-0 flex flex-col items-center justify-start bg-[#457b9d] p-8 md:p-10 text-white w-full md:w-[360px]">
                     <Image
                         src={game.imageUrl || ""}
                         alt={game.title}
-                        width={280}
-                        height={280}
-                        className="rounded-xl object-cover shadow-lg border border-[#a8dadc]/10"
+                        width={500}
+                        height={500}
+                        className="w-[600px] h-[300px] rounded-xl object-cover shadow-lg border border-[#a8dadc]/10"
                         priority
                     />
 
                     {/* Estrellas de rating */}
-                    <div className="flex items-center mt-6 mb-4">
+                    <div className="text-center mt-5">
+                        <span className="text-xl font-bold text-[#f1faee]">
+                            Rating: {hover || rating}
+                        </span>
+                    </div>
+                    <div className="flex items-center mt-1 mb-4">
                         {[1, 2, 3, 4, 5].map((star) => {
                             const filled = (hover || rating) >= star;
                             const halfFilled = !filled && (hover || rating) >= star - 0.5;
@@ -152,14 +156,14 @@ export default function GameDetails({ id }: { id: string }) {
                             );
                         })}
                     </div>
-
+                    
                     {/* Botones de estado */}
                     <div className="flex flex-wrap justify-center gap-3 mt-2">
                         <button
                             onClick={handleTogglePlayed}
                             className={`px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm transition shadow-md ${played
-                                    ? "bg-[#06d6a0] text-[#073b4c] font-semibold"
-                                    : "bg-white/10 text-gray-200 hover:bg-white/20"
+                                ? "bg-[#06d6a0] text-[#073b4c] font-semibold"
+                                : "bg-white/10 text-gray-200 hover:bg-white/20"
                                 }`}
                         >
                             <Gamepad2 className="w-5 h-5" />
@@ -169,8 +173,8 @@ export default function GameDetails({ id }: { id: string }) {
                         <button
                             onClick={handleTogglePlaying}
                             className={`px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm transition shadow-md ${playing
-                                    ? "bg-[#118ab2] text-white font-semibold"
-                                    : "bg-white/10 text-gray-200 hover:bg-white/20"
+                                ? "bg-[#118ab2] text-white font-semibold"
+                                : "bg-white/10 text-gray-200 hover:bg-white/20"
                                 }`}
                         >
                             <Play className="w-5 h-5" />
@@ -180,19 +184,19 @@ export default function GameDetails({ id }: { id: string }) {
                         <button
                             onClick={handleToggleWishlist}
                             className={`px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm transition shadow-md ${wishlist
-                                    ? "bg-[#8338ec] text-white font-semibold"
-                                    : "bg-white/10 text-gray-200 hover:bg-white/20"
+                                ? "bg-[#8338ec] text-white font-semibold"
+                                : "bg-white/10 text-gray-200 hover:bg-white/20"
                                 }`}
                         >
-                            <Gift className="w-5 h-5" /> 
+                            <Gift className="w-5 h-5" />
                             Lista de deseos
                         </button>
 
                         <button
                             onClick={handleToggleLike}
                             className={`px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm transition shadow-md ${liked
-                                    ? "bg-[#ef476f] text-white font-semibold"
-                                    : "bg-white/10 text-gray-200 hover:bg-white/20"
+                                ? "bg-[#ef476f] text-white font-semibold"
+                                : "bg-white/10 text-gray-200 hover:bg-white/20"
                                 }`}
                         >
                             <Heart className="w-5 h-5" />

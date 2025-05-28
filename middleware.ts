@@ -7,21 +7,20 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
 
     const publicPaths = [
-        "/settings", 
-        "/auth", 
-        "/games", 
-        "/about", 
+        "/settings",
+        "/auth",
+        "/games",
+        "/about",
         "/help"
     ];
 
     const isProfileRoute =
-        /^\/[^\/]+$/.test(pathname) &&
-        !publicPaths.some(route => pathname.startsWith(route));
+        /^\/user\/[^\/]+$/.test(pathname);
 
-    const isUserWishlistRoute = /^\/[^\/]+\/wishlist$/.test(pathname);
-    const isUserLikesRoute = /^\/[^\/]+\/likes$/.test(pathname);
-    const isUserPlayingRoute = /^\/[^\/]+\/playing$/.test(pathname);
-    const isUserPlayedRoute = /^\/[^\/]+\/played$/.test(pathname);
+    const isUserWishlistRoute = /^\/user\/[^\/]+\/wishlist$/.test(pathname);
+    const isUserLikesRoute = /^\/user\/[^\/]+\/likes$/.test(pathname);
+    const isUserPlayingRoute = /^\/user\/[^\/]+\/playing$/.test(pathname);
+    const isUserPlayedRoute = /^\/user\/[^\/]+\/played$/.test(pathname);
 
     if (
         (
@@ -38,7 +37,7 @@ export async function middleware(request: NextRequest) {
 
     if (
         token &&
-        (   
+        (
             pathname.startsWith("/auth/login") ||
             pathname.startsWith("/auth/signup") ||
             pathname.startsWith("/auth/resetpassword") ||

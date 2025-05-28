@@ -55,7 +55,7 @@ export default function Navbar() {
                                         >
                                             <li>
                                                 <Link
-                                                    href={`/${session.user?.username}`}
+                                                    href={`/user/${session.user?.username}`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
                                                     Perfil
@@ -64,7 +64,7 @@ export default function Navbar() {
                                             <li></li>
                                             <li>
                                                 <Link
-                                                    href={`/${session.user?.username}/likes`}
+                                                    href={`/user/${session.user?.username}/likes`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
                                                     Me Gustas
@@ -72,7 +72,7 @@ export default function Navbar() {
                                             </li>
                                             <li>
                                                 <Link
-                                                    href={`/${session.user?.username}/played`}
+                                                    href={`/user/${session.user?.username}/played`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
                                                     Jugados
@@ -80,7 +80,7 @@ export default function Navbar() {
                                             </li>
                                             <li>
                                                 <Link
-                                                    href={`/${session.user?.username}/playing`}
+                                                    href={`/user/${session.user?.username}/playing`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
                                                     Jugando
@@ -88,7 +88,7 @@ export default function Navbar() {
                                             </li>
                                             <li>
                                                 <Link
-                                                    href={`/${session.user?.username}/wishlist`}
+                                                    href={`/user/${session.user?.username}/wishlist`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
                                                     Lista de Deseos
@@ -175,7 +175,7 @@ export default function Navbar() {
                                         <ul className="mt-2 space-y-2 bg-[#1d3557] rounded shadow-lg">
                                             <li>
                                                 <Link
-                                                    href={`/${session.user?.username}`}
+                                                    href={`/user/${session.user?.username}`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
                                                     Perfil

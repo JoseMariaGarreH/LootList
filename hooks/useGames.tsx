@@ -2,16 +2,15 @@
 
 import { Games } from "@/src/types";
 import { useEffect, useState } from "react";
-import { gamesRawAction } from "@/src/actions/games-raw-action";
+import getGames from "@/src/actions/get-games-action";
 
 export default function useGames(): { games: Games[]; loading: boolean } {
     const [games, setGames] = useState<Games[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        gamesRawAction()
-            .then((data : any) => {
-                console.log("Games fetched:", data);
+        getGames()
+            .then((data) => {
                 setGames(data);
                 setLoading(false);
             })
