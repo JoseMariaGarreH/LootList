@@ -1,6 +1,6 @@
 "use client"
 
-import { Games } from "@prisma/client";
+import { Games } from "@/src/types";
 import { useEffect, useState } from "react";
 import getGames from "@/src/actions/get-games-action";
 

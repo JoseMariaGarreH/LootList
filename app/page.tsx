@@ -5,8 +5,10 @@ import Navbar from "@/components/menu/Navbar";
 import Image from "next/image";
 import { roboto } from "@/app/font";
 import { Heart, Star, Gamepad2 } from "lucide-react";
+import { useEffect } from "react";
 
 export default function Home() {
+
   return (
     <>
       <Navbar></Navbar>
@@ -15,18 +17,17 @@ export default function Home() {
           src="/img/img_juego1.jpeg"
           alt="Imagen portada del juego Split Fiction"
           fill
-          className="object-cover brightness-75"
+          className="object-cover"
         />
 
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-          <h2 className={`${roboto.className} text-[#e63946] text-[26px] font-semibold drop-shadow border p-2`}>
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 ">
+          <h2 className={`${roboto.className} text-[#f1faee] text-[26px] font-semibold drop-shadow border p-2 bg-black bg-opacity-75`}>
             Haz un seguimiento de los Juegos que te has pasado. <br />
             Registra tus juegos favoritos. <br />
             Y disfruta de una experiencia única.
           </h2>
         </div>
       </div>
-
       <div className="flex flex-wrap">
 
         <div className="w-full md:w-1/2  md:order-1 px-4 py-4">

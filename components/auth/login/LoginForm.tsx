@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginForm() {
@@ -32,7 +31,7 @@ export default function LoginForm() {
     return (
         <>
             <Toaster position="top-left" reverseOrder={false} />
-            <form onSubmit={onSubmit} className="space-y-4 border rounded border-[#a8dadc] shadow-lg p-5">
+            <form onSubmit={onSubmit} className="space-y-4 border rounded border-[#a8dadc] bg-[#355f7a] shadow-lg p-5">
                 <div>
                     <label htmlFor="email_label" className="block text-sm font-semibold text-white">
                         Correo electrónico

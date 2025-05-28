@@ -22,8 +22,8 @@ export default function SignupPage() {
 
                     <SignUpForm />
 
-                    <div className="flex justify-center text-sm border rounded border-[#a8dadc] shadow-lg p-5">
-                        <p className="mr-2 text-black font-light">¿Ya tienes una cuenta?</p>
+                    <div className="flex justify-center text-sm border rounded border-[#a8dadc] bg-[#355f7a] shadow-lg p-5">
+                        <p className="mr-2 text-white font-light">¿Ya tienes una cuenta?</p>
                         <Link href="/auth/login" className="text-[#a8dadc] hover:underline">
                             Iniciar sesión
                         </Link>

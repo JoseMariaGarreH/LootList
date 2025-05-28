@@ -3,10 +3,11 @@ import GameCard from "./GameCard";
 import { useState } from "react";
 import { Search, FilterX } from "lucide-react";
 import AjaxLoader from "../ui/AjaxLoader";
+import useGamesRaw from "@/hooks/useGames";
 
 export default function GameList() {
 
-    const { games, loading } = useGames();
+    const { games, loading } = useGamesRaw();
 
     const [platform, setPlatform] = useState("");
     const [search, setSearch] = useState("");
