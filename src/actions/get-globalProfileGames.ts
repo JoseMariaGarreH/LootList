@@ -1,9 +1,9 @@
 "use server"
 
-export default async function getProfileGameById(userId: string) {
+export default async function getGlobalProfileGamesByGameId(gameId: string) {
     try {
         const baseUrl = process.env.NEXT_PUBLIC_URL;
-        const res = await fetch(`${baseUrl}/api/profileGame/${userId}`, {
+        const res = await fetch(`${baseUrl}/api/profileGame/game/${gameId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -11,12 +11,12 @@ export default async function getProfileGameById(userId: string) {
         });
 
         if (!res.ok) {
-            throw new Error("Error al obtener los juegos del perfil");
+            throw new Error("Error al obtener los datos globales del juego");
         }
 
         return await res.json();
     } catch (error) {
-        console.error("Error en el action [getProfileGameById]:", error);
+        console.error("Error en el action [getGlobalProfileGamesByGameId]:", error);
         return [];
     }
 }

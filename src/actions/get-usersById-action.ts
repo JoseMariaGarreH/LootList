@@ -2,7 +2,7 @@
 
 export default async function getUserById(userId: string) {
     try {
-        const baseUrl = process.env.NEXTAUTH_URL;
+        const baseUrl = process.env.NEXT_PUBLIC_URL;
         const res = await fetch(`${baseUrl}/api/users/${userId}`, {
             method: "GET",
             headers: {

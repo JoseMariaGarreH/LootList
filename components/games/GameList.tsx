@@ -123,6 +123,7 @@ export default function GameList() {
                                     id: game.id,
                                     title: game.title ?? "",
                                     platform: game.platform,
+                                    genre: game.genre ?? "",
                                     releaseDate: game.releaseDate,
                                     description: "",
                                     imageUrl: game.imageUrl ?? "",

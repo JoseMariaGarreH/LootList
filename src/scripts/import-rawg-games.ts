@@ -5,6 +5,8 @@ async function importGames() {
     try {
         const rawgGames = await getAllVideojuegos(""); // Puedes pasar una query si quieres filtrar
 
+        console.log(`Importando ${rawgGames.length} juegos desde RAWG...`);
+
         for (const game of rawgGames) {
             // Mapea los campos de RAWG a tu modelo
             await prisma.games.upsert({
@@ -15,6 +17,7 @@ async function importGames() {
                     platform: game.platforms?.map((p: any) => p.platform?.name).join(", ") || "",
                     releaseDate: game.released ? new Date(game.released) : null,
                     imageUrl: game.background_image || "",
+                    genre: game.genres?.map((g: any) => g.name).join(", ") || "",
                 },
                 create: {
                     title: game.name,
@@ -22,6 +25,7 @@ async function importGames() {
                     platform: game.platforms?.map((p: any) => p.platform?.name).join(", ") || "",
                     releaseDate: game.released ? new Date(game.released) : null,
                     imageUrl: game.background_image || "",
+                    genre: game.genres?.map((g: any) => g.name).join(", ") || "",
                 },
             });
         }

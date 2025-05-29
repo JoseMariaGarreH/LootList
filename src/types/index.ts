@@ -24,6 +24,7 @@ export interface Games {
     title: string;
     description: string | null;
     platform: string | null;
+    genre: string | null;
     releaseDate: Date | null;
     imageUrl: string | null;
     profiles?: Profile[];

@@ -38,6 +38,7 @@ model Games {
   title        String
   description  String?
   platform     String?
+  genre        String?
   releaseDate  DateTime?
   imageUrl     String?
 

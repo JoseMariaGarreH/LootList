@@ -12,7 +12,7 @@ export default async function updateProfile(
     }
 ) {
     try {
-        const baseUrl = process.env.NEXTAUTH_URL;
+        const baseUrl = process.env.NEXT_PUBLIC_URL;
         const res = await fetch(`${baseUrl}/api/profile/${userId}`, {
             method: "PUT",
             headers: {

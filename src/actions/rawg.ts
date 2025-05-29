@@ -1,5 +1,5 @@
-const API_KEY = process.env.RAWG_API_KEY;
-const BASE_URL = process.env.RAWG_API_URL;
+const API_KEY = "8152f9b5c1464a4b9851894645fb4a39";
+const BASE_URL = "https://api.rawg.io/api";
 
 export async function getAllVideojuegos(query = "", maxPages = 5) {
   let allGames: any[] = [];

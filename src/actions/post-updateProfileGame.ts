@@ -13,7 +13,7 @@ export default async function updateProfileGame(
 ) {
     try {
         console.log("Actualizando juego del perfil:", { userId, gameId, data });
-        const baseUrl = process.env.NEXTAUTH_URL;
+        const baseUrl = process.env.NEXT_PUBLIC_URL;
         const res = await fetch(`${baseUrl}/api/profileGame/${userId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
