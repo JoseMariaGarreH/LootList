@@ -9,7 +9,10 @@ interface GameFiltersProps {
     setYear: (v: string) => void;
     order: string;
     setOrder: (v: string) => void;
+    genre: string;
+    setGenre: (v: string) => void;
     platforms: string[];
+    genres: string[];
     years: string[];
     onClear: () => void;
 }
@@ -19,88 +22,86 @@ export default function GameFilters({
     platform, setPlatform,
     year, setYear,
     order, setOrder,
-    platforms, years,
+    genre, setGenre,
+    platforms, years, genres,
     onClear
 }: GameFiltersProps) {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-2xl p-6 w-full max-w-7xl mx-auto">
-            {/* Buscar */}
-            <div>
-                <label htmlFor="search" className="block text-xs font-semibold text-white mb-2 uppercase tracking-wider">
-                    Buscar
-                </label>
+        <div className="flex flex-wrap items-center justify-between gap-4 bg-white/10 backdrop-blur-md border-b border-white/20 px-6 py-4">
+            {/* Título */}
+            <div className="text-xs font-semibold text-white uppercase tracking-widest mr-4">
+                Juegos
+            </div>
+
+            {/* Filtros */}
+            <div className="flex flex-wrap items-center gap-4 flex-1">
+                {/* Buscar */}
                 <div className="relative">
-                    <Search className="absolute left-3 top-3 text-white/70 w-5 h-5" />
+                    <Search className="absolute left-3 top-2.5 text-white/70 w-4 h-4" />
                     <input
-                        id="search"
                         type="text"
-                        placeholder="Ej: Zelda..."
+                        placeholder="Buscar..."
                         value={search}
                         onChange={e => setSearch(e.target.value)}
-                        className="pl-10 pr-4 py-2.5 w-full rounded-xl bg-[#1d3557] border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#a8dadc] transition shadow-inner"
+                        className="pl-9 pr-4 py-1.5 rounded-md bg-[#1d3557] border border-white/20 text-white text-sm placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-[#a8dadc] transition"
                     />
                 </div>
-            </div>
-            {/* Plataforma */}
-            <div>
-                <label htmlFor="platform" className="block text-xs font-semibold text-white mb-2 uppercase tracking-wider">
-                    Plataforma
-                </label>
+
+                {/* Plataforma */}
                 <select
-                    id="platform"
                     value={platform}
                     onChange={e => setPlatform(e.target.value)}
-                    className="w-full py-2.5 px-4 rounded-xl bg-[#1d3557] border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-[#a8dadc] transition shadow-inner"
+                    className="bg-[#1d3557] py-1.5 px-3 rounded-md border border-white/20 text-white text-sm focus:outline-none focus:ring-1 focus:ring-[#a8dadc] transition"
                 >
-                    <option value="">Todas</option>
+                    <option value="">Plataforma</option>
                     {platforms.map(p => (
                         <option key={p} value={p}>{p}</option>
                     ))}
                 </select>
-            </div>
-            {/* Año */}
-            <div>
-                <label htmlFor="year" className="block text-xs font-semibold text-white mb-2 uppercase tracking-wider">
-                    Año
-                </label>
+                {/* Género */}
                 <select
-                    id="year"
+                    value={genre}
+                    onChange={e => setGenre(e.target.value)}
+                    className="bg-[#1d3557] py-1.5 px-3 rounded-md border border-white/20 text-white text-sm focus:outline-none focus:ring-1 focus:ring-[#a8dadc] transition"
+                >
+                    <option value="">Género</option>
+                    {genres.map(g => (
+                        <option key={g} value={g}>{g}</option>
+                    ))}
+                </select>
+
+                {/* Año */}
+                <select
                     value={year}
                     onChange={e => setYear(e.target.value)}
-                    className="w-full py-2.5 px-4 rounded-xl bg-[#1d3557] border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-[#a8dadc] transition shadow-inner"
+                    className="bg-[#1d3557] py-1.5 px-3 rounded-md border border-white/20 text-white text-sm focus:outline-none focus:ring-1 focus:ring-[#a8dadc] transition"
                 >
-                    <option value="">Todos</option>
+                    <option value="">Año</option>
                     {years.map(y => (
                         <option key={y} value={y}>{y}</option>
                     ))}
                 </select>
-            </div>
-            {/* Ordenar */}
-            <div>
-                <label htmlFor="order" className="block text-xs font-semibold text-white mb-2 uppercase tracking-wider">
-                    Orden
-                </label>
+
+                {/* Orden */}
                 <select
-                    id="order"
                     value={order}
                     onChange={e => setOrder(e.target.value)}
-                    className="bg-[#1d3557] w-full py-2.5 px-4 rounded-xl border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-[#a8dadc] transition shadow-inner"
+                    className="bg-[#1d3557] py-1.5 px-3 rounded-md border border-white/20 text-white text-sm focus:outline-none focus:ring-1 focus:ring-[#a8dadc] transition"
                 >
-                    <option value="">Sin orden</option>
+                    <option value="">Orden</option>
                     <option value="az">A-Z</option>
                     <option value="za">Z-A</option>
                 </select>
             </div>
+
             {/* Limpiar */}
-            <div className="flex items-end">
-                <button
-                    onClick={onClear}
-                    className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-4 rounded-xl shadow-md w-full transition"
-                >
-                    <FilterX className="w-5 h-5" />
-                    Limpiar
-                </button>
-            </div>
+            <button
+                onClick={onClear}
+                className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white text-sm font-medium py-1.5 px-3 rounded-md transition shadow-sm"
+            >
+                <FilterX className="w-4 h-4" />
+                Limpiar
+            </button>
         </div>
     );
 }

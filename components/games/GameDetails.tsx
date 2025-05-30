@@ -4,6 +4,7 @@ import { useProfileGame } from "@/hooks/useProfileGame";
 import { useUpdateProfileGame } from "@/hooks/useUpdateProfileGame";
 import { Games, ProfileGame } from "@/src/types";
 import {
+    ArrowLeftCircle,
     Calendar,
     Gamepad,
     Gamepad2,
@@ -156,6 +157,15 @@ export default function GameDetails({ id }: { id: string }) {
     return (
         <>
             <Toaster position="top-left" reverseOrder={false} />
+            <div>
+                <button
+                    onClick={() => window.history.back()}
+                    className="absolute top-4 left-4 flex items-center bg-[#1d3557] text-white text-sm px-2 py-3 rounded-xl shadow-md hover:bg-[#264470] transition-all duration-200"
+                >
+                    <ArrowLeftCircle className="inline-block mr-2 w-5 h-5" />
+                    Volver
+                </button>
+            </div>
             <div className="bg-gradient-to-br from-[#1d3557] to-[#264470] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden border border-[#a8dadc]/20 max-w-6xl mx-auto">
 
                 <div className="flex-shrink-0 flex flex-col items-center bg-[#355f7a] p-6 md:p-10 text-white w-full md:w-[380px] gap-6">

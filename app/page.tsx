@@ -61,9 +61,9 @@ export default function Home() {
             <Image
               src={img2.imageUrl}
               alt={img2.title || "Imagen aleatoria de juego"}
-              className="w-full h-auto rounded-lg shadow-md object-cover"
-              width={600}
-              height={600}
+              width={900}
+              height={500}
+              className="w-[900px] h-[500px] rounded-lg shadow-md object-cover mx-auto"
             />
           )}
         </div>
@@ -83,9 +83,9 @@ export default function Home() {
             <Image
               src={img3.imageUrl}
               alt={img3.title || "Imagen aleatoria de juego"}
-              className="w-full h-auto rounded-lg shadow-md object-cover"
-              width={600}
-              height={600}
+              width={900}
+              height={500}
+              className="w-[900px] h-[500px] rounded-lg shadow-md object-cover mx-auto"
             />
           )}
         </div>
@@ -106,9 +106,9 @@ export default function Home() {
             <Image
               src={img4.imageUrl}
               alt={img4.title || "Imagen aleatoria de juego"}
-              className="w-full h-auto rounded-lg shadow-md object-cover"
-              width={600}
-              height={600}
+              width={900}
+              height={500}
+              className="w-[900px] h-[500px] rounded-lg shadow-md object-cover mx-auto"
             />
           )}
         </div>

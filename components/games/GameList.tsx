@@ -5,43 +5,60 @@ import useGames from "@/hooks/useGames";
 import GameFilters from "./GameFilter";
 import Pagination from "./Pagination";
 
+const genres = [
+    "Action",
+    "Adventure",
+    "RPG",
+    "Shooter",
+    "Indie",
+    "Simulation",
+    "Sports",
+    "Racing",
+    "Strategy",
+    "Puzzle",
+    "Platformer",
+    "Horror",
+    "Multiplayer"
+];
+
+const platforms = [
+    "Android",
+    "Classic Macintosh",
+    "Dreamcast",
+    "iOS",
+    "Linux",
+    "Mac",
+    "Nintendo 3DS",
+    "Nintendo Switch",
+    "PC",
+    "PlayStation 2",
+    "PlayStation 3",
+    "PlayStation 4",
+    "PlayStation 5",
+    "PS Vita",
+    "Web",
+    "Wii U",
+    "Xbox",
+    "Xbox 360",
+    "Xbox One",
+    "Xbox Series S/X"
+];
+
 export default function GameList() {
+    // Estados para los filtros
     const [platform, setPlatform] = useState("");
     const [search, setSearch] = useState("");
     const [year, setYear] = useState("");
     const [order, setOrder] = useState("");
+    const [genre, setGenre] = useState("");
     const [page, setPage] = useState(1);
-    const pageSize = 20; // Cambia este valor si quieres más/menos juegos por página
+    const pageSize = 20; // Número de juegos por página
 
-    // Usar useGames en vez de estado local y useEffect
     const { games, loading } = useGames();
-
-    const platforms = [
-        "Android",
-        "Classic Macintosh",
-        "Dreamcast",
-        "iOS",
-        "Linux",
-        "Mac",
-        "Nintendo 3DS",
-        "Nintendo Switch",
-        "PC",
-        "PlayStation 2",
-        "PlayStation 3",
-        "PlayStation 4",
-        "PlayStation 5",
-        "PS Vita",
-        "Web",
-        "Wii U",
-        "Xbox",
-        "Xbox 360",
-        "Xbox One",
-        "Xbox Series S/X"
-    ];
 
     useEffect(() => {
         setPage(1);
-    }, [search, platform, year, order]);
+    }, [search, platform, year, order, genre]);
 
     const years = Array.from(
         new Set(
@@ -51,14 +68,13 @@ export default function GameList() {
         )
     );
 
-    // Filtrado local si es necesario (puedes omitir si useGames ya filtra)
     const filteredGames = games.filter((game) => {
         const gamePlatforms: string[] = typeof game.platform === "string"
             ? game.platform.split(",").map(p => p.trim())
             : [];
 
-        const matchesPlatform = platform
-            ? gamePlatforms.includes(platform)
+        const matchesPlatform = platform.length > 0
+            ? gamePlatforms.some(p => platform.includes(p))
             : true;
 
         const matchesYear = year
@@ -69,10 +85,13 @@ export default function GameList() {
             ? game.title?.toLowerCase().includes(search.toLowerCase())
             : true;
 
-        return matchesPlatform && matchesYear && matchesSearch;
+        const matchesGenre = genre
+            ? (game.genre && game.genre.includes(genre))
+            : true;
+
+        return matchesPlatform && matchesYear && matchesSearch && matchesGenre;
     });
 
-    // Ordenar si es necesario (puedes omitir si useGames ya ordena)
     const orderedGames =
         order === "az"
             ? [...filteredGames].sort((a, b) => a.title.localeCompare(b.title, "es", { sensitivity: "base" }))
@@ -96,11 +115,15 @@ export default function GameList() {
                 setYear={setYear}
                 order={order}
                 setOrder={setOrder}
+                genre={genre}
+                setGenre={setGenre}
                 platforms={platforms}
+                genres={genres}
                 years={years}
                 onClear={() => {
                     setSearch("");
                     setPlatform("");
+                    setGenre("");
                     setYear("");
                     setOrder("");
                 }}
