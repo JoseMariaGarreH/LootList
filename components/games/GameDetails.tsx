@@ -229,9 +229,10 @@ export default function GameDetails({ id }: { id: string }) {
                             <button
                                 key={idx}
                                 onClick={onClick}
+                                style={active ? { backgroundColor: color, color: "#fff" } : {}}
                                 className={`px-4 py-2 rounded-full inline-flex items-center gap-2 text-sm font-medium transition-all duration-200 shadow-sm ${active
-                                    ? `bg-[${color}] text-white`
-                                    : "bg-white/10 text-white hover:bg-white/20"
+                                        ? ""
+                                        : "bg-white/10 text-white hover:bg-white/20"
                                     }`}
                             >
                                 {icon}
