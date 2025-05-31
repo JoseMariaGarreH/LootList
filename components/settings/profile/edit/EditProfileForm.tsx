@@ -15,7 +15,7 @@ import { useUpdateProfile } from "@/hooks/useUpdateProfile";
 export default function ProfileForm() {
 
     // Datos de la sesión
-    const { data: session } = useSession();
+    const { data: session, update } = useSession();
 
     // hooks
     const { user } = useUserById(session?.user?.id || "");
@@ -103,18 +103,27 @@ export default function ProfileForm() {
             bio,
             location,
             pronoun,
+            username,
+            email
         } = data;
 
         try {
             const updateResponse = await changeProfile(
                 session?.user?.id || '',
-                { name, firstSurname, secondSurname, bio, location, pronoun }
+                { name, firstSurname, secondSurname, bio, location, pronoun, username, email }
             );
 
             if (!updateResponse) {
                 toast.error("Error al actualizar el perfil");
                 return;
             }
+
+            // Restablece los modos de edición tras guardar
+            setModificarUsername(false);
+            setModificarEmail(false);
+
+            await update({ email, username });
+
             toast.success("Perfil actualizado correctamente");
         } catch (error) {
             console.error("Error al actualizar el perfil:", error);
@@ -122,8 +131,9 @@ export default function ProfileForm() {
         }
     };
 
+
     const handleCancelConfirmacion = () => {
-        setSeAbreVentanaConfirmacion(false); // Cierra VentanaEmergente
+        setSeAbreVentanaConfirmacion(false);
     };
 
     return (
@@ -135,7 +145,15 @@ export default function ProfileForm() {
                     <div>
                         <div className='flex justify-between'>
                             <label htmlFor="username" className="block text-sm font-semibold">Username</label>
-                            <Pencil onClick={() => handleEditClick('username')} className='w-5 h-5 mb-1' ></Pencil>
+                            {!modificarUsername && (
+                                <button
+                                    type="button"
+                                    onClick={() => handleEditClick('username')}
+                                    className="text-white hover:text-[#a8dadc] transition-colors"
+                                >
+                                    <Pencil className='w-5 h-5 mb-1 cursor-pointer' />
+                                </button>
+                            )}
                         </div>
                         <input
                             id="username"
@@ -153,7 +171,15 @@ export default function ProfileForm() {
                     <div>
                         <div className='flex justify-between'>
                             <label htmlFor="email" className="block text-sm font-semibold">Correo electrónico</label>
-                            <Pencil onClick={() => handleEditClick('email')} className='w-5 h-5 mb-1' ></Pencil>
+                            {!modificarEmail && (
+                                <button
+                                    type="button"
+                                    onClick={() => handleEditClick('email')}
+                                    className="text-white hover:text-[#a8dadc] transition-colors"
+                                >
+                                    <Pencil className='w-5 h-5 mb-1 cursor-pointer' />
+                                </button>
+                            )}
                         </div>
                         <input
                             id="email"

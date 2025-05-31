@@ -5,7 +5,7 @@ import { prisma } from "@/src/lib/prisma";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
     try {
-        
+
         if (!params.id) {
             return NextResponse.json(
                 { message: "No autorizado" },
@@ -66,6 +66,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             );
         }
 
+        
+
         const body = await request.json();
         const {
             name,
@@ -74,7 +76,20 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             bio,
             location,
             pronoun,
+            username,
+            email,
         } = body;
+
+        // Actualiza el usuario si hay cambios en username o email
+        if (username || email) {
+            await prisma.users.update({
+                where: { id: user.id },
+                data: {
+                    username: username,
+                    email: email,
+                },
+            });
+        }
 
         const updatedProfile = await prisma.profiles.update({
             where: { userId: user.id },
@@ -85,6 +100,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
                 bio,
                 location,
                 pronoun,
+                updatedAt: new Date(),
             },
         });
 

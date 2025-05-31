@@ -28,9 +28,12 @@ model Profiles {
   location      String @default("")
   pronoun       String @default("")
   profileImage  String @default("")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   user          Users  @relation(fields: [userId], references: [id])
   games         ProfileGame[]
+  comments      Comments[]
 }
 
 model Games {
@@ -43,6 +46,7 @@ model Games {
   imageUrl     String?
 
   profiles     ProfileGame[]
+  comments     Comments[]
 }
 
 model ProfileGame {
@@ -57,12 +61,24 @@ model ProfileGame {
   wishlist  Boolean?
 
   createdAt DateTime     @default(now())
-  updatedAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 
   profile    Profiles      @relation(fields: [profileId], references: [id], onDelete: Cascade)
   game       Games         @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
   @@unique([profileId, gameId])
+}
+
+model Comments {
+  id         Int      @id @default(autoincrement())
+  profileId  Int
+  gameId     Int
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  profile    Profiles  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  game       Games    @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }
 
 model PasswordResetToken {

@@ -9,6 +9,7 @@ import { useAvatar } from "@/hooks/useAvatar";
 import toast, { Toaster } from "react-hot-toast";
 import { useProfileById } from "@/hooks/useProfileById";
 import AjaxLoader from "@/components/ui/AjaxLoader";
+import clsx from "clsx";
 
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg";
 
@@ -27,6 +28,8 @@ export default function AvatarUploader() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [imageName, setImageName] = useState<string | null>(null);
     const [hasInteracted, setHasInteracted] = useState(false);
+    const [dragCounter, setDragCounter] = useState(0);
+    const [isDragActive, setIsDragActive] = useState(false);
 
     useEffect(() => {
         if (profile?.profileImage && !hasInteracted) {
@@ -91,10 +94,29 @@ export default function AvatarUploader() {
         }
     }, [preview, croppedAreaPixels, imageName, session]);
 
+    const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragCounter((c) => c + 1);
+        setIsDragActive(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragCounter((c) => {
+            const newCount = c - 1;
+            if (newCount <= 0) setIsDragActive(false);
+            return newCount;
+        });
+    };
+
     // Maneja el lanzamiento de archivos hacia el área de recorte
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
+        setIsDragActive(false);
+        setDragCounter(0);
         const file = e.dataTransfer.files?.[0];
         if (file && file.type.startsWith("image/")) {
             setHasInteracted(true);
@@ -121,7 +143,10 @@ export default function AvatarUploader() {
             <div className="max-w-2xl mt-32 mb-32 mx-auto p-6 bg-[#1d3557] rounded-lg shadow-lg text-white">
                 <h2 className="text-xl font-semibold mb-4">Avatar</h2>
                 <div
-                    className="relative w-full h-96 border-2 border-dashed border-gray-600 rounded-md flex items-center justify-center cursor-pointer"
+                    className={clsx(
+                        "relative w-full h-96 border-2 border-dashed border-gray-600 rounded-md flex items-center justify-center cursor-pointer transition-colors duration-200",
+                        isDragActive && "border-blue-400 bg-blue-100/10"
+                    )}
                     onClick={() => {
                         if (!preview && !croppedImage) {
                             fileInputRef.current?.click();
@@ -129,6 +154,8 @@ export default function AvatarUploader() {
                     }}
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
+                    onDragEnter={handleDragEnter}
+                    onDragLeave={handleDragLeave}
                 >
                     {/* Si hay preview pero no imagen recortada, muestra el cropper */}
                     {
@@ -195,6 +222,11 @@ export default function AvatarUploader() {
                     ) : (
                         // Si no hay imagen, muestra el mensaje para cargar una
                         <p>Arrastrar y soltar una imagen</p>
+                    )}
+                    {isDragActive && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-blue-400/30 z-10 rounded-md pointer-events-none">
+                            <span className="text-white text-lg font-bold">¡Suelta la imagen aquí!</span>
+                        </div>
                     )}
                 </div>
                 {/* Input de archivo oculto */}

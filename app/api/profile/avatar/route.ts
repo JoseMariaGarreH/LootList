@@ -5,8 +5,8 @@ import { v2 as cloudinary } from 'cloudinary';
 import { prisma } from '@/src/lib/prisma';
 
 cloudinary.config({ 
-    cloud_name: 'dyczqjlew', 
-    api_key: '388522924768573', 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 

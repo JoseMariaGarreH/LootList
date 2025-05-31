@@ -12,6 +12,8 @@ export function useUpdateProfile() : {
             bio: string;
             location: string;
             pronoun: string;
+            username: string;
+            email: string;
         }
     ) => Promise<boolean>;
 }  {
@@ -25,6 +27,8 @@ export function useUpdateProfile() : {
             bio: string;
             location: string;
             pronoun: string;
+            username: string;
+            email: string;
         }
     ) => {
         const result = await updateProfile(userId, profileData);

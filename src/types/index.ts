@@ -17,6 +17,8 @@ export interface Profile {
     location: string;
     pronoun: string;
     profileImage: string | null;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface Games {
@@ -39,6 +41,15 @@ export interface ProfileGame {
     played: boolean | null;
     playing: boolean | null;
     wishlist: boolean | null;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface Comments {
+    id: number;
+    profileId: number;
+    gameId: number;
+    content: string;
     createdAt: Date;
     updatedAt: Date;
 }

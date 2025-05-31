@@ -64,11 +64,21 @@ const authOptions: NextAuthOptions = {
             return session;
         },
         async jwt({ token, user }) {
-            // Agregar el username al token JWT
+            // Si hay un usuario (login), añade los datos
             if (user) {
                 token.id = user.id;
                 token.email = user.email;
-                token.username = user.username; 
+                token.username = user.username;
+            } else if (token?.id) {
+                // Refresca los datos del usuario en cada petición
+                const userInDb = await prisma.users.findUnique({
+                    where: { id: Number(token.id) },
+                    select: { id: true, email: true, username: true }
+                });
+                if (userInDb) {
+                    token.email = userInDb.email;
+                    token.username = userInDb.username;
+                }
             }
             return token;
         }
