@@ -1,7 +1,8 @@
 import GameCard from "@/components/games/GameCard";
+import { Games } from "@/src/types";
 
 interface ProfileGameListSectionProps {
-    games: any[];
+    games: Games[];
     emptyText: string;
     title: string;
 }

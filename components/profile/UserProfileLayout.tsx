@@ -1,11 +1,12 @@
 "use client"
 
+import { Profile } from "@/src/types";
 import { Edit3, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function UserProfileLayout({ profile, session, children }: { profile: any, session: any, children: React.ReactNode }) {
+export default function UserProfileLayout({ profile, session, children }: { profile: Profile, session: any, children: React.ReactNode }) {
     const pathname = usePathname();
     const tabs = [
         { name: "Perfil", href: `/user/${session?.user.username}` },
