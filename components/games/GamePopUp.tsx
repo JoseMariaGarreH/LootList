@@ -34,8 +34,6 @@ export default function GamePopUp({
         }
         setSubmitting(true);
         try {
-            console.log("Enviando comentario:", commentValue.trim());
-            console.log("Perfil ID:", profileId);
             await addOrUpdateComment(profileId, commentValue.trim());
             toast.success(userComment ? "Comentario actualizado." : "Comentario añadido.");
             setModalOpen(false);
@@ -73,16 +71,8 @@ export default function GamePopUp({
                     />
                     <div className="mt-4 flex justify-end space-x-4">
                         <button
-                            type="button"
-                            className="py-2 px-4 text-white rounded-md hover:bg-gray-600 bg-gray-500 transition"
-                            onClick={() => setModalOpen(false)}
-                            disabled={submitting}
-                        >
-                            Cancelar
-                        </button>
-                        <button
                             type="submit"
-                            className="py-2 px-4 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
+                            className="py-2 px-4 w-full text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
                             disabled={submitting}
                         >
                             {userComment ? "Guardar cambios" : "Comentar"}

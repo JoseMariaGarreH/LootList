@@ -46,6 +46,7 @@ export default function AvatarUploader() {
         setZoom(1);
         setCroppedAreaPixels(null);
         await deleteAvatar(DEFAULT_AVATAR_URL);
+        window.location.reload();
     };
 
     // Maneja el cambio de archivo (cuando el usuario selecciona una imagen)

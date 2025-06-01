@@ -38,7 +38,7 @@ export default function WishlistPage() {
                     <ProfileGameListSection
                         games={displayedGames}
                         emptyText="No tienes juegos marcados como te gustaron."
-                        title={`${countLikedGames} juego${countLikedGames !== 1 ? "s" : ""} que le gustó ${session?.user?.username}`}
+                        title={`${countLikedGames} juego${countLikedGames !== 1 ? "s" : ""} que le gustó a ${session?.user?.username}`}
                     />
                     <Pagination page={page} totalPages={totalPages} setPage={setPage} />
                 </UserProfileLayout>

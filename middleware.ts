@@ -19,6 +19,7 @@ export async function middleware(request: NextRequest) {
 
     const isUserWishlistRoute = /^\/user\/[^\/]+\/wishlist$/.test(pathname);
     const isUserLikesRoute = /^\/user\/[^\/]+\/likes$/.test(pathname);
+    const isUserReviewsRoute = /^\/user\/[^\/]+\/reviews$/.test(pathname);
     const isUserPlayingRoute = /^\/user\/[^\/]+\/playing$/.test(pathname);
     const isUserPlayedRoute = /^\/user\/[^\/]+\/played$/.test(pathname);
 
@@ -29,7 +30,8 @@ export async function middleware(request: NextRequest) {
             isUserPlayedRoute ||
             isUserWishlistRoute ||
             isUserLikesRoute ||
-            isUserPlayingRoute
+            isUserPlayingRoute ||
+            isUserReviewsRoute
         ) && !token
     ) {
         return NextResponse.redirect(new URL("/auth/login", request.url));

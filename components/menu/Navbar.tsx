@@ -61,12 +61,21 @@ export default function Navbar() {
                                                     Perfil
                                                 </Link>
                                             </li>
+                                            <hr className="border-white/20" />
                                             <li>
                                                 <Link
                                                     href={`/user/${session.user?.username}/likes`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
                                                     Me Gustas
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={`/user/${session.user?.username}/reviews`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Reseñas
                                                 </Link>
                                             </li>
                                             <li>
@@ -93,6 +102,7 @@ export default function Navbar() {
                                                     Lista de Deseos
                                                 </Link>
                                             </li>
+                                            <hr className="border-white/20" />
                                             <li>
                                                 <Link
                                                     href="/settings/profile"
@@ -165,8 +175,17 @@ export default function Navbar() {
                                 <li>
                                     <button
                                         onClick={() => setDropdownAbierto(!dropdownAbierto)}
-                                        className="flex items-center justify-between w-full text-[#f1faee] hover:text-[#1d3557] transition-colors"
+                                        className="flex items-center text-[#f1faee] hover:text-[#1d3557] transition-colors"
                                     >
+                                        {profile?.profileImage && (
+                                            <Image
+                                                src={profile.profileImage}
+                                                width={30}
+                                                height={30}
+                                                alt="Avatar"
+                                                className="rounded-full object-cover mx-2"
+                                            />
+                                        )}
                                         {session.user?.username}
                                         <ChevronDown className="ml-1 w-4 h-4" />
                                     </button>
@@ -180,12 +199,21 @@ export default function Navbar() {
                                                     Perfil
                                                 </Link>
                                             </li>
+                                            <hr className="border-white/20" />
                                             <li>
                                                 <Link
                                                     href={`/user/${session.user?.username}/likes`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
                                                     Me Gustas
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={`/user/${session.user?.username}/reviews`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Reseñas
                                                 </Link>
                                             </li>
                                             <li>
@@ -212,6 +240,7 @@ export default function Navbar() {
                                                     Lista de Deseos
                                                 </Link>
                                             </li>
+                                            <hr className="border-white/20" />
                                             <li>
                                                 <Link
                                                     href="/settings/profile"

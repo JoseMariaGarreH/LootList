@@ -174,7 +174,7 @@ export default function GameDetails({ id }: { id: string }) {
             {/* Botón Volver */}
             <button
                 onClick={() => window.history.back()}
-                className="fixed top-6 left-6 z-10 flex items-center gap-2 bg-[#1d3557] text-white text-sm px-4 py-2 rounded-full shadow-md hover:bg-[#264470] transition-all"
+                className="fixed top-6 left-6 z-10 flex items-center gap-2 bg-[#1d3557] text-white text-sm px-4 py-2 rounded-md shadow-md hover:bg-[#264470] transition-all"
             >
                 <ArrowLeftCircle className="w-5 h-5" />
                 Volver
@@ -242,7 +242,8 @@ export default function GameDetails({ id }: { id: string }) {
                                 key={idx}
                                 onClick={onClick}
                                 style={active ? { backgroundColor: color, color: "#fff" } : {}}
-                                className={`px-4 py-2 rounded-full inline-flex items-center gap-2 text-sm font-semibold transition-all duration-200 shadow-sm ${active ? "" : "bg-white/10 text-white hover:bg-white/20"}`}
+                                className={`px-4 py-2 rounded-md inline-flex items-center gap-2 text-sm font-semibold transition-all duration-200 shadow-sm 
+                                    ${active ? "" : "bg-white/10 text-white hover:bg-white/20"}`}
                             >
                                 {icon}
                                 {label}
@@ -257,15 +258,15 @@ export default function GameDetails({ id }: { id: string }) {
 
                     {/* Estadísticas */}
                     <div className="flex flex-wrap gap-3">
-                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-full text-sm font-semibold shadow">
+                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-semibold shadow">
                             <ThumbsUp className="w-4 h-4" />
                             {totalLikes} Me gusta
                         </span>
-                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-full text-sm font-semibold shadow">
+                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-semibold shadow">
                             <Star className="w-4 h-4" />
                             Media: {avgRating}
                         </span>
-                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-full text-sm font-semibold shadow">
+                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-semibold shadow">
                             <Users className="w-4 h-4" />
                             {totalPlayed === 1 ? "1 persona lo ha jugado" : `${totalPlayed} personas lo han jugado`}
                         </span>
@@ -273,15 +274,15 @@ export default function GameDetails({ id }: { id: string }) {
 
                     {/* Metadata */}
                     <div className="flex flex-wrap gap-3">
-                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-full text-sm font-medium shadow-sm">
+                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-medium shadow-sm">
                             <Gamepad2 className="w-5 h-5" />
                             {game.platform || "Desconocida"}
                         </span>
-                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-full text-sm font-medium shadow-sm">
+                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-medium shadow-sm">
                             <Calendar className="w-5 h-5" />
                             {game.releaseDate ? new Date(game.releaseDate).getFullYear() : "Desconocido"}
                         </span>
-                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-full text-sm font-medium shadow-sm">
+                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-medium shadow-sm">
                             <Gamepad className="w-5 h-5" />
                             {game.genre || "Desconocido"}
                         </span>
@@ -296,7 +297,7 @@ export default function GameDetails({ id }: { id: string }) {
             </div>
 
             {/* Comentarios debajo de la card */}
-            <div className="max-w-6xl mx-auto mt-10 bg-[#1d3557] rounded-2xl shadow-lg p-8">
+            <div className="max-w-6xl mx-auto mt-10 bg-[#355f7a] rounded-2xl shadow-lg p-8">
                 <h2 className="text-2xl font-bold mb-4 border-b border-white/20 pb-2 text-white">Comentarios</h2>
                 {loadingComments ? (
                     <p className="text-white/80">Cargando comentarios...</p>
@@ -331,7 +332,7 @@ export default function GameDetails({ id }: { id: string }) {
 
                 {/* Botón para abrir el modal */}
                 <button
-                    className="mt-6 px-5 py-2 bg-[#e63946] hover:bg-[#d62839] transition rounded-lg text-white font-semibold"
+                    className="mt-6 py-2 px-4 w-full text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
                     onClick={() => setModalOpen(true)}
                 >
                     {userComment ? "Editar comentario" : "Comentar"}

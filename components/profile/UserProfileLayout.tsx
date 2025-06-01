@@ -12,7 +12,7 @@ export default function UserProfileLayout({ profile, session, children }: { prof
         { name: "Jugados", href: `/user/${session?.user.username}/played` },
         { name: "Jugando", href: `/user/${session?.user.username}/playing` },
         { name: "Lista de Deseos", href: `/user/${session?.user.username}/wishlist` },
-        { name: "Listas", href: `/user/${session?.user.username}/lists` },
+        { name: "Reseñas", href: `/user/${session?.user.username}/reviews` },
         { name: "Me Gusta", href: `/user/${session?.user.username}/likes` },
     ];
 
