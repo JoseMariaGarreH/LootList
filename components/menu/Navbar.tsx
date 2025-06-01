@@ -61,7 +61,6 @@ export default function Navbar() {
                                                     Perfil
                                                 </Link>
                                             </li>
-                                            <li></li>
                                             <li>
                                                 <Link
                                                     href={`/user/${session.user?.username}/likes`}
@@ -183,10 +182,34 @@ export default function Navbar() {
                                             </li>
                                             <li>
                                                 <Link
-                                                    href="/"
+                                                    href={`/user/${session.user?.username}/likes`}
                                                     className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
                                                 >
-                                                    Inicio
+                                                    Me Gustas
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={`/user/${session.user?.username}/played`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Jugados
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={`/user/${session.user?.username}/playing`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Jugando
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={`/user/${session.user?.username}/wishlist`}
+                                                    className="block px-4 py-2 text-sm text-[#f1faee] hover:bg-[#457b9d] hover:text-[#f1faee]"
+                                                >
+                                                    Lista de Deseos
                                                 </Link>
                                             </li>
                                             <li>

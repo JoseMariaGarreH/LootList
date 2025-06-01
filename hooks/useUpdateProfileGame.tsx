@@ -1,6 +1,6 @@
 "use client";
 
-import updateProfileGame from "@/src/actions/post-updateProfileGame";
+import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
 
 export function useUpdateProfileGame(userId: string, currentState?: {
     played?: boolean;

@@ -88,6 +88,7 @@ export default function AvatarUploader() {
             if (url) {
                 setPreview(url);
                 setCroppedImage(url);
+                window.location.reload();
             }
         } catch (error) {
             toast.error("Error al guardar el avatar");

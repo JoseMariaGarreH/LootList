@@ -17,8 +17,10 @@ const genres = [
     "Strategy",
     "Puzzle",
     "Platformer",
-    "Horror",
-    "Multiplayer"
+    "Multiplayer",
+    "Fighting",
+    "Casual",
+    "Family",
 ];
 
 const platforms = [
@@ -41,17 +43,30 @@ const platforms = [
     "Xbox",
     "Xbox 360",
     "Xbox One",
-    "Xbox Series S/X"
+    "Xbox Series S/X",
+    "SEGA Saturn"
 ];
 
+function getInitialFilters() {
+    if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("gameListFilters");
+        if (saved) {
+            return JSON.parse(saved);
+        }
+    }
+    return {};
+}
+
 export default function GameList() {
+    const initialFilters = getInitialFilters();
+
     // Estados para los filtros
-    const [platform, setPlatform] = useState("");
-    const [search, setSearch] = useState("");
-    const [year, setYear] = useState("");
-    const [order, setOrder] = useState("");
-    const [genre, setGenre] = useState("");
-    const [page, setPage] = useState(1);
+    const [platform, setPlatform] = useState(initialFilters.platform || "");
+    const [search, setSearch] = useState(initialFilters.search || "");
+    const [year, setYear] = useState(initialFilters.year || "");
+    const [order, setOrder] = useState(initialFilters.order || "");
+    const [genre, setGenre] = useState(initialFilters.genre || "");
+    const [page, setPage] = useState(initialFilters.page || 1);
     const pageSize = 20; // Número de juegos por página
 
     const { games, loading } = useGames();
@@ -103,6 +118,12 @@ export default function GameList() {
     const totalPages = Math.ceil(orderedGames.length / pageSize);
     const displayedGames = orderedGames.slice((page - 1) * pageSize, page * pageSize);
 
+    // Guardar filtros cada vez que cambian
+    useEffect(() => {
+        const filters = { platform, search, year, order, genre, page };
+        localStorage.setItem("gameListFilters", JSON.stringify(filters));
+    }, [platform, search, year, order, genre, page]);
+
     return (
         <>
             {/* Filtros */}
@@ -135,7 +156,7 @@ export default function GameList() {
                     <AjaxLoader />
                 </div>
             ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 px-12 pt-4 pb-10 max-w-7xl mx-auto">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-5 px-16 pt-4 pb-10 max-w-7xl mx-auto">
                     {displayedGames.length === 0 ? (
                         <p className="text-center text-[#f1faee] w-full col-span-full">No hay juegos que coincidan con los filtros.</p>
                     ) : (
