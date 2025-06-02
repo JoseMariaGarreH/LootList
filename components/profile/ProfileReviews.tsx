@@ -5,7 +5,7 @@ import { Comment } from "@/src/types";
 import { updateComment } from "@/src/actions/put-comments-action";
 import { useProfileGame } from "@/hooks/useProfileGame";
 import { useUserComments } from "@/hooks/useUserComments";
-import { Star, Heart, Gamepad2, Play, Gift } from "lucide-react";
+import { Star, Heart, Gamepad2, Play, Gift, NotebookPen } from "lucide-react";
 import AjaxLoader from "../ui/AjaxLoader";
 import Link from "next/link";
 import Pagination from "../games/Pagination";
@@ -105,7 +105,7 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
     return (
         <>
             <Toaster position="top-left" reverseOrder={false} />
-            <div className="w-full mt-8 mb-8 space-y-10 max-w-4xl mx-auto">
+            <div className="w-full mt-8 mb-8 space-y-10 max-w-4xl mx-auto px-2">
                 {displayedComments.map((comment: Comment) => {
                     const profileGame = profileGames.find(pg => pg.gameId === comment.gameId);
                     const rating = profileGame?.rating ?? 0;
@@ -117,46 +117,53 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                     return (
                         <div
                             key={comment.id}
-                            className="flex flex-col sm:flex-row w-full gap-6 bg-[#1d3557] border border-white/10 p-5 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
+                            className="flex flex-col gap-4 bg-[#1d3557] border border-white/10 p-4 sm:p-5 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
                         >
-                            <Link href={`/games/${comment.game?.id}`} className="block">
-                                <img
-                                    src={comment.game?.imageUrl || ""}
-                                    alt={comment.game?.title || ""}
-                                    className="w-32 h-44 object-cover rounded-xl border border-white/20 hover:scale-105 transition-transform duration-300 shadow-inner"
-                                />
-                            </Link>
+                            {/* Título y año arriba */}
+                            <div className="mb-2 flex flex-col sm:flex-row sm:items-center">
+                                <Link href={`/games/${comment.game?.id}`} className="hover:text-[#e63946] transition-all duration-200 ease-in-out">
+                                    <h3 className="text-lg sm:text-2xl font-semibold leading-snug">
+                                        {comment.game?.title}
+                                    </h3>
+                                </Link>
+                                <span className="text-sm text-[#a8dadc] sm:ml-3 sm:mt-0.5">
+                                    {comment.game?.releaseDate ? new Date(comment.game.releaseDate).getFullYear() : ""}
+                                </span>
+                            </div>
 
-                            <div className="flex flex-col justify-between flex-1 text-white">
-                                <div>
-                                    <div className="flex flex-col sm:flex-row sm:items-center mb-2">
-                                        <Link href={`/games/${comment.game?.id}`} className="hover:text-[#e63946] transition-all duration-200 ease-in-out">
-                                            <h3 className="text-xl sm:text-2xl font-semibold leading-snug">
-                                                {comment.game?.title}
-                                            </h3>
-                                        </Link>
-                                        <span className="text-sm text-[#a8dadc] sm:ml-3 sm:mt-0.5">
-                                            {comment.game?.releaseDate ? new Date(comment.game.releaseDate).getFullYear() : ""}
-                                        </span>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Link href={`/games/${comment.game?.id}`} className="flex-shrink-0 self-center sm:self-start ">
+                                    <img
+                                        src={comment.game?.imageUrl || ""}
+                                        alt={comment.game?.title || ""}
+                                        className="w-full h-44 sm:w-32 object-cover rounded-xl border border-white/20 hover:scale-105 transition-transform duration-300 shadow-inner"
+                                    />
+                                </Link>
+
+                                <div className="flex flex-col justify-between flex-1 text-white">
+                                    <div>
+                                        <StatusIcons liked={liked} played={played} playing={playing} wishlist={wishlist} />
+                                        <p className="text-white/90 text-base leading-relaxed mt-2 break-words">{comment.content}</p>
                                     </div>
 
-                                    <StatusIcons liked={liked} played={played} playing={playing} wishlist={wishlist} />
-                                    <p className="text-white/90 text-base leading-relaxed mt-2">{comment.content}</p>
-                                </div>
-
-                                <div className="flex items-center justify-between gap-4 mt-4 text-sm text-white/80">
-                                    <RatingStars rating={rating} />
-                                    <button
-                                        className="px-3 py-1.5 rounded-md bg-[#e63946] hover:bg-[#d62839] text-white text-sm font-medium shadow-sm transition"
-                                        onClick={() => handleEditComment(comment)}
-                                    >
-                                        Editar reseña
-                                    </button>
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 mt-4 text-sm text-white/80">
+                                        <RatingStars rating={rating} />
+                                        <button
+                                            className="px-3 py-1.5 rounded-md bg-[#e63946] hover:bg-[#d62839] text-white text-sm font-medium shadow-sm transition w-full sm:w-auto"
+                                            onClick={() => handleEditComment(comment)}
+                                        >
+                                            <div className="flex items-center gap-2 justify-center">
+                                                <NotebookPen size={16} />
+                                                Editar reseña
+                                            </div>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     );
                 })}
+                
                 <Pagination
                     page={page}
                     totalPages={totalPages}
