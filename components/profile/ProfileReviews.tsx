@@ -150,7 +150,7 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                                         className="px-3 py-1.5 rounded-md bg-[#e63946] hover:bg-[#d62839] text-white text-sm font-medium shadow-sm transition"
                                         onClick={() => handleEditComment(comment)}
                                     >
-                                        Editar
+                                        Editar reseña
                                     </button>
                                 </div>
                             </div>
