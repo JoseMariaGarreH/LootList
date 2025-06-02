@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { X } from "lucide-react";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { useForm } from "react-hook-form";
 
 interface GamePopUpProps {
     profileId: string | null;
@@ -15,38 +16,37 @@ export default function GamePopUp({
     setModalOpen,
     addOrUpdateComment,
 }: GamePopUpProps) {
-    const [commentValue, setCommentValue] = useState(userComment || "");
-    const [submitting, setSubmitting] = useState(false);
+    const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<{ comment: string }>({
+        defaultValues: { comment: userComment || "" }
+    });
 
     useEffect(() => {
-        setCommentValue(userComment || "");
-    }, [userComment]);
+        setValue("comment", userComment || "");
+    }, [userComment, setValue]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit = async (data: { comment: string }) => {
         if (!profileId) {
             toast.error("Debes iniciar sesión para comentar.");
             return;
         }
-        if (!commentValue.trim()) {
+        if (!data.comment.trim()) {
             toast.error("El comentario no puede estar vacío.");
             return;
         }
-        setSubmitting(true);
         try {
-            await addOrUpdateComment(profileId, commentValue.trim());
+            await addOrUpdateComment(profileId, data.comment.trim());
             toast.success(userComment ? "Comentario actualizado." : "Comentario añadido.");
             setModalOpen(false);
         } catch {
             toast.error("Error al guardar el comentario.");
-        } finally {
-            setSubmitting(false);
         }
     };
 
     if (!setModalOpen) return null;
 
     return (
+        <>
+        <Toaster position="top-left" reverseOrder={false} />
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-[#457b9d] rounded-lg shadow-lg w-[500px] p-6 relative">
                 <div className="flex justify-between items-center mb-4">
@@ -61,19 +61,23 @@ export default function GamePopUp({
                         <X className="w-6 h-6 text-[#d9d9d9]" />
                     </button>
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <textarea
                         className="w-full h-32 p-3 rounded-lg bg-white/10 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#e63946] resize-none mb-4"
                         placeholder="Escribe tu comentario..."
-                        value={commentValue}
-                        onChange={e => setCommentValue(e.target.value)}
                         maxLength={500}
+                        {...register("comment", { required: "El comentario no puede estar vacío" })}
                     />
+                    {errors.comment && (
+                        <span className="text-red-800 text-xs font-semibold mt-2 block">
+                            {errors.comment.message}
+                        </span>
+                    )}
                     <div className="mt-4 flex justify-end space-x-4">
                         <button
                             type="submit"
                             className="py-2 px-4 w-full text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
-                            disabled={submitting}
+                            disabled={isSubmitting}
                         >
                             {userComment ? "Guardar cambios" : "Comentar"}
                         </button>
@@ -81,5 +85,6 @@ export default function GamePopUp({
                 </form>
             </div>
         </div>
+        </>
     );
 }

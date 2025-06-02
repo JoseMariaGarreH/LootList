@@ -10,9 +10,9 @@ export default function NavbarProfile() {
         <>
             <Navbar />
                 <NavbarSettings></NavbarSettings>
-                <div className="max-w-md mx-auto mt-28 mb-28 p-6">
+                <div className="max-w-md mx-auto mt-14 mb-40 p-6">
                     <h1 className="text-2xl font-bold text-white mb-6">Cambiar contraseña</h1>
-                    <PasswordForm></PasswordForm>
+                    <PasswordForm />
                 </div>
             <Footer />
         </>

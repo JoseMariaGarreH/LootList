@@ -48,12 +48,17 @@ const platforms = [
 ];
 
 function getInitialFilters() {
+    // Verifica si el código se está ejecutando en el navegador 
     if (typeof window !== "undefined") {
+        // Intenta obtener los filtros guardados en localStorage bajo la clave "gameListFilters"
         const saved = localStorage.getItem("gameListFilters");
+        // Si existen filtros guardados
         if (saved) {
+            // Parsea el JSON guardado y lo devuelve
             return JSON.parse(saved);
         }
     }
+    // Si no hay filtros guardados, devuelve un objeto vacío
     return {};
 }
 
@@ -67,12 +72,12 @@ export default function GameList() {
     const [order, setOrder] = useState(initialFilters.order || "");
     const [genre, setGenre] = useState(initialFilters.genre || "");
     const [page, setPage] = useState(initialFilters.page || 1);
-    const pageSize = 20; // Número de juegos por página
+    const pageSize = 18; // Número de juegos por página
 
     const { games, loading } = useGames();
 
     useEffect(() => {
-        setPage(0);
+        setPage(1);
     }, [search, platform, year, order, genre]);
 
     const years = Array.from(
@@ -114,7 +119,7 @@ export default function GameList() {
                 ? [...filteredGames].sort((a, b) => b.title.localeCompare(a.title, "es", { sensitivity: "base" }))
                 : filteredGames;
 
-    // PAGINACIÓN LOCAL
+    // Paginación de los juegos 
     const totalPages = Math.ceil(orderedGames.length / pageSize);
     const displayedGames = orderedGames.slice((page - 1) * pageSize, page * pageSize);
 
@@ -126,7 +131,7 @@ export default function GameList() {
 
     return (
         <>
-            {/* Filtros */}
+            {/* Filtro de la lista de juegos */}
             <GameFilters
                 search={search}
                 setSearch={setSearch}
@@ -156,7 +161,7 @@ export default function GameList() {
                     <AjaxLoader />
                 </div>
             ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-5 px-16 pt-4 pb-10 max-w-7xl mx-auto">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-5 px-1 pt-4 pb-10 max-w-7xl mx-auto">
                     {displayedGames.length === 0 ? (
                         <p className="text-center text-[#f1faee] w-full col-span-full">No hay juegos que coincidan con los filtros.</p>
                     ) : (

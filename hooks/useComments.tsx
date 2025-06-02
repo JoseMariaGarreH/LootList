@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react";
 import { getComments } from "@/src/actions/get-comments-action";
 import { postComment } from "@/src/actions/post-comments-action";
@@ -6,7 +8,12 @@ import { Comment } from "@/src/types";
 
 
 
-export function useComments(gameId: string, userId?: string) {
+export function useComments(gameId: string, userId?: string) : {
+    comments: Comment[];
+    loading: boolean;
+    addOrUpdateComment: (profileId: string, content: string) => Promise<void>;
+    userComment: Comment | undefined;
+} {
     const [comments, setComments] = useState<Comment[]>([]);
     const [loading, setLoading] = useState(false);
 

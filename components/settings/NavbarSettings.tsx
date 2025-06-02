@@ -43,16 +43,6 @@ export default function NavbarSettings() {
                             >
                                 AVATAR
                             </Link>
-                            <Link
-                                href="/profile/connections"
-                                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                                    pathname === "/profile/connections"
-                                        ? "text-[#e63946] border-[#e63946]"
-                                        : "text-[#a8dadc] border-transparent hover:text-[#e63946]"
-                                }`}
-                            >
-                                CONEXIONES
-                            </Link>
                         </nav>
                     </div>
 

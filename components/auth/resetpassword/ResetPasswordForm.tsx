@@ -6,15 +6,20 @@ import { useForm } from "react-hook-form";
 import { resetPasswordWithToken } from "@/src/actions/post-resetPasswordWithToken-action";
 import toast, { Toaster } from "react-hot-toast";
 
+type ResetPasswordFormData = {
+    password: string;
+    confirmPassword: string;
+};
+
 export default function ResetPasswordForm() {
 
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
     const router = useRouter()
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm<ResetPasswordFormData>();
     const [isPending, setIsPending] = useState(false);
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: ResetPasswordFormData) => {
         if (!token) {
             toast.error("Token no válido");
             return;
@@ -60,6 +65,13 @@ export default function ResetPasswordForm() {
                         })}
                         disabled={isPending}
                     />
+                    {
+                        errors.password && (
+                            <span className="text-red-800 text-xs font-semibold mt-2">
+                                {typeof errors.password?.message === "string" && errors.password.message}
+                            </span>
+                        )
+                    }
                 </div>
                 <div className="text-left">
                     <label htmlFor="confirmPassword" className="block text-sm font-semibold text-white mb-1">

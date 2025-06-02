@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
 

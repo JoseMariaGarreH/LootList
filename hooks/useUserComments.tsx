@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import getUserComments from "@/src/actions/get-userComments-action"
+import { Comment } from "@/src/types";
 
-export function useUserComments(profileId: number) {
+export function useUserComments(profileId: number) : { comments: Comment[], loading: boolean } {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
 

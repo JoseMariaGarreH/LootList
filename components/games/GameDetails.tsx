@@ -15,12 +15,13 @@ import {
     Star,
     ThumbsUp,
     Users,
+    X,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import GamePopUp from "./CommentPopUp";
+import GamePopUp from "./GamePopUp";
 import { CommentGame } from "./CommentGame";
 import AjaxLoader from "../ui/AjaxLoader";
 import { useProfileById } from "@/hooks/useProfileById";
@@ -50,6 +51,7 @@ export default function GameDetails({ id }: { id: string }) {
     const [wishlist, setWishlistState] = useState(false);
     const [liked, setLikedState] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+    const [showClear, setShowClear] = useState(false);
 
     useEffect(() => {
         if (profileGame) {
@@ -192,45 +194,75 @@ export default function GameDetails({ id }: { id: string }) {
                         priority
                     />
 
+                    <button
+                        className="mt-0.5 py-2 px-4 w-52 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
+                        onClick={() => setModalOpen(true)}
+                    >
+                        {userComment ? "Editar tu registro" : "Registrar o Reseñar"}
+                    </button>
+
                     {/* Rating */}
                     <div className="text-center space-y-2">
-                        <p className="text-xl font-semibold">Calificación: {hover || rating}</p>
-                        <div className="flex justify-center gap-1">
-                            {[1, 2, 3, 4, 5].map((star) => {
-                                const filled = (hover || rating) >= star;
-                                const halfFilled = !filled && (hover || rating) >= star - 0.5;
-                                return (
-                                    <span
-                                        key={star}
-                                        className="relative w-8 h-8 cursor-pointer"
-                                        onMouseMove={(e) => {
-                                            const { left, width } = e.currentTarget.getBoundingClientRect();
-                                            const x = e.clientX - left;
-                                            setHover(x < width / 2 ? star - 0.5 : star);
-                                        }}
-                                        onMouseLeave={() => setHover(0)}
-                                        onClick={(e) => {
-                                            const { left, width } = e.currentTarget.getBoundingClientRect();
-                                            const x = e.clientX - left;
-                                            const newRating = x < width / 2 ? star - 0.5 : star;
-                                            setRatingState(newRating);
-                                            handleSetRating(newRating);
-                                        }}
-                                    >
-                                        <Star className="absolute w-8 h-8 text-white opacity-30" />
-                                        {filled && (
-                                            <Star className="absolute w-8 h-8 text-[#e63946]" fill="#e63946" />
-                                        )}
-                                        {halfFilled && (
-                                            <div className="absolute w-8 h-8 overflow-hidden">
-                                                <div className="w-4 h-8 overflow-hidden">
-                                                    <Star className="w-8 h-8 text-[#e63946]" fill="#e63946" />
+                        {/* Botón para abrir el modal */}
+                        <div
+                            className="relative w-full flex items-center justify-center mb-2"
+                            style={{ minHeight: 40 }}
+                            onMouseEnter={() => setShowClear(true)}
+                            onMouseLeave={() => { setShowClear(false); setHover(0); }}
+                        >
+                            <div
+                                className="flex justify-center items-center gap-1 mx-auto relative mr-5"
+                                style={{ width: "fit-content" }}
+                            >
+                                <button
+                                    type="button"
+                                    style={{ visibility: showClear ? "visible" : "hidden" }}
+                                    tabIndex={showClear ? 0 : -1}
+                                    onClick={() => {
+                                        setRatingState(0);
+                                        handleSetRating(0);
+                                    }}
+                                    onMouseEnter={() => setShowClear(true)}
+                                    onMouseLeave={() => setShowClear(false)}
+                                    title="Quitar valoración"
+                                >
+                                    <X className="w-5 h-5 text-[#e63946] transition-transform duration-150" />
+                                </button>
+                                {[1, 2, 3, 4, 5].map((star) => {
+                                    const filled = (hover || rating) >= star;
+                                    const halfFilled = !filled && (hover || rating) >= star - 0.5;
+                                    return (
+                                        <span
+                                            key={star}
+                                            className="relative w-8 h-8 cursor-pointer"
+                                            onMouseMove={(e) => {
+                                                const { left, width } = e.currentTarget.getBoundingClientRect();
+                                                const x = e.clientX - left;
+                                                setHover(x < width / 2 ? star - 0.5 : star);
+                                            }}
+                                            onClick={(e) => {
+                                                const { left, width } = e.currentTarget.getBoundingClientRect();
+                                                const x = e.clientX - left;
+                                                const newRating = x < width / 2 ? star - 0.5 : star;
+                                                setRatingState(newRating);
+                                                handleSetRating(newRating);
+                                            }}
+                                        >
+                                            <Star className="absolute w-8 h-8 text-white opacity-30" />
+                                            {filled && (
+                                                <Star className="absolute w-8 h-8 text-[#e63946]" fill="#e63946" />
+                                            )}
+                                            {halfFilled && (
+                                                <div className="absolute w-8 h-8 overflow-hidden">
+                                                    <div className="w-4 h-8 overflow-hidden">
+                                                        <Star className="w-8 h-8 text-[#e63946]" fill="#e63946" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        )}
-                                    </span>
-                                );
-                            })}
+                                            )}
+                                        </span>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
 
@@ -328,14 +360,6 @@ export default function GameDetails({ id }: { id: string }) {
                         })}
                     </ul>
                 )}
-
-                {/* Botón para abrir el modal */}
-                <button
-                    className="mt-6 py-2 px-4 w-full text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
-                    onClick={() => setModalOpen(true)}
-                >
-                    {userComment ? "Editar comentario" : "Comentar"}
-                </button>
 
                 {/* Modal */}
                 {modalOpen && (

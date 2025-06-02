@@ -190,7 +190,7 @@ export default function Navbar() {
                                         <ChevronDown className="ml-1 w-4 h-4" />
                                     </button>
                                     {dropdownAbierto && (
-                                        <ul className="mt-2 space-y-2 bg-[#1d3557] rounded shadow-lg">
+                                        <ul className="mt-2 bg-[#1d3557] rounded shadow-lg">
                                             <li>
                                                 <Link
                                                     href={`/user/${session.user?.username}`}

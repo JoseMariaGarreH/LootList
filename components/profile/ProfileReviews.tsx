@@ -1,16 +1,16 @@
 "use client"
 
+import { useEffect, useState } from "react";
+import { Comment } from "@/src/types";
+import { updateComment } from "@/src/actions/put-comments-action";
 import { useProfileGame } from "@/hooks/useProfileGame";
 import { useUserComments } from "@/hooks/useUserComments";
 import { Star, Heart, Gamepad2, Play, Gift } from "lucide-react";
 import AjaxLoader from "../ui/AjaxLoader";
 import Link from "next/link";
 import Pagination from "../games/Pagination";
-import { useState, useEffect } from "react";
-import GamePopUp from "@/components/games/CommentPopUp";
-import toast from "react-hot-toast";
-import { postComment } from "@/src/actions/post-comments-action";
-import { updateComment } from "@/src/actions/put-comments-action";
+import GamePopUp from "@/components/games/GamePopUp";
+import toast, { Toaster } from "react-hot-toast";
 
 function StatusIcons({ liked, played, playing, wishlist }: { liked: boolean, played: boolean, playing: boolean, wishlist: boolean }) {
     return (
@@ -55,37 +55,45 @@ function RatingStars({ rating }: { rating: number }) {
 }
 
 export default function ProfileReviews({ profileId }: { profileId: number }) {
-    const { comments, loading } = useUserComments(profileId);
+    const { comments: initialComments, loading } = useUserComments(profileId);
     const { profileGames } = useProfileGame(String(profileId));
 
+    const [comments, setComments] = useState<Comment[]>(initialComments);
     const [page, setPage] = useState(1);
     const pageSize = 5;
+
+    useEffect(() => {
+        setComments(initialComments);
+    }, [initialComments]);
 
     const totalPages = Math.ceil(comments.length / pageSize);
     const displayedComments = comments.slice((page - 1) * pageSize, page * pageSize);
 
     const [modalOpen, setModalOpen] = useState(false);
-    const [editingComment, setEditingComment] = useState<any>(null);
+    const [editingComment, setEditingComment] = useState<Comment | null>(null);
 
-    // Función para editar comentario
-    const handleEditComment = (comment: any) => {
+    const handleEditComment = (comment: Comment) => {
         setEditingComment(comment);
         setModalOpen(true);
     };
 
-    // Función para guardar cambios
     const addOrUpdateComment = async (profileId: string, content: string) => {
         try {
             if (editingComment) {
                 await updateComment(editingComment.id, content);
-                toast.success("Comentario actualizado.");
+                // Actualiza el comentario en el estado local
+                setComments((prev) =>
+                    prev.map((c) =>
+                        c.id === editingComment.id ? { ...c, content } : c
+                    )
+                );
             } else {
-                await postComment(profileId, editingComment.gameId, content);
-                toast.success("Comentario añadido.");
+                // Si no hay editingComment, no se puede obtener gameId
+                toast.error("No se puede añadir comentario sin juego asociado.");
+                return;
             }
             setModalOpen(false);
             setEditingComment(null);
-            window.location.reload();
         } catch {
             toast.error("Error al guardar el comentario.");
         }
@@ -96,8 +104,9 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
 
     return (
         <>
+            <Toaster position="top-left" reverseOrder={false} />
             <div className="w-full mt-8 mb-8 space-y-10 max-w-4xl mx-auto">
-                {displayedComments.map((comment: any) => {
+                {displayedComments.map((comment: Comment) => {
                     const profileGame = profileGames.find(pg => pg.gameId === comment.gameId);
                     const rating = profileGame?.rating ?? 0;
                     const liked = profileGame?.liked ?? false;
@@ -106,49 +115,45 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                     const wishlist = profileGame?.wishlist ?? false;
 
                     return (
-
                         <div
                             key={comment.id}
-                            className="flex flex-col bg-[#1d3557] sm:flex-row w-full gap-6 border-b border-white/10 p-4 rounded-lg shadow-lg"
+                            className="flex flex-col sm:flex-row w-full gap-6 bg-[#1d3557] border border-white/10 p-5 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
                         >
-                            {/* Imagen del juego como enlace */}
-                            <Link href={`/games/${comment.game.id}`} className="block">
+                            <Link href={`/games/${comment.game?.id}`} className="block">
                                 <img
-                                    src={comment.game.imageUrl}
-                                    alt={comment.game.title}
-                                    className="w-32 h-44 object-cover rounded-lg shadow-md border border-white/20 hover:scale-105 transition-transform"
+                                    src={comment.game?.imageUrl || ""}
+                                    alt={comment.game?.title || ""}
+                                    className="w-32 h-44 object-cover rounded-xl border border-white/20 hover:scale-105 transition-transform duration-300 shadow-inner"
                                 />
                             </Link>
 
-                            {/* Contenido */}
                             <div className="flex flex-col justify-between flex-1 text-white">
                                 <div>
-                                    {/* Título y año como enlace */}
-                                    <div className="flex flex-col sm:flex-row sm:items-center mb-1">
-                                        <Link href={`/games/${comment.game.id}`} className="hover:text-[#e63946] transition-colors">
-                                            <h3 className="text-2xl font-bold">{comment.game.title}</h3>
+                                    <div className="flex flex-col sm:flex-row sm:items-center mb-2">
+                                        <Link href={`/games/${comment.game?.id}`} className="hover:text-[#e63946] transition-all duration-200 ease-in-out">
+                                            <h3 className="text-xl sm:text-2xl font-semibold leading-snug">
+                                                {comment.game?.title}
+                                            </h3>
                                         </Link>
-                                        <span className="text-sm text-black ml-3 mt-1.5">
-                                            {comment.game.releaseDate ? new Date(comment.game.releaseDate).getFullYear() : ""}
+                                        <span className="text-sm text-[#a8dadc] sm:ml-3 sm:mt-0.5">
+                                            {comment.game?.releaseDate ? new Date(comment.game.releaseDate).getFullYear() : ""}
                                         </span>
                                     </div>
 
                                     <StatusIcons liked={liked} played={played} playing={playing} wishlist={wishlist} />
-                                    <p className="text-white/90 mt-2">{comment.content}</p>
+                                    <p className="text-white/90 text-base leading-relaxed mt-2">{comment.content}</p>
                                 </div>
 
-                                {/* Rating y acciones */}
-                                <div className="flex items-center justify-start gap-6 mt-4 text-sm text-white/80">
+                                <div className="flex items-center justify-between gap-4 mt-4 text-sm text-white/80">
                                     <RatingStars rating={rating} />
                                     <button
-                                        className="ml-4 px-3 py-1 rounded bg-[#e63946] hover:bg-[#a62633] text-white"
+                                        className="px-3 py-1.5 rounded-md bg-[#e63946] hover:bg-[#d62839] text-white text-sm font-medium shadow-sm transition"
                                         onClick={() => handleEditComment(comment)}
                                     >
                                         Editar
                                     </button>
                                 </div>
                             </div>
-
                         </div>
                     );
                 })}
@@ -157,9 +162,8 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                     totalPages={totalPages}
                     setPage={setPage}
                 />
-                {/* Modal para editar comentario */}
-
             </div>
+
             {modalOpen && editingComment && (
                 <GamePopUp
                     setModalOpen={setModalOpen}

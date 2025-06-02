@@ -1,12 +1,17 @@
 import { useRequestResetPassword } from "@/hooks/useRequestPasswordReset";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useForm } from "react-hook-form";
+
+type RequestEmailFormData = {
+    email: string;
+};
 
 export default function RequestEmailForm() {
-
-    const [email, setEmail] = useState('');
     const { sendResetEmail, isPending, message, isError } = useRequestResetPassword();
+
+    const { register, handleSubmit, formState: { errors } } = useForm<RequestEmailFormData>();
 
     useEffect(() => {
         if (message) {
@@ -18,27 +23,36 @@ export default function RequestEmailForm() {
         }
     }, [message, isError]);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        sendResetEmail(email);
+    const onSubmit = (data: RequestEmailFormData) => {
+        sendResetEmail(data.email);
     };
 
     return (
         <>
             <Toaster position="top-left" reverseOrder={false} />
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                 <input
                     type="email"
                     placeholder="Correo electrónico"
-                    required
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    autoComplete="email"
+                    {...register("email", {
+                        required: "El correo es obligatorio",
+                        pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: "Correo no válido"
+                        }
+                    })}
                     className="w-full px-4 py-2 rounded transition-all
-                                    bg-[#1d3557] text-[#F1FAEE]
-                                    focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none
-                                    disabled:bg-[#D9D9D9] disabled:text-[#A0A0A0]"
+                        bg-[#1d3557] text-[#F1FAEE]
+                        focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none
+                        disabled:bg-[#D9D9D9] disabled:text-[#A0A0A0]"
                     disabled={isPending || (!isError && !!message)}
                 />
+                {errors.email && (
+                    <span className="text-red-800 text-xs font-semibold mt-2 block">
+                        {errors.email.message}
+                    </span>
+                )}
                 {(!message || isError) ? (
                     <button
                         type="submit"

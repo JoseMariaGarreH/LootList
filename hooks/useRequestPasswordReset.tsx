@@ -1,7 +1,14 @@
+"use client"
+
 import { useState, useTransition } from "react";
 import { requestPasswordReset } from "@/src/actions/post-requestPasswordReset-action";
 
-export function useRequestResetPassword() {
+export function useRequestResetPassword() : {
+    sendResetEmail: (email: string) => void;
+    isPending: boolean;
+    message: string;
+    isError: boolean;
+} {
     const [isPending, startTransition] = useTransition();
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
