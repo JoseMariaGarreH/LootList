@@ -72,7 +72,7 @@ export default function GameList() {
     const { games, loading } = useGames();
 
     useEffect(() => {
-        setPage(1);
+        setPage(0);
     }, [search, platform, year, order, genre]);
 
     const years = Array.from(

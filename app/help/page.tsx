@@ -2,40 +2,51 @@
 
 import Footer from "@/components/menu/Footer";
 import Navbar from "@/components/menu/Navbar";
+import { HelpCircle, Compass, Star, Info } from "lucide-react";
 
 export default function HelpPage() {
     return (
         <>  
             <Navbar />
-            <div className="flex flex-col items-center justify-center min-h-screen px-4">
-                <section className="w-full max-w-3xl mb-8">
-                    <h1 className="text-4xl font-bold mb-4 text-white text-center">Ayuda</h1>
-                    <p className="text-lg text-white text-center">
-                        Esta aplicación te permite llevar un registro de los videojuegos que has jugado, descubrir nuevos títulos y compartir tus opiniones.
+            <main className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 md:px-8">
+                <section className="w-full max-w-3xl mb-8 text-center">
+                    <h1 className="text-4xl font-bold mb-4 text-white flex items-center justify-center gap-2">
+                        <HelpCircle size={32} /> Ayuda
+                    </h1>
+                    <p className="text-lg text-white">
+                        Esta aplicación te permite llevar un registro de los videojuegos que has jugado, descubrir nuevos títulos y compartir tus opiniones con la comunidad.
                     </p>
                 </section>
-                <section className="w-full max-w-3xl mb-8 bg-gray-800 bg-opacity-70 rounded-lg p-6 shadow-lg">
-                    <h2 className="text-2xl font-semibold mb-2 text-white">¿Cómo navegar?</h2>
+
+                <section className="w-full max-w-3xl mb-8 bg-gray-800 bg-opacity-70 rounded-xl p-6 shadow-lg">
+                    <h2 className="text-2xl font-semibold mb-3 text-white flex items-center gap-2">
+                        <Compass size={22} /> ¿Cómo navegar?
+                    </h2>
                     <p className="text-white">
-                        Utiliza la barra de navegación superior para acceder a las secciones principales: explorar juegos, tu perfil y reseñas. Cada sección está pensada para que encuentres fácilmente lo que buscas.
+                        Usa la barra de navegación superior para explorar juegos, gestionar tu perfil o leer reseñas. Todo está diseñado para que accedas fácilmente a las funcionalidades que necesitas.
                     </p>
                 </section>
-                <section className="w-full max-w-3xl mb-8 bg-gray-800 bg-opacity-70 rounded-lg p-6 shadow-lg">
-                    <h2 className="text-2xl font-semibold mb-2 text-white">Funcionalidades principales</h2>
-                    <ul className="list-disc list-inside text-white">
-                        <li>Registra los videojuegos que has jugado, estás jugando o quieres jugar.</li>
-                        <li>Escribe y lee reseñas de otros usuarios sobre los juegos.</li>
-                        <li>Descubre nuevos títulos a través de recomendaciones y tendencias de la comunidad.</li>
+
+                <section className="w-full max-w-3xl mb-8 bg-gray-800 bg-opacity-70 rounded-xl p-6 shadow-lg">
+                    <h2 className="text-2xl font-semibold mb-3 text-white flex items-center gap-2">
+                        <Star size={22} /> Funcionalidades principales
+                    </h2>
+                    <ul className="list-disc list-inside text-white space-y-2">
+                        <li>Registra los videojuegos que has jugado, estás jugando o planeas jugar.</li>
+                        <li>Lee y escribe reseñas para ayudar a otros jugadores.</li>
+                        <li>Descubre nuevos títulos mediante recomendaciones y tendencias.</li>
                     </ul>
                 </section>
-                <section className="w-full max-w-3xl bg-gray-800 bg-opacity-70 rounded-lg p-6 shadow-lg">
-                    <h2 className="text-2xl font-semibold mb-2 text-white">Nota importante</h2>
+
+                <section className="w-full max-w-3xl bg-gray-800 bg-opacity-70 rounded-xl p-6 shadow-lg">
+                    <h2 className="text-2xl font-semibold mb-3 text-white flex items-center gap-2">
+                        <Info size={22} /> Nota importante
+                    </h2>
                     <p className="text-white">
-                        Esta aplicación ha sido desarrollada como parte de un Trabajo de Fin de Grado (TFG). 
-                        No está habilitada la opción de soporte.
+                        Esta aplicación ha sido desarrollada como parte de un Trabajo de Fin de Grado (TFG). Actualmente no está habilitada la opción de soporte o contacto.
                     </p>
                 </section>
-            </div>
+            </main>
             <Footer />
         </>
     )

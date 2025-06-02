@@ -19,6 +19,7 @@ export interface Profile {
     profileImage: string | null;
     createdAt: Date;
     updatedAt: Date;
+    user?: User;
 }
 
 export interface Games {
@@ -45,11 +46,13 @@ export interface ProfileGame {
     updatedAt: Date;
 }
 
-export interface Comments {
+export interface Comment {
     id: number;
     profileId: number;
     gameId: number;
     content: string;
     createdAt: Date;
     updatedAt: Date;
+    profile?: Profile;
+    game?: Games;
 }

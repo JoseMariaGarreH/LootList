@@ -3,7 +3,7 @@ import useGames from "@/hooks/useGames";
 import { useGlobalProfileGames } from "@/hooks/useGlobalProfileGames";
 import { useProfileGame } from "@/hooks/useProfileGame";
 import { useUpdateProfileGame } from "@/hooks/useUpdateProfileGame";
-import { Games, ProfileGame } from "@/src/types";
+import { Comment, Games, ProfileGame } from "@/src/types";
 import {
     ArrowLeftCircle,
     Calendar,
@@ -20,16 +20,15 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import GamePopUp from "./GamePopUp";
+import GamePopUp from "./CommentPopUp";
 import { CommentGame } from "./CommentGame";
 import AjaxLoader from "../ui/AjaxLoader";
-import { profile } from "console";
 import { useProfileById } from "@/hooks/useProfileById";
 
 export default function GameDetails({ id }: { id: string }) {
     const { data: session } = useSession();
     const userId = session?.user?.id || "";
-    const { profile } = useProfileById(userId); // <-- así obtienes el perfil
+    const { profile } = useProfileById(userId);
 
     const { games, loading } = useGames();
     const { profileGames } = useProfileGame(userId);
@@ -68,7 +67,7 @@ export default function GameDetails({ id }: { id: string }) {
         }
     }, [profileGame, id]);
 
-    // Calcula estadísticas globales usando globalProfileGames
+    // Calculando estadísticas globales usando globalProfileGames
     const totalLikes = globalProfileGames.filter((pg) => pg.liked).length;
     const ratings = globalProfileGames
         .map((pg) => pg.rating)
@@ -305,7 +304,7 @@ export default function GameDetails({ id }: { id: string }) {
                     <p className="text-white/50 italic">Sé el primero en comentar este juego.</p>
                 ) : (
                     <ul className="space-y-3 max-h-[250px] overflow-y-auto pr-1">
-                        {comments.map((comment, idx) => {
+                        {comments.map((comment: Comment, idx: number) => {
                             // Convertimos los IDs a número para evitar problemas de tipo
                             const commentProfileId = Number(comment.profileId);
                             const commentGameId = Number(comment.gameId);

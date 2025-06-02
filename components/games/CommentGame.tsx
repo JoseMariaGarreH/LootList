@@ -2,8 +2,9 @@
 
 import React from "react";
 import { Star } from "lucide-react";
+import { Comment } from "@/src/types";
 
-export function CommentGame({ comment, rating }: { comment: any, rating: number }) {
+export function CommentGame({ comment, rating }: { comment: Comment, rating: number }) {
     return (
         <li className="bg-[#264470] rounded-lg px-4 py-3 shadow-md flex items-start gap-4">
             <img

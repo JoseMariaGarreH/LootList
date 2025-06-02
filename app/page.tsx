@@ -7,12 +7,13 @@ import { roboto } from "@/app/font";
 import { Heart, Star, Gamepad2 } from "lucide-react";
 import useGames from "@/hooks/useGames";
 import { useMemo } from "react";
+import { Games } from "@/src/types";
 
 export default function Home() {
   const { games } = useGames();
 
   // Devuelve un array de N juegos aleatorios (sin repetir)
-  function getRandomGames(arr: any[], n: number) {
+  function getRandomGames(arr: Games[], n: number) {
     if (arr.length < n) return arr;
     const shuffled = [...arr].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, n);
@@ -165,7 +166,7 @@ export default function Home() {
         </div>
       </div>
 
-      <Footer></Footer>
+      <Footer />
     </>
   );
 }

@@ -2,20 +2,21 @@ import { useState, useEffect } from "react";
 import { getComments } from "@/src/actions/get-comments-action";
 import { postComment } from "@/src/actions/post-comments-action";
 import { updateComment } from "@/src/actions/put-comments-action";
+import { Comment } from "@/src/types";
 
 
 
 export function useComments(gameId: string, userId?: string) {
-    const [comments, setComments] = useState<any[]>([]);
+    const [comments, setComments] = useState<Comment[]>([]);
     const [loading, setLoading] = useState(false);
 
     const fetchComments = async () => {
         setLoading(true);
         try {
             const data = await getComments(gameId);
-            const mapped = data.map((comment: any) => ({
+            const mapped = data.map((comment: Comment) => ({
                 ...comment,
-                authorName: comment.profile?.username || "Usuario",
+                authorName: comment.profile?.user?.username || "Usuario",
             }));
             setComments(mapped);
         } finally {

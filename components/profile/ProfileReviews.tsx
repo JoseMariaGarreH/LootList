@@ -7,7 +7,7 @@ import AjaxLoader from "../ui/AjaxLoader";
 import Link from "next/link";
 import Pagination from "../games/Pagination";
 import { useState, useEffect } from "react";
-import GamePopUp from "@/components/games/GamePopUp";
+import GamePopUp from "@/components/games/CommentPopUp";
 import toast from "react-hot-toast";
 import { postComment } from "@/src/actions/post-comments-action";
 import { updateComment } from "@/src/actions/put-comments-action";
@@ -66,14 +66,6 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
 
     const [modalOpen, setModalOpen] = useState(false);
     const [editingComment, setEditingComment] = useState<any>(null);
-
-    // Refresca comentarios después de editar
-    useEffect(() => {
-        if (!modalOpen) {
-            // Refresca los comentarios después de cerrar el modal
-            // Puedes llamar aquí a la función para recargar comentarios si la tienes
-        }
-    }, [modalOpen]);
 
     // Función para editar comentario
     const handleEditComment = (comment: any) => {
