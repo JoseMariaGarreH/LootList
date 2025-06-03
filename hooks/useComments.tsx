@@ -21,7 +21,9 @@ export function useComments(gameId: string, userId?: string) : {
         setLoading(true);
         try {
             const data = await getComments(gameId);
-            const mapped = data.map((comment: Comment) => ({
+            
+            const safeData = Array.isArray(data) ? data : [];
+            const mapped = safeData.map((comment: Comment) => ({
                 ...comment,
                 authorName: comment.profile?.user?.username || "Usuario",
             }));
@@ -43,7 +45,6 @@ export function useComments(gameId: string, userId?: string) : {
         await fetchComments();
     };
 
-    // ...existing code...
     useEffect(() => {
         if (gameId) fetchComments();
     }, [gameId]);

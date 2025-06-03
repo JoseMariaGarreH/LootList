@@ -125,7 +125,11 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
     };
 
     if (loading) return <AjaxLoader />;
-    if (!comments.length) return <p className="text-center text-white">No has escrito ninguna reseña</p>;
+    if (!comments.length) return (
+        <div className="w-full mt-8 mb-8 max-w-4xl mx-auto px-2">
+            <p className="text-center text-white">No has escrito ninguna reseña</p>
+        </div>
+    );
 
     return (
         <>

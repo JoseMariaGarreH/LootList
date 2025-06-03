@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
+import Image from "next/image";
 
 export default function LoginForm() {
 

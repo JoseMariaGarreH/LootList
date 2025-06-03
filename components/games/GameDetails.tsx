@@ -33,8 +33,8 @@ export default function GameDetails({ id }: { id: string }) {
     const userId = session?.user?.id || "";
     const { profile } = useProfileById(userId);
 
-    const { games, loading } = useGames();
-    const { profileGames } = useProfileGame(userId);
+    const { games = [], loading } = useGames();
+    const { profileGames = [] } = useProfileGame(userId);
     const { globalProfileGames } = useGlobalProfileGames(id);
     const { comments, loading: loadingComments, addOrUpdateComment, userComment } = useComments(id, userId);
 
@@ -97,6 +97,12 @@ export default function GameDetails({ id }: { id: string }) {
         }
         setRatingState(newRating);
         await setRating(game.id, newRating);
+
+        // Marca como jugado automáticamente si la valoración es mayor que 0
+        if (newRating > 0 && !played) {
+            setPlayedState(true);
+            await setPlayed(game.id, true);
+        }
     };
 
     const handleTogglePlayed = async () => {
@@ -274,11 +280,11 @@ export default function GameDetails({ id }: { id: string }) {
                                                 const x = e.clientX - left;
                                                 setHover(x < width / 2 ? star - 0.5 : star);
                                             }}
+                                            onMouseLeave={() => setHover(0)}
                                             onClick={(e) => {
                                                 const { left, width } = e.currentTarget.getBoundingClientRect();
                                                 const x = e.clientX - left;
                                                 const newRating = x < width / 2 ? star - 0.5 : star;
-                                                setRatingState(newRating);
                                                 handleSetRating(newRating);
                                             }}
                                         >

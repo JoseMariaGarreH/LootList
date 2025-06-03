@@ -16,6 +16,7 @@ model Users {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   profile   Profiles?
+  passwordResetTokens PasswordResetToken[]
 }
 
 model Profiles {
@@ -83,9 +84,12 @@ model Comments {
 
 model PasswordResetToken {
   id        Int      @id @default(autoincrement())
+  userId    Int
   email     String
   token     String   @unique
   expires   DateTime
   createdAt DateTime @default(now())
+
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

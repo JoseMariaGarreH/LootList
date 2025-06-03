@@ -18,7 +18,6 @@ export function useAvatar(userId: string) {
                 body: formData,
             });
             const data = await res.json();
-            toast.success("Avatar actualizado correctamente");
             return data.url;
         } catch {
             toast.error("Error al actualizar el avatar");

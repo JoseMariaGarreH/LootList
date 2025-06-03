@@ -73,7 +73,6 @@ export default function GamePopUp({
                 playing,
                 wishlist,
             });
-            toast.success(userComment ? "Comentario actualizado." : "Comentario añadido.");
             setModalOpen(false);
             window.location.reload();
         } catch {
@@ -134,7 +133,9 @@ export default function GamePopUp({
                                             onClick={e => {
                                                 const { left, width } = e.currentTarget.getBoundingClientRect();
                                                 const x = e.clientX - left;
-                                                setRating(x < width / 2 ? star - 0.5 : star);
+                                                const newRating = x < width / 2 ? star - 0.5 : star;
+                                                setRating(newRating);
+                                                if (newRating > 0) setPlayed(true); // <-- Marca "Jugado" automáticamente
                                             }}
                                         >
                                             <Star className="absolute w-7 h-7 text-white opacity-30" />
@@ -206,7 +207,7 @@ export default function GamePopUp({
                                 className="py-2 px-4 w-full text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
                                 disabled={isSubmitting}
                             >
-                                {userComment ? "Guardar cambios" : "Comentar"}
+                                Confirmar
                             </button>
                         </div>
                     </form>

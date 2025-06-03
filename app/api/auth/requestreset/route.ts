@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         }
 
         const token = uuidv4();
-        const expires = new Date(Date.now() + 60 * 60 * 1000); // 1h
+        const expires = new Date(Date.now() + 30 * 30 * 1000); // 15 minutos
 
         // Guardar el token en la base de datos
         await prisma.passwordResetToken.create({
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
                         </a>
                     </div>
                     <p style="font-size: 12px; color: #a8dadc; margin-top: 16px;">
-                        Este enlace expirará en 1 hora.
+                        Este enlace expirará en 15 minutos.
                     </p>
                     <p style="font-size: 12px; color: #a8dadc; margin-top: 32px;">
                         Si tienes problemas, contacta con el equipo de soporte de <strong style="color: #f1faee;">LootList</strong>.
