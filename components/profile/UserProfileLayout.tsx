@@ -73,7 +73,6 @@ export default function UserProfileLayout({ profile, session, children }: { prof
                     </nav>
                 </div>
             </div>
-            {/* Contenido dinámico */}
             {children}
         </div>
     );

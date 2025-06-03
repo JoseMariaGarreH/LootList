@@ -25,6 +25,8 @@ import GamePopUp from "./GamePopUp";
 import { CommentGame } from "./CommentGame";
 import AjaxLoader from "../ui/AjaxLoader";
 import { useProfileById } from "@/hooks/useProfileById";
+import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
+import { updateComment } from "@/src/actions/put-comments-action";
 
 export default function GameDetails({ id }: { id: string }) {
     const { data: session } = useSession();
@@ -135,6 +137,38 @@ export default function GameDetails({ id }: { id: string }) {
         const newValue = !liked;
         setLikedState(newValue);
         await setLike(game.id, newValue);
+    };
+
+    // Nueva función para guardar comentario y estados
+    const handleAddOrUpdateComment = async (
+        profileId: string,
+        content: string,
+        states: {
+            rating: number;
+            liked: boolean;
+            played: boolean;
+            playing: boolean;
+            wishlist: boolean;
+        }
+    ) => {
+        try {
+            // Busca si ya existe un comentario del usuario
+            if (userComment) {
+                await updateComment(userComment.id, content);
+            } else {
+                await addOrUpdateComment(profileId, content);
+            }
+            // Actualiza los estados del juego
+            await updateProfileGame(profileId, Number(id), {
+                rating: states.rating,
+                liked: states.liked,
+                played: states.played,
+                playing: states.playing,
+                wishlist: states.wishlist,
+            });
+        } catch {
+            toast.error("Error al guardar el comentario o los estados.");
+        }
     };
 
     const userStatusButtons = [
@@ -365,9 +399,16 @@ export default function GameDetails({ id }: { id: string }) {
                 {modalOpen && (
                     <GamePopUp
                         setModalOpen={setModalOpen}
-                        addOrUpdateComment={addOrUpdateComment}
+                        addOrUpdateComment={handleAddOrUpdateComment}
                         profileId={String(profile?.id) ?? null}
                         userComment={userComment?.content ?? ""}
+                        initialStates={{
+                            rating: profileGames.find(pg => pg.gameId.toString() === id)?.rating ?? 0,
+                            liked: profileGames.find(pg => pg.gameId.toString() === id)?.liked ?? false,
+                            played: profileGames.find(pg => pg.gameId.toString() === id)?.played ?? false,
+                            playing: profileGames.find(pg => pg.gameId.toString() === id)?.playing ?? false,
+                            wishlist: profileGames.find(pg => pg.gameId.toString() === id)?.wishlist ?? false,
+                        }}
                     />
                 )}
             </div>

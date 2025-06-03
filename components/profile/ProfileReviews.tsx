@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Comment } from "@/src/types";
 import { updateComment } from "@/src/actions/put-comments-action";
+import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
 import { useProfileGame } from "@/hooks/useProfileGame";
 import { useUserComments } from "@/hooks/useUserComments";
 import { Star, Heart, Gamepad2, Play, Gift, NotebookPen } from "lucide-react";
@@ -77,10 +78,35 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
         setModalOpen(true);
     };
 
-    const addOrUpdateComment = async (profileId: string, content: string) => {
+    const addOrUpdateComment = async (
+        profileId: string,
+        content: string,
+        states: {
+            rating: number;
+            liked: boolean;
+            played: boolean;
+            playing: boolean;
+            wishlist: boolean;
+        }
+    ) => {
         try {
             if (editingComment) {
+                // Actualiza el comentario
                 await updateComment(editingComment.id, content);
+
+                // Actualiza los estados del juego en ProfileGame
+                await updateProfileGame(
+                    profileId,
+                    editingComment.gameId,
+                    {
+                        rating: states.rating,
+                        liked: states.liked,
+                        played: states.played,
+                        playing: states.playing,
+                        wishlist: states.wishlist,
+                    }
+                );
+
                 // Actualiza el comentario en el estado local
                 setComments((prev) =>
                     prev.map((c) =>
@@ -88,14 +114,13 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                     )
                 );
             } else {
-                // Si no hay editingComment, no se puede obtener gameId
                 toast.error("No se puede añadir comentario sin juego asociado.");
                 return;
             }
             setModalOpen(false);
             setEditingComment(null);
         } catch {
-            toast.error("Error al guardar el comentario.");
+            toast.error("Error al guardar el comentario o los estados.");
         }
     };
 
@@ -177,6 +202,13 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                     addOrUpdateComment={addOrUpdateComment}
                     profileId={String(profileId)}
                     userComment={editingComment.content}
+                    initialStates={{
+                        rating: profileGames.find(pg => pg.gameId === editingComment.gameId)?.rating ?? 0,
+                        liked: profileGames.find(pg => pg.gameId === editingComment.gameId)?.liked ?? false,
+                        played: profileGames.find(pg => pg.gameId === editingComment.gameId)?.played ?? false,
+                        playing: profileGames.find(pg => pg.gameId === editingComment.gameId)?.playing ?? false,
+                        wishlist: profileGames.find(pg => pg.gameId === editingComment.gameId)?.wishlist ?? false,
+                    }}
                 />
             )}
         </>
