@@ -83,8 +83,13 @@ export default function GamePopUp({
             });
             setModalOpen(false)
             onUpdateStates({ rating, liked, played, playing, wishlist });
+            toast.success("Comentario guardado con éxito.", {
+                duration: 1500,
+            });
         } catch {
-            toast.error("Error al guardar el comentario.");
+            toast.error("Error al guardar el comentario.", {
+                duration: 1500,
+            });
         }
     };
 
