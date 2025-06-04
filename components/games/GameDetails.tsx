@@ -216,17 +216,11 @@ export default function GameDetails({ id }: { id: string }) {
         },
     ];
 
-    const handleOpenModal = async () => {
-        if (typeof refetch === "function") {
-            await refetch(); // Recarga los datos del juego de perfil
+    const handleOpenModal = () => {
+        if (!session?.user?.id) {
+            toast.error("Debes iniciar sesión para registrar o reseñar.");
+            return;
         }
-        // Busca el juego actualizado
-        const updatedProfileGame = profileGames.find(pg => pg.gameId.toString() === id);
-        setRatingState(updatedProfileGame?.rating || 0);
-        setPlayedState(!!updatedProfileGame?.played);
-        setPlayingState(!!updatedProfileGame?.playing);
-        setWishlistState(!!updatedProfileGame?.wishlist);
-        setLikedState(!!updatedProfileGame?.liked);
         setModalOpen(true);
     };
 
