@@ -1,8 +1,10 @@
 "use server"
 
+const baseUrl = process.env.NEXT_PUBLIC_URL;
+
 export default async function getProfileGameById(userId: string) {
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_URL;
+        
         const res = await fetch(`${baseUrl}/api/profileGame/${userId}`, {
             method: "GET",
             headers: {
@@ -17,6 +19,6 @@ export default async function getProfileGameById(userId: string) {
         return await res.json();
     } catch (error) {
         console.error("Error en el action [getProfileGameById]:", error);
-        return [];
+        throw error;
     }
 }

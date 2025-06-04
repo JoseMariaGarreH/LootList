@@ -1,8 +1,10 @@
 "use server"
 
+const baseUrl = process.env.NEXT_PUBLIC_URL;
+
 export default async function getGames() {
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_URL;
+        
         const res = await fetch(`${baseUrl}/api/games`, {
             method: "GET",
             headers: {

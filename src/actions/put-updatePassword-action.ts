@@ -1,11 +1,15 @@
 "use server"
 
+// URL base de la aplicación, se usa para construir la URL completa de la API
+const baseUrl = process.env.NEXT_PUBLIC_URL;
+
 export default async function updatePassword(
     userId: string,
     newPassword: string,
 ) {
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_URL;
+        // Generamos la URL completa para la API, con la que llamaremos al endpoint
+        // declarado en app/api/users/[id]/route.ts
         const res = await fetch(`${baseUrl}/api/users/${userId}`, {
             method: "PUT",
             headers: {
@@ -14,14 +18,17 @@ export default async function updatePassword(
             body: JSON.stringify({ password: newPassword }),
         });
 
+        // Verificamos si la respuesta es exitosa
         if (!res.ok) {
             const error = await res.json();
             throw new Error(error.message || "Error al actualizar la contraseña");
         }
-
-        return true;
+        // Si lo es, retornamos true
+        return { success: true };
     } catch (error) {
+        // Log del error para depuración
         console.error("Error en el action [updatePassword]:", error);
-        return false;
+        // Retornamos false en caso de error
+        return { success: false };
     }
 }
