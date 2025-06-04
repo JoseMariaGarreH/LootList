@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 
         // Guardar el token en la base de datos
         await prisma.passwordResetToken.create({
-            data: { email, token, expires },
+            data: { userId: user.id, email, token, expires },
         });
 
         // Enviar email
