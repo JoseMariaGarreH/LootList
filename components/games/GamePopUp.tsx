@@ -74,7 +74,9 @@ export default function GamePopUp({
                 wishlist,
             });
             setModalOpen(false);
-            window.location.reload();
+            if (typeof profileId === "number" && profileId > 0) {
+                window.location.reload();
+            }
         } catch {
             toast.error("Error al guardar el comentario.");
         }
