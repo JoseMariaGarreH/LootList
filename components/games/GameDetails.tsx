@@ -34,7 +34,7 @@ export default function GameDetails({ id }: { id: string }) {
     const { profile } = useProfileById(userId);
 
     const { games = [], loading } = useGames();
-    const { profileGames = [] } = useProfileGame(userId);
+    const { profileGames = [], refetch } = useProfileGame(userId);
     const { globalProfileGames } = useGlobalProfileGames(id);
     const { comments, loading: loadingComments, addOrUpdateComment, userComment } = useComments(id, userId);
 
@@ -54,6 +54,14 @@ export default function GameDetails({ id }: { id: string }) {
     const [liked, setLikedState] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [showClear, setShowClear] = useState(false);
+
+    const handleUpdateStates = (states: { rating: number; liked: boolean; played: boolean; playing: boolean; wishlist: boolean; }) => {
+        setRatingState(states.rating);
+        setPlayedState(states.played);
+        setPlayingState(states.playing);
+        setWishlistState(states.wishlist);
+        setLikedState(states.liked);
+    };
 
     useEffect(() => {
         if (profileGame) {
@@ -208,6 +216,20 @@ export default function GameDetails({ id }: { id: string }) {
         },
     ];
 
+    const handleOpenModal = async () => {
+        if (typeof refetch === "function") {
+            await refetch(); // Recarga los datos del juego de perfil
+        }
+        // Busca el juego actualizado
+        const updatedProfileGame = profileGames.find(pg => pg.gameId.toString() === id);
+        setRatingState(updatedProfileGame?.rating || 0);
+        setPlayedState(!!updatedProfileGame?.played);
+        setPlayingState(!!updatedProfileGame?.playing);
+        setWishlistState(!!updatedProfileGame?.wishlist);
+        setLikedState(!!updatedProfileGame?.liked);
+        setModalOpen(true);
+    };
+
     return (
         <>
             <Toaster position="top-left" reverseOrder={false} />
@@ -236,7 +258,7 @@ export default function GameDetails({ id }: { id: string }) {
 
                     <button
                         className="mt-0.5 py-2 px-4 w-52 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
-                        onClick={() => setModalOpen(true)}
+                        onClick={() =>handleOpenModal()}
                     >
                         {userComment ? "Editar tu registro" : "Registrar o Reseñar"}
                     </button>
@@ -415,6 +437,7 @@ export default function GameDetails({ id }: { id: string }) {
                             playing: profileGames.find(pg => pg.gameId.toString() === id)?.playing ?? false,
                             wishlist: profileGames.find(pg => pg.gameId.toString() === id)?.wishlist ?? false,
                         }}
+                        onUpdateStates={handleUpdateStates}
                     />
                 )}
             </div>

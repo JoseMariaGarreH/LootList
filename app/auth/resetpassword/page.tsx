@@ -3,6 +3,7 @@
 import ResetPasswordForm from "@/components/auth/resetpassword/ResetPasswordForm";
 import Logo from "@/components/ui/Logo";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function ResetPasswordPage() {
     return (
@@ -20,7 +21,9 @@ export default function ResetPasswordPage() {
                     <p className="text-sm text-[#f1faee] mb-6">
                         Introduce tu nueva contraseña a continuación.
                     </p>
-                    <ResetPasswordForm />
+                    <Suspense>
+                        <ResetPasswordForm />
+                    </Suspense>
                 </div>
             </div>
         </>

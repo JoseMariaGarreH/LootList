@@ -1,18 +1,29 @@
-"use client"
-
-import { ProfileGame } from "@/src/types";
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import getProfileGameById from "@/src/actions/get-profileGameById-action";
+import { ProfileGame } from "@/src/types";
 
-export function useProfileGame(id : string): { profileGames: ProfileGame[] } {
+export function useProfileGame(userId: string): { profileGames: ProfileGame[]; loading: boolean; refetch: () => Promise<void> } {
     const [profileGames, setProfileGames] = useState<ProfileGame[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchProfileGames = useCallback(async () => {
+        setLoading(true);
+        try {
+            const data = await getProfileGameById(userId);
+            setProfileGames(data || []);
+        } catch (error) {
+            setProfileGames([]);
+        } finally {
+            setLoading(false);
+        }
+    }, [userId]);
 
     useEffect(() => {
-        if (!id) return;
-        getProfileGameById(id)
-            .then(data => setProfileGames(data))
-            .catch(() => setProfileGames([]));
-    }, [id]);
+        if (userId) {
+            fetchProfileGames();
+        }
+    }, [userId, fetchProfileGames]);
 
-    return { profileGames };
+    // Esta es la función refetch que puedes usar desde fuera
+    return { profileGames, loading, refetch: fetchProfileGames };
 }

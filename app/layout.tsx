@@ -3,6 +3,7 @@ import { montserrat } from "./font";
 import "./globals.css";
 import SessionWrapper from "@/components/menu/SessionWrapper";
 import PageLoader from "@/components/ui/PageLoader";
+import { Suspense } from "react";
 
 export const metadata : Metadata = {
   title: "LootList",
@@ -21,9 +22,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.className} antialiase bg-[#457b9d]`}>
         <SessionWrapper>
-          <PageLoader>
+          <Suspense>
+            <PageLoader>
               {children}
-          </PageLoader>
+            </PageLoader>
+          </Suspense>
         </SessionWrapper>
       </body>
     </html>

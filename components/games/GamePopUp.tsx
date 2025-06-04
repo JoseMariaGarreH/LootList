@@ -25,6 +25,13 @@ interface GamePopUpProps {
         playing?: boolean;
         wishlist?: boolean;
     };
+    onUpdateStates?: (states: {
+        rating: number;
+        liked: boolean;
+        played: boolean;
+        playing: boolean;
+        wishlist: boolean;
+    }) => void;
 }
 
 export default function GamePopUp({
@@ -33,6 +40,7 @@ export default function GamePopUp({
     setModalOpen,
     addOrUpdateComment,
     initialStates = {},
+    onUpdateStates = () => {},
 }: GamePopUpProps) {
     const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<{ comment: string }>({
         defaultValues: { comment: userComment || "" }
@@ -73,10 +81,8 @@ export default function GamePopUp({
                 playing,
                 wishlist,
             });
-            setModalOpen(false);
-            if (typeof profileId === "number" && profileId > 0) {
-                window.location.reload();
-            }
+            setModalOpen(false)
+            onUpdateStates({ rating, liked, played, playing, wishlist });
         } catch {
             toast.error("Error al guardar el comentario.");
         }
