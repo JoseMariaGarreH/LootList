@@ -40,7 +40,7 @@ export default function GamePopUp({
     setModalOpen,
     addOrUpdateComment,
     initialStates = {},
-    onUpdateStates = () => {},
+    onUpdateStates = () => { },
 }: GamePopUpProps) {
     const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<{ comment: string }>({
         defaultValues: { comment: userComment || "" }
@@ -83,9 +83,12 @@ export default function GamePopUp({
             });
             setModalOpen(false)
             onUpdateStates({ rating, liked, played, playing, wishlist });
-            toast.success("Comentario guardado con éxito.", {
-                duration: 1500,
-            });
+            setTimeout(() => {
+                if (typeof profileId === "string" && profileId.trim() !== "" && profileId !== "null" && profileId !== "undefined") {
+                    window.location.reload();
+                }
+            }, 200);
+
         } catch {
             toast.error("Error al guardar el comentario.", {
                 duration: 1500,
