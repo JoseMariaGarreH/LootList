@@ -20,10 +20,10 @@ export default async function verifyPassword(email: string, password: string) {
             throw new Error(error.message || "Error al verificar la contraseña");
         }
 
-        return {success: true}; // Retornamos un objeto indicando éxito
+        return true; // Retornamos un objeto indicando éxito
     } catch (error) {
         // Log del error para depuración
         console.error("Error en el action [verifyPassword]:", error);
-        return {success: false};
+        return false;
     }
 }

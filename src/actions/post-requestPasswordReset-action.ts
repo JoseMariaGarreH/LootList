@@ -14,12 +14,15 @@ export async function requestPasswordReset(email: string) {
             body: JSON.stringify({ email }),
         });
 
-        // Verificamos si la respuesta es exitosa
-        const data = await res.json();
-        return { success: data.success }; // Retornamos los datos de la respuesta
+        // Error al pedir el reset de contraseña
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.message || "Error al pedir el reset de contraseña");
+        }
+        return true; // Retornamos los datos de la respuesta
     } catch (error) {
         // Log del error para depuración
         console.error("Error en el action [requestPasswordReset]:", error);
-        throw error; // Re-lanzamos el error para que pueda ser manejado por el componente que lo llama
+        return false; // Retornamos false en caso de error
     }
 }

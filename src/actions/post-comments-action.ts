@@ -21,6 +21,6 @@ export async function postComment(profileId: string, gameId: string, content: st
     } catch (error) {
         // Log del error para depuración
         console.error("Error en el action [postComment]:", error);
-        throw error;
+        throw error; // Lanzamos el error para que pueda ser manejado por el componente que lo llama
     }
 }

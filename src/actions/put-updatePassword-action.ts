@@ -24,11 +24,11 @@ export default async function updatePassword(
             throw new Error(error.message || "Error al actualizar la contraseña");
         }
         // Si lo es, retornamos true
-        return { success: true };
+        return true;
     } catch (error) {
         // Log del error para depuración
         console.error("Error en el action [updatePassword]:", error);
         // Retornamos false en caso de error
-        return { success: false };
+        return false;
     }
 }

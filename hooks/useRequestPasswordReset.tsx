@@ -19,7 +19,7 @@ export function useRequestResetPassword() : {
         startTransition(async () => {
             try {
                 const res = await requestPasswordReset(email);
-                if (res.success) {
+                if (res) {
                     setMessage("Correo enviado con éxito");
                 } else {
                     setMessage("No se pudo enviar el correo");

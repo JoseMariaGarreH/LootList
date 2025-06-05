@@ -216,12 +216,13 @@ export default function GameDetails({ id }: { id: string }) {
         },
     ];
 
-    const handleOpenModal = () => {
+    const handleOpenModal = async () => {
         if (!session?.user?.id) {
             toast.error("Debes iniciar sesión para registrar o reseñar.");
             return;
         }
         setModalOpen(true);
+        await refetch(); // Refresca los datos del perfil del usuario
     };
 
     return (
@@ -425,11 +426,11 @@ export default function GameDetails({ id }: { id: string }) {
                         profileId={String(profile?.id) ?? null}
                         userComment={userComment?.content ?? ""}
                         initialStates={{
-                            rating: profileGames.find(pg => pg.gameId.toString() === id)?.rating ?? 0,
-                            liked: profileGames.find(pg => pg.gameId.toString() === id)?.liked ?? false,
-                            played: profileGames.find(pg => pg.gameId.toString() === id)?.played ?? false,
-                            playing: profileGames.find(pg => pg.gameId.toString() === id)?.playing ?? false,
-                            wishlist: profileGames.find(pg => pg.gameId.toString() === id)?.wishlist ?? false,
+                            rating,
+                            liked,
+                            played,
+                            playing,
+                            wishlist,
                         }}
                         onUpdateStates={handleUpdateStates}
                     />

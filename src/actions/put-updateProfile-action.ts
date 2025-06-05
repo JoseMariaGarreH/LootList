@@ -17,7 +17,6 @@ export default async function updateProfile(
     try {
         // Generamos la URL completa para la API, con la que llamaremos al endpoint
         // declarado en app/api/profile/[id]/route.ts
-
         const res = await fetch(`${baseUrl}/api/profile/${userId}`, {
             method: "PUT",
             headers: {
@@ -32,11 +31,12 @@ export default async function updateProfile(
             throw new Error(error.message || "Error al actualizar el perfil");
         }
 
-        return { success: true };
+        // Si lo es, retornamos verdadero
+        return true;
     } catch (error) {
         // Log del error para depuración
         console.error("Error en el action [updateProfile]:", error);
         // Retornamos false en caso de error
-        return { success: false };
+        return false;
     }
 }

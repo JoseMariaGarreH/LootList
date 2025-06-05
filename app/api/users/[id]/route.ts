@@ -3,6 +3,7 @@
 import { prisma } from "@/src/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import bcrypt from "bcrypt";
 
 
@@ -62,7 +63,7 @@ export async function DELETE(request : Request, { params }: Params){
         })
     } catch (error) {
 
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error instanceof PrismaClientKnownRequestError) {
             
             if (error.code === 'P2025') {
                 return NextResponse.json({

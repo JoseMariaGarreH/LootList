@@ -15,11 +15,14 @@ const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1
 
 export default function AvatarUploader() {
 
+    // Obtiene la sesión del usuario actual
     const { data: session } = useSession();
 
+    // Hooks personalizados para obtener el perfil y manejar el avatar
     const { profile } = useProfileById(session?.user?.id || "");
     const { updateAvatar, deleteAvatar, loading } = useAvatar(session?.user?.id || "");
 
+    // Estados para manejar la imagen, recorte y zoom
     const [preview, setPreview] = useState<string | null>(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
@@ -31,6 +34,7 @@ export default function AvatarUploader() {
     const [dragCounter, setDragCounter] = useState(0);
     const [isDragActive, setIsDragActive] = useState(false);
 
+    // Efecto para cargar la imagen del perfil si existe y no se ha interactuado aún
     useEffect(() => {
         if (profile?.profileImage && !hasInteracted) {
             setPreview(profile.profileImage);
@@ -38,6 +42,7 @@ export default function AvatarUploader() {
         }
     }, [profile?.profileImage, hasInteracted]);
 
+    // Maneja la eliminación del avatar, restableciendo el estado y eliminando la imagen
     const handleDeleteAvatar = async () => {
         setPreview(DEFAULT_AVATAR_URL);
         setCroppedImage(DEFAULT_AVATAR_URL);
@@ -70,7 +75,7 @@ export default function AvatarUploader() {
         setCroppedAreaPixels(croppedAreaPixels);
     }, []);
 
-    // Cambia showCroppedImage para subir el imagen al confirmar el recorte
+    // Cambia showCroppedImage para subir la imagen al confirmar el recorte
     const showCroppedImage = useCallback(async () => {
         if (!preview || !croppedAreaPixels || !imageName || !session) return;
         try {
@@ -96,6 +101,7 @@ export default function AvatarUploader() {
         }
     }, [preview, croppedAreaPixels, imageName, session]);
 
+    // Maneja el evento de arrastre dentro del área de recorte
     const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
@@ -103,6 +109,7 @@ export default function AvatarUploader() {
         setIsDragActive(true);
     };
 
+    // Maneja el evento de arrastre fuera del área de recorte
     const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();

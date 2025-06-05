@@ -1,5 +1,6 @@
 "use client"
 
+import putAvatarAction from "@/src/actions/put-avatar-action";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -13,12 +14,11 @@ export function useAvatar(userId: string) {
             formData.append("userId", userId);
             formData.append("image", image);
 
-            const res = await fetch("/api/profile/avatar", {
-                method: "PUT",
-                body: formData,
-            });
-            const data = await res.json();
-            return data.url;
+            const url = await putAvatarAction(formData);
+            if (url) {
+                toast.success("Avatar actualizado con éxito");
+                return url;
+            }
         } catch {
             toast.error("Error al actualizar el avatar");
             return null;
