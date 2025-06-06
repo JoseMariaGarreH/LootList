@@ -1,18 +1,25 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import { Comment } from "@/src/types";
-import { updateComment } from "@/src/actions/put-comments-action";
-import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
-import { useProfileGame } from "@/hooks/useProfileGame";
-import { useUserComments } from "@/hooks/useUserComments";
-import { Star, Heart, Gamepad2, Play, Gift, NotebookPen } from "lucide-react";
+// Componentes
 import AjaxLoader from "../ui/AjaxLoader";
-import Link from "next/link";
 import Pagination from "../games/Pagination";
 import GamePopUp from "@/components/games/GamePopUp";
+// Hooks
+import { useEffect, useState } from "react";
+import { updateComment } from "@/src/actions/put-comments-action";
+import { useProfileGame } from "@/hooks/useProfileGame";
+import { useUserComments } from "@/hooks/useUserComments";
+// Tipos 
+import { Comment } from "@/src/types";
+// Actions
+import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
+// Iconos
+import { Star, Heart, Gamepad2, Play, Gift, NotebookPen } from "lucide-react";
+// Next.js
+import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
 
+// Función que se utiliza en el componente para mostrar los iconos de estado del juego
 function StatusIcons({ liked, played, playing, wishlist }: { liked: boolean, played: boolean, playing: boolean, wishlist: boolean }) {
     return (
         <div className="flex items-center gap-3 mb-2">
@@ -24,9 +31,11 @@ function StatusIcons({ liked, played, playing, wishlist }: { liked: boolean, pla
     );
 }
 
+// Componente que muestra las estrellas de valoración
 function RatingStars({ rating }: { rating: number }) {
     return (
         <div className="flex items-center">
+            {/* Estrellas de valoración */}
             {[1, 2, 3, 4, 5].map((star) => {
                 const filled = rating >= star;
                 const halfFilled = !filled && rating >= star - 0.5;
@@ -56,28 +65,35 @@ function RatingStars({ rating }: { rating: number }) {
 }
 
 export default function ProfileReviews({ profileId }: { profileId: number }) {
+    // Hooks personalizados para obtener los comentarios del usuario y los juegos del perfil
     const { comments: initialComments, loading } = useUserComments(profileId);
     const { profileGames } = useProfileGame(String(profileId));
 
+    // Estados locales para manejar los comentarios, la paginación y el modal de edición
     const [comments, setComments] = useState<Comment[]>(initialComments);
     const [page, setPage] = useState(1);
     const pageSize = 5;
 
+    // Efecto para actualizar los comentarios cuando cambian los comentarios iniciales
     useEffect(() => {
         setComments(initialComments);
     }, [initialComments]);
 
+    // Calcula la cantidad total de páginas y los comentarios a mostrar en la página actual
     const totalPages = Math.ceil(comments.length / pageSize);
     const displayedComments = comments.slice((page - 1) * pageSize, page * pageSize);
 
+    // Estados para manejar la apertura de la ventana emergente y el comentario que se está editando
     const [modalOpen, setModalOpen] = useState(false);
     const [editingComment, setEditingComment] = useState<Comment | null>(null);
 
+    // Función para manejar la edición de un comentario
     const handleEditComment = (comment: Comment) => {
         setEditingComment(comment);
         setModalOpen(true);
     };
 
+    // Función para añadir o actualizar un comentario
     const addOrUpdateComment = async (
         profileId: string,
         content: string,
@@ -124,7 +140,9 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
         }
     };
 
+    // Si los comentarios están cargando, muestra un loader
     if (loading) return <AjaxLoader />;
+    // Si no hay comentarios, muestra un mensaje indicando que no se han escrito reseñas
     if (!comments.length) return (
         <div className="w-full mt-8 mb-8 max-w-4xl mx-auto px-2">
             <p className="text-center text-white">No has escrito ninguna reseña</p>
@@ -134,6 +152,7 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
     return (
         <>
             <Toaster position="top-left" reverseOrder={false} />
+
             <div className="w-full mt-8 mb-8 space-y-10 max-w-4xl mx-auto px-2">
                 {displayedComments.map((comment: Comment) => {
                     const profileGame = profileGames.find(pg => pg.gameId === comment.gameId);
@@ -148,7 +167,6 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                             key={comment.id}
                             className="flex flex-col gap-4 bg-[#1d3557] border border-white/10 p-4 sm:p-5 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
                         >
-                            {/* Título y año arriba */}
                             <div className="mb-2 flex flex-col sm:flex-row sm:items-center">
                                 <Link href={`/games/${comment.game?.id}`} className="hover:text-[#e63946] transition-all duration-200 ease-in-out">
                                     <h3 className="text-lg sm:text-2xl font-semibold leading-snug">
@@ -192,14 +210,15 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                         </div>
                     );
                 })}
-                
+                {/* Componente de paginación */}
                 <Pagination
                     page={page}
                     totalPages={totalPages}
                     setPage={setPage}
                 />
             </div>
-
+            
+            {/* Componente de ventana emergente para editar comentarios */}
             {modalOpen && editingComment && (
                 <GamePopUp
                     setModalOpen={setModalOpen}

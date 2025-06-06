@@ -1,15 +1,20 @@
 "use client"
 
+// Hooks
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+// Librerías
 import toast, { Toaster } from "react-hot-toast";
 
 export default function UserForm() {
-
+    // Importamos los hooks necesarios de react-hook-form, para manejar el formulario
     const { register, handleSubmit, formState: { errors } } = useForm();
+    // Importamos el hook useRouter de next navigation, para redirigir al usuario después de registrarse
     const router = useRouter();
 
+    // Definimos la función onSubmit que se ejecutará al enviar el formulario
     const onSubmit = handleSubmit(async (data) => {
+        // Cargamos los datos del formulario
         const {
             username,
             email,
@@ -17,11 +22,12 @@ export default function UserForm() {
             confirmPassword
         } = data;
 
+        // Comprobamos que las cotraseñas coincidan
         if (password !== confirmPassword) {
             toast.error("Las contraseñas no coinciden");
             return;
         }
-
+        // Realizamos la petición al backend para registrar al usuario, enviando los datos del formulario, que se han insertado
         const respuesta = await fetch("/api/auth/signup", {
             method: "POST",
             headers: {
@@ -30,12 +36,14 @@ export default function UserForm() {
             body: JSON.stringify({ username, email, password })
         })
 
+        // Si la respuesta es exitosa, redirigimos al usuario a la página de inicio de sesión
         if (respuesta.ok) {
-            router.push("/auth/login");
+            router.push("/auth/login"); // Redirigimos al usuario a la página de inicio de sesión
         } else {
             toast.error("Error al registrarse, el nombre de usuario o el correo ya están en uso");
         }
 
+        // Log de la respuesta para depuración
         console.log(respuesta);
     })
 
@@ -112,9 +120,9 @@ export default function UserForm() {
                         type="password"
                         id="password"
                         className="w-full px-4 py-2 rounded transition-all
-                    bg-[#1d3557] text-[#F1FAEE]
-                    focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none
-                    disabled:bg-[#D9D9D9] disabled:text-[#A0A0A0]"
+                        bg-[#1d3557] text-[#F1FAEE]
+                        focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none
+                        disabled:bg-[#D9D9D9] disabled:text-[#A0A0A0]"
                         autoComplete="password"
                         {...register("password", {
                             required: {
@@ -122,6 +130,7 @@ export default function UserForm() {
                                 message: "La contraseña es obligatoria"
                             },
                             pattern: {
+                                // Expresión regular para validar, comprueba que tenga al menos 8 caracteres, una mayúscula, una minúscula y un número
                                 value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
                                 message: "Debes tener al menos 8 caracteres, una mayúscula, una minúscula y un número"
                             }

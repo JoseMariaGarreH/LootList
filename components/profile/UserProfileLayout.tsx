@@ -1,13 +1,25 @@
 "use client"
 
+// Tipos
 import { Profile } from "@/src/types";
+// Iconos
 import { Edit3, User } from "lucide-react";
+// Next.js
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function UserProfileLayout({ profile, session, children }: { profile: Profile, session: any, children: React.ReactNode }) {
+// Componente de diseño para el perfil de usuario
+interface UserProfileLayoutProps {
+    profile: Profile;
+    session: any;
+    children: React.ReactNode;
+}
+
+export default function UserProfileLayout({ profile, session, children }: UserProfileLayoutProps) {
+    // Obtiene la ruta actual para resaltar la pestaña activa
     const pathname = usePathname();
+    // Define las pestañas de navegación del perfil
     const tabs = [
         { name: "Perfil", href: `/user/${session?.user.username}` },
         { name: "Jugados", href: `/user/${session?.user.username}/played` },

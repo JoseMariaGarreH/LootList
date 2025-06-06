@@ -1,10 +1,14 @@
+"use server"
+
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import { prisma } from "@/src/lib/prisma";
 
+// Esta función maneja la solicitud POST para enviar un correo de restablecimiento de contraseña
 export async function POST(request: Request) {
     try {
+        // Extraer el email del cuerpo de la solicitud, al que se le va enviar el enlace de restablecimiento de contraseña
         const { email } = await request.json();
 
         // Verifica que el email exista en la base de datos
@@ -12,15 +16,16 @@ export async function POST(request: Request) {
             where: { email },
         });
 
+        // Si no se encuentra el usuario, devuelve un error 404
         if (!user) {
             return NextResponse.json(
                 { success: false, message: "No existe un usuario registrado con ese correo" },
                 { status: 404 }
             );
         }
-
+        // Generar un token único para el restablecimiento de contraseña
         const token = uuidv4();
-        const expires = new Date(Date.now() + 30 * 30 * 1000); // 15 minutos
+        const expires = new Date(Date.now() + 30 * 30 * 1000); // el token durará15 minutos
 
         // Guardar el token en la base de datos
         await prisma.passwordResetToken.create({
@@ -35,12 +40,15 @@ export async function POST(request: Request) {
                 pass: process.env.EMAIL_PASSWORD,
             },
             tls: {
-                rejectUnauthorized: false, // Solo para desarrollo
+                rejectUnauthorized: false,
             },
         });
 
+        // Crear el enlace de restablecimiento de contraseña
         const resetLink = `${process.env.NEXT_PUBLIC_URL}/auth/resetpassword?token=${token}`;
 
+        // Enviar el correo electrónico con el enlace de restablecimiento de contraseña
+        // Con un diseño personalizado de email
         await transporter.sendMail({
             to: email,
             subject: 'Restablecimiento de contraseña',
@@ -69,8 +77,10 @@ export async function POST(request: Request) {
             `,
         });
 
+        // Respuesta exitosa en caso de que el correo se envíe correctamente
         return NextResponse.json({ success: true, message: "Correo enviado con éxito" });
     } catch (error: any) {
+        // Muestra el error si ocurre un problema en la ejecución de la operación de envío de correo
         return NextResponse.json(
             { success: false, message: error.message || "No se pudo enviar el correo" },
             { status: 500 }

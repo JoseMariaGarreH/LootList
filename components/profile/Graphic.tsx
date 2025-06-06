@@ -1,4 +1,8 @@
+"use client"
+
+// Componentes
 import { Bar } from 'react-chartjs-2';
+// Librerías de chart.js
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -10,7 +14,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-type Props = {
+interface Props {
     ratingsCount: number[];
 };
 

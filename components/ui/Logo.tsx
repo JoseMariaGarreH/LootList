@@ -1,7 +1,9 @@
 "use client"
 
+// Next.js
 import Image from "next/image";
 
+// Componente de logo para la aplicación web
 export default function Logo() {
     return(
         <div className="relative w-20 h-20">

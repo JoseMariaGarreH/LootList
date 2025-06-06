@@ -1,10 +1,13 @@
 "use client"
 
-import { Lock, X } from "lucide-react"
+// Hooks
 import { useState } from "react";
+// Iconos
+import { Lock, X } from "lucide-react"
+// Librerías
 import toast from "react-hot-toast";
 
-
+// Definición de las propiedades del componente
 interface EditProfileVentanaEmergenteProps {
     onClose: () => void,
     onAuthenticate: (password: string) => void;
@@ -12,15 +15,19 @@ interface EditProfileVentanaEmergenteProps {
 }
 
 export default function EditProfileVentanaEmergente({ onClose, onAuthenticate, open }: EditProfileVentanaEmergenteProps) {
+    // Si la ventana emergente no está abierta, no renderizar nada
     if (!open) return null;
-
+    // Estado para manejar la contraseña ingresada
     const [password, setPassword] = useState('');
 
+    // Función para manejar el envío del formulario
     const handleSubmit = () => {
+        // Validamos que la contraseña que no esté vacía
         if (!password) {
             toast.error('Por favor ingresa una contraseña');
             return;
         }
+        // Llamamos a la función onAuthenticate con la contraseña ingresada, si es válida
         onAuthenticate(password);
     };
 

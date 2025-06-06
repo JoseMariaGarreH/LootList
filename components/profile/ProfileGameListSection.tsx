@@ -1,6 +1,11 @@
+"use client"
+
+// Componentes
 import GameCard from "@/components/games/GameCard";
+// Tipos
 import { Games } from "@/src/types";
 
+// Definición de las propiedades del componente
 interface ProfileGameListSectionProps {
     games: Games[];
     emptyText: string;

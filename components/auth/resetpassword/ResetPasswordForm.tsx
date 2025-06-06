@@ -1,44 +1,60 @@
 "use client"
 
+// Hooks
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { resetPasswordWithToken } from "@/src/actions/post-resetPasswordWithToken-action";
+import { useResetPassword } from "@/hooks/useResetPassord";
+// Librerías
 import toast, { Toaster } from "react-hot-toast";
 
+// Definimos la estructura de los datos del formulario de restablecimiento de contraseña
 type ResetPasswordFormData = {
     password: string;
     confirmPassword: string;
 };
 
 export default function ResetPasswordForm() {
-
+    // El hook useSearchParams nos permite acceder a los parámetros de búsqueda de la URL
     const searchParams = useSearchParams();
+    // Obtenemos el token de los parámetros de búsqueda, que genera el backend al enviar el correo de restablecimiento de contraseña
     const token = searchParams.get("token");
+    // El hook useRouter nos permite navegar a otras páginas de la aplicación
     const router = useRouter()
+    // Importamos el hook useForm de react-hook-form para manejar el formulario
     const { register, handleSubmit, formState: { errors } } = useForm<ResetPasswordFormData>();
+    // Estado para manejar el estado de carga del formulario
     const [isPending, setIsPending] = useState(false);
+    // Importamos el hook useResetPassword que maneja la lógica de restablecimiento de contraseña
+    const { resetPassword } = useResetPassword();
 
+    // Función que se ejecuta al enviar el formulario
     const onSubmit = async (data: ResetPasswordFormData) => {
+        // Validamos que haya un token
         if (!token) {
             toast.error("Token no válido");
             return;
         }
+        // Validamos que las contraseñas coincidan
         if (data.password !== data.confirmPassword) {
             toast.error("Las contraseñas no coinciden");
             return;
         }
+        // Mostramos un mensaje de carga mientras se procesa la solicitud
         setIsPending(true);
         try {
-            await resetPasswordWithToken(token, data.password);
-            router.push("/auth/login");
+            // Llamamos a la función resetPassword que se encarga de enviar la solicitud al backend
+            const result = await resetPassword(token, data.password);
+            if (result) {
+                // Si la solicitud es exitosa, mostramos un mensaje de éxito
+                router.push("/auth/login");
+            }
         } catch (e: any) {
             toast.error(e?.message || "Error al cambiar la contraseña");
         } finally {
             setIsPending(false);
         }
     };
-
 
     return (
         <>

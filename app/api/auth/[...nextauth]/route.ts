@@ -5,6 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/src/lib/prisma";
 import bcrypt from "bcrypt";
 
+// Extiende los tipos de Session y User de next-auth para incluir id, email y username
 declare module "next-auth" {
     interface Session {
         user: {
@@ -21,8 +22,10 @@ declare module "next-auth" {
     }
 }
 
+// Configuración de NextAuth
 const authOptions: NextAuthOptions = {
     providers: [
+        // Proveedor de autenticación por credenciales (email y contraseña)
         CredentialsProvider({
             name: "Credentials",
             credentials: {
@@ -34,7 +37,7 @@ const authOptions: NextAuthOptions = {
                 const userFound = await prisma.users.findUnique({
                     where: { email: credentials?.email }
                 });
-
+                // Si no se encuentra el usuario o no se proporciona contraseña, lanzar un error
                 if (!userFound) throw new Error("No existe el usuario");
                 if (!credentials?.password) throw new Error("No se proporcionó contraseña");
 
@@ -52,8 +55,9 @@ const authOptions: NextAuthOptions = {
         })
     ],
     callbacks: {
+        // Callback para manejar la sesión y añadir los datos del usuario
         async session({ session, token }) {
-            // Agregar el username al objeto session.user
+            // Agrega id, email y username al objeto session.user
             if (token) {
                 session.user = {
                     id: token.id as string,
@@ -63,6 +67,7 @@ const authOptions: NextAuthOptions = {
             }
             return session;
         },
+        // Callback para manejar el token JWT y añadir los datos del usuario
         async jwt({ token, user }) {
             // Si hay un usuario (login), añade los datos
             if (user) {
@@ -83,12 +88,15 @@ const authOptions: NextAuthOptions = {
             return token;
         }
     },
+    // Página de inicio de sesión personalizada
     pages: {
         signIn: "/auth/login",
     },
+    // Secreto para firmar los tokens
     secret: process.env.NEXTAUTH_SECRET,
 };
 
+// Crea el handler de NextAuth con la configuración definida
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

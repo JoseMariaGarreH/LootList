@@ -1,29 +1,35 @@
 "use client";
 
+// Componentes
+import AuthPopup from '../../../ui/AuthPopup';
+import EditProfileAuthPopup from './EditProfileAuthPopup';
+
+// Hooks
 import { useForm } from 'react-hook-form';
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from 'react';
-import AuthPopup from '../../../ui/AuthPopup';
-import toast, { Toaster } from 'react-hot-toast';
-import { Pencil } from 'lucide-react';
-import EditProfileAuthPopup from './EditProfileAuthPopup';
 import { useUserById } from '@/hooks/useUserById';
 import { useProfileById } from '@/hooks/useProfileById';
 import { useVerifyPassword } from "@/hooks/useVerifyPassword";
 import { useUpdateProfile } from "@/hooks/useUpdateProfile";
+// Librerías
+import toast, { Toaster } from 'react-hot-toast';
+// Iconos
+import { Pencil } from 'lucide-react';
+
 
 export default function ProfileForm() {
-
     // Datos de la sesión
     const { data: session, update } = useSession();
 
-    // hooks
+    // Hooks personalizados para obtener datos del usuario y perfil
     const { user } = useUserById(session?.user?.id || "");
     const { profile } = useProfileById(session?.user?.id || "");
+    // y para verificar la contraseña y actualizar el perfil
     const { checkPassword } = useVerifyPassword();
     const { changeProfile } = useUpdateProfile();
 
-    // hooks react-hook-form
+    // Declaración del formulario con react-hook-form
     const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
         defaultValues: {
             username: '',
@@ -45,6 +51,7 @@ export default function ProfileForm() {
     const [modificarUsername, setModificarUsername] = useState(false);
     const [modificarEmail, setModificarEmail] = useState(false);
 
+    // useEffect para cargar los datos del usuario y perfil en el formulario
     useEffect(() => {
         if (user && profile) {
             setValue('username', user.username);
@@ -56,45 +63,56 @@ export default function ProfileForm() {
             setValue('bio', profile.bio);
             setValue('pronoun', profile.pronoun);
         }
-    }, [user, profile, setValue]);
+    }, [user, profile, setValue]); // Se ejecuta cuando cambian user, profile o se actualiza el valor
 
+    // Funciones para manejar la edición de campos
     const handleEditClick = (campo: 'username' | 'email') => {
         setCampoEditable(campo);
         setSeAbreVentanaProfile(true);
     };
 
+    // Función para manejar la autenticación antes de permitir la edición, de campos sensibles como username y email
     const handleAuthenticate = async (password: string) => {
+        // Verifica si hay un campo editable seleccionado
         if (!campoEditable) return;
-
+        // Verifica la contraseña del usuario
         const ok = await checkPassword(session?.user?.email ?? '', password);
+        // Si la contraseña es incorrecta, muestra un mensaje de error
         if (!ok) {
             toast.error("La contraseña es incorrecta");
             return;
         }
 
+        // Si la contraseña es correcta, permite la edición del campo correspondiente
         if (campoEditable === 'username') {
             setModificarUsername(true);
         } else if (campoEditable === 'email') {
             setModificarEmail(true);
         }
 
+        // Cierra la ventana de autenticación
         setCampoEditable(null);
         setSeAbreVentanaProfile(false);
     };
 
+    // Función para cancelar la edición del perfil
     const handleCancelProfile = () => {
         setSeAbreVentanaProfile(false);
         setCampoEditable(null);
     };
 
+    // Función para manejar el envío del formulario
     const onSubmit = handleSubmit(() => {
         setMensajeVentana('¿Estás seguro de que quieres guardar tus datos?');
         setSeAbreVentanaConfirmacion(true);
     });
 
+    // Función para manejar la confirmación de los cambios
     const handleConfirm = async () => {
+        // Cierra la ventana de confirmación
         setSeAbreVentanaConfirmacion(false);
 
+        // Obtiene los valores del formulario
         const data = getValues();
         const {
             name,
@@ -107,12 +125,14 @@ export default function ProfileForm() {
             email
         } = data;
 
+        
         try {
+            // Actualiza el perfil del usuario con los datos del formulario
             const updateResponse = await changeProfile(
                 session?.user?.id || '',
                 { name, firstSurname, secondSurname, bio, location, pronoun, username, email }
             );
-
+            // Si la actualización falla, muestra un mensaje de error
             if (!updateResponse) {
                 toast.error("Error al actualizar el perfil");
                 return;
@@ -122,8 +142,9 @@ export default function ProfileForm() {
             setModificarUsername(false);
             setModificarEmail(false);
 
+            // Actualiza los datos de la sesión con el nuevo username y email
             await update({ email, username });
-
+            // Muestra un mensaje de éxito
             toast.success("Perfil actualizado correctamente");
         } catch (error) {
             console.error("Error al actualizar el perfil:", error);
@@ -131,7 +152,7 @@ export default function ProfileForm() {
         }
     };
 
-
+    // Función para manejar la cancelación de la confirmación
     const handleCancelConfirmacion = () => {
         setSeAbreVentanaConfirmacion(false);
     };

@@ -1,28 +1,40 @@
+"use client"
+
+// Hooks
 import { useRequestResetPassword } from "@/hooks/useRequestPasswordReset";
-import Link from "next/link";
 import { useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
+// Librerías
+import toast, { Toaster } from "react-hot-toast";
+// Next.js
+import Link from "next/link";
+
+
 
 type RequestEmailFormData = {
     email: string;
 };
 
 export default function RequestEmailForm() {
+    // Importamos el hook useRequestResetPassword que maneja la lógica de envío del correo de restablecimiento
+    // y los estados de carga, mensaje y error
     const { sendResetEmail, isPending, message, isError } = useRequestResetPassword();
-
+    // Importamos los hooks de react-hook-form para manejar el formulario
     const { register, handleSubmit, formState: { errors } } = useForm<RequestEmailFormData>();
 
+    // useEffect para mostrar notificaciones de éxito o error al usuario
     useEffect(() => {
+        // Si hay un mensaje, mostramos una notificación
         if (message) {
-            if (isError) {
+            if (isError) { // Si es un error, mostramos un mensaje de error
                 toast.error(message);
-            } else {
+            } else { // Si es un mensaje de éxito, mostramos un mensaje de éxito
                 toast.success(message);
             }
         }
-    }, [message, isError]);
+    }, [message, isError]); // Solo se ejecuta cuando cambia el mensaje o el estado de error
 
+    // Función que se ejecuta al enviar el formulario
     const onSubmit = (data: RequestEmailFormData) => {
         sendResetEmail(data.email);
     };
@@ -38,7 +50,8 @@ export default function RequestEmailForm() {
                     {...register("email", {
                         required: "El correo es obligatorio",
                         pattern: {
-                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            // Expresión regular para validar, comprueba que tenga una @ y un dominio osea un .com, .es, etc...
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
                             message: "Correo no válido"
                         }
                     })}

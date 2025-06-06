@@ -1,5 +1,9 @@
+"use client"
+
+// Iconos
 import { Search, FilterX } from "lucide-react";
 
+// Importamos los tipos de las props para el componente de filtros de juegos
 interface GameFiltersProps {
     search: string;
     setSearch: (v: string) => void;

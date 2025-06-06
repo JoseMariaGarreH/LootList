@@ -1,8 +1,12 @@
 'use client'
 
-import { Profile, ProfileGame } from "@/src/types";
+// Componentes
 import Graphic from "./Graphic";
+// Tipos
+import { Profile, ProfileGame } from "@/src/types";
 
+
+// Definición de las propiedades del componente
 interface ProfileInformationProps {
     profileGames: ProfileGame[];
     profile: Profile;
@@ -10,11 +14,12 @@ interface ProfileInformationProps {
 
 export default function ProfileInformation({ profileGames, profile }: ProfileInformationProps) {
 
+    // Filtra los juegos del perfil para obtener el número de juegos jugados, jugando y que le han gustado
     const gamesPlayed = profileGames.filter(game => game.played === true).length;
     const gamesPlaying = profileGames.filter(game => game.playing === true).length;
     const gamesLiked = profileGames.filter(game => game.liked === true).length;
 
-    // Calcula el número de juegos por rating (1 a 5)
+    // Calcula el número de juegos por rating del 1 al 5, incluyendo medias estrellas
     const ratingsCount = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map(
         (star) => profileGames.filter(g => g.rating === star).length
     );

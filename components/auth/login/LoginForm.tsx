@@ -1,32 +1,39 @@
 "use client"
 
-import Link from "next/link";
+// Hooks
 import { useForm } from "react-hook-form";
+// Librerías
+import toast, { Toaster } from "react-hot-toast";
+// Next.js
+import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast";
-import Image from "next/image";
+
 
 export default function LoginForm() {
 
+    // Importamos los hooks necesarios de react-hook-form, para manejar el formulario
     const { register, handleSubmit, formState: { errors } } = useForm();
+    // Importamos el hook useRouter de next navigation, para redirigir al usuario después de iniciar sesión
     const router = useRouter();
 
+    // Definimos la función onSubmit que se ejecutará al enviar el formulario
     const onSubmit = handleSubmit(async (data) => {
-        
+        // Mostramos un mensaje de carga mientras se procesa la solicitud
         const respuesta = await signIn("credentials",{
             email: data.email,
             password: data.password,
             redirect: false
         })
 
+        // Si la respuesta contiene un error, mostramos un mensaje de error
         if (respuesta?.error) {
             toast.error("Error al iniciar sesión");
-        } else {
-            router.push("/");
+        } else { // Si no hay error, mostramos un mensaje de éxito
+            router.push("/"); // Y redirigimos al usuario a la página principal
         }
 
-        console.log(respuesta);
+        console.log(respuesta); // Log de la respuesta para depuración
     })
 
     return (

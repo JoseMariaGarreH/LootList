@@ -1,15 +1,23 @@
 "use client"
 
+// Componentes
 import Footer from "@/components/menu/Footer";
 import Navbar from "@/components/menu/Navbar";
-import Image from "next/image";
-import { roboto } from "@/app/font";
-import { Heart, Star, Gamepad2 } from "lucide-react";
+// Hooks
 import useGames from "@/hooks/useGames";
 import { useMemo } from "react";
+// Tipos
 import { Games } from "@/src/types";
+// Fuentes
+import { roboto } from "@/app/font";
+// Librerías
+import { Heart, Star, Gamepad2 } from "lucide-react";
+// Next.js
+import Image from "next/image";
+
 
 export default function Home() {
+  // Recogemos los juegos guardados en la base de datos
   const { games } = useGames();
 
   // Devuelve un array de N juegos aleatorios (sin repetir)

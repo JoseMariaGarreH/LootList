@@ -1,9 +1,12 @@
 "use client"
 
+// Componentes
 import Footer from "@/components/menu/Footer";
 import Navbar from "@/components/menu/Navbar";
+// Iconos
 import { GraduationCap, Info, MessageCircleQuestion, Pin } from "lucide-react";
 
+// Página de "Sobre Nosotros", para informar al usuario sobre el proyecto y su creador
 export default function AboutPage() {
     return (
         <>  

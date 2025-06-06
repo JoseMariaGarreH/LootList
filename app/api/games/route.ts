@@ -3,6 +3,7 @@
 import { prisma } from "@/src/lib/prisma"
 import { NextResponse } from "next/server"
 
+// Esta función recoge todos los juegos de la base de datos
 export async function GET() {
     try {
         const games = await prisma.games.findMany()

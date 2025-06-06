@@ -1,22 +1,26 @@
 "use client"
 
+// Next.js
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
     return (
+        // Contenedor principal del pie de página
         <footer className="w-full bg-[#a8dadc]">
             <div className="mx-auto max-w-6xl px-4 py-4">
                 <div className="flex flex-col sm:flex-row items-center justify-center">
                     <div className="flex flex-col items-start">
                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-black">
+                            {/* Enlaces de navegación, de la aplicación en la parte inferior */}
                             <a href="/about" className="hover:text-gray-600 font-medium text-sm">Sobre nosotros</a>
                             <a href="/help" className="hover:text-gray-600 font-medium text-sm">Ayuda</a>
                             <a href="/games" className="hover:text-gray-600 font-medium text-sm">Juegos</a>
                         </div>
+                        {/* Texto de derechos de autor y mensaje de la aplicación */}
                         <p className="text-gray-800 text-xs mt-1">©LootList hecho por gente que hace lo que le gusta.</p>
                     </div>
-
+                    {/* los iconos de redes sociales */}
                     <div className="flex gap-3 mt-3 sm:mt-0 sm:ml-16">
                         <Link
                             href="https://twitter.com"

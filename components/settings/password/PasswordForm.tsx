@@ -1,23 +1,29 @@
 "use client";
 
+// Componentes
+import AuthPopup from "../../ui/AuthPopup";
+// Hooks
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import AuthPopup from "../../ui/AuthPopup";
-import toast, { Toaster } from "react-hot-toast";
 import { useVerifyPassword } from "@/hooks/useVerifyPassword";
 import { useUpdatePassword } from "@/hooks/useUpdatePassword";
+// Librerías
+import toast, { Toaster } from "react-hot-toast";
+
 
 export default function PasswordForm() {
+    // Obtener la sesión del usuario
     const { data: session } = useSession();
-
+    // Si no hay sesión, mostrar un mensaje para iniciar sesión
     if (!session?.user) {
         return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
     }
-
+    // Hooks personalizados para verificar y actualizar la contraseña
     const { checkPassword } = useVerifyPassword();
     const { changePassword } = useUpdatePassword();
 
+    // Configuración del formulario con react-hook-form
     const { register, handleSubmit, getValues, reset, formState: { errors } } = useForm({
         defaultValues: {
             currentPassword: '',
@@ -26,20 +32,26 @@ export default function PasswordForm() {
         }
     });
 
+    // Estado para manejar la ventana de confirmación
     const [seAbreVentana, setSeAbreVentana] = useState(false);
     const [mensajeVentana, setMensajeVentana] = useState('');
 
+    // Función para manejar el envío del formulario
     const onSubmit = handleSubmit(() => {
         setMensajeVentana('¿Estás seguro de que quieres guardar tus datos?');
         setSeAbreVentana(true);
     });
 
-    const handleConfirm = async () => {
+    // Función para manejar la confirmación de la actualización de contraseña
+    const handleConfirm = async () => { 
+        // Cerrar la ventana de confirmación
         setSeAbreVentana(false);
 
+        // Obtener los valores del formulario
         const data = getValues();
         const { currentPassword, newPassword, confirmPassword } = data;
 
+        // Comprprobar que las contraseñas no coinciden, para mostrar un mensaje de error, y evitar errores
         if (newPassword !== confirmPassword) {
             toast.error("La contraseña nueva y la confirmación no coinciden");
             return;
@@ -49,6 +61,7 @@ export default function PasswordForm() {
             // Verificar la contraseña actual
             const verifyResponse = await checkPassword(session?.user?.email ?? '', currentPassword);
 
+            // Si la verificación falla, mostrar un mensaje de error
             if (!verifyResponse) {
                 toast.error("La contraseña actual es incorrecta");
                 return;
@@ -60,11 +73,12 @@ export default function PasswordForm() {
                 newPassword,
             );
 
+            // Si la actualización falla, mostrar un mensaje de error
             if (!updateResponse) {
                 toast.error("Error al actualizar la contraseña");
                 return;
             }
-
+            // Si todo va bien, mostrar un mensaje de éxito y resetear el formulario
             toast.success("Tu contraseña ha sido actualizada correctamente");
             reset({
                 currentPassword: '',
@@ -77,6 +91,7 @@ export default function PasswordForm() {
         }
     };
 
+    // Función para manejar el cierre de la ventana de confirmación
     const handleCancel = () => {
         setSeAbreVentana(false);
     };

@@ -1,9 +1,13 @@
+"use server"
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 import bcrypt from "bcrypt";
 
+// Función para cambiar la contraseña de un usuario usando un token de restablecimiento
 export async function POST(request: Request) {
     try {
+        // Extraer los datos del cuerpo de la solicitud
         const { token, password } = await request.json();
 
         // Buscar el token
@@ -11,6 +15,7 @@ export async function POST(request: Request) {
             where: { token },
         });
 
+        // Verificar si el token existe y no ha expirado
         if (!resetToken || resetToken.expires < new Date()) {
             return NextResponse.json(
                 { success: false, message: "Token inválido o expirado" },
@@ -23,6 +28,7 @@ export async function POST(request: Request) {
             where: { email: resetToken.email },
         });
 
+        // Verificar si el usuario existe
         if (!user) {
             return NextResponse.json(
                 { success: false, message: "Usuario no encontrado" },
@@ -42,8 +48,10 @@ export async function POST(request: Request) {
             where: { token },
         });
 
+        // Respuesta exitosa
         return NextResponse.json({ success: true, message: "Contraseña cambiada correctamente" });
     } catch (error: any) {
+        // Muestra el error si ocurre un problema en la ejecución de la operación de cambio de contraseña
         return NextResponse.json(
             { success: false, message: error.message || "Error al cambiar la contraseña" },
             { status: 500 }

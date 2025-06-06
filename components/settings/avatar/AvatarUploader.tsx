@@ -1,14 +1,19 @@
 "use client";
 
-import Image from "next/image";
-import { useState, useRef, useCallback, useEffect } from "react";
-import Cropper from "react-easy-crop";
-import { getCroppedImg } from "@/src/utils/cropImage";
-import { useSession } from "next-auth/react";
-import { useAvatar } from "@/hooks/useAvatar";
-import toast, { Toaster } from "react-hot-toast";
-import { useProfileById } from "@/hooks/useProfileById";
+// Componentes
 import AjaxLoader from "@/components/ui/AjaxLoader";
+// Hooks
+import { useState, useRef, useCallback, useEffect } from "react";
+import { useAvatar } from "@/hooks/useAvatar";
+import { useProfileById } from "@/hooks/useProfileById";
+import { useSession } from "next-auth/react";
+//Next.js
+import Image from "next/image";
+// Utils
+import { getCroppedImg } from "@/src/utils/cropImage";
+// Librerías
+import Cropper from "react-easy-crop";
+import toast, { Toaster } from "react-hot-toast";
 import clsx from "clsx";
 
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg";
@@ -31,7 +36,6 @@ export default function AvatarUploader() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [imageName, setImageName] = useState<string | null>(null);
     const [hasInteracted, setHasInteracted] = useState(false);
-    const [dragCounter, setDragCounter] = useState(0);
     const [isDragActive, setIsDragActive] = useState(false);
 
     // Efecto para cargar la imagen del perfil si existe y no se ha interactuado aún
@@ -105,7 +109,6 @@ export default function AvatarUploader() {
     const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        setDragCounter((c) => c + 1);
         setIsDragActive(true);
     };
 
@@ -113,11 +116,7 @@ export default function AvatarUploader() {
     const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        setDragCounter((c) => {
-            const newCount = c - 1;
-            if (newCount <= 0) setIsDragActive(false);
-            return newCount;
-        });
+        setIsDragActive(false);
     };
 
     // Maneja el lanzamiento de archivos hacia el área de recorte
@@ -125,7 +124,6 @@ export default function AvatarUploader() {
         e.preventDefault();
         e.stopPropagation();
         setIsDragActive(false);
-        setDragCounter(0);
         const file = e.dataTransfer.files?.[0];
         if (file && file.type.startsWith("image/")) {
             setHasInteracted(true);

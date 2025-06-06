@@ -1,7 +1,8 @@
 "use client"
-
+// Next.js
 import Image from "next/image";
 
+// Componente de loader para mostrar mientras se cargan datos
 export default function AjaxLoader() {
     return (
         <div className="flex items-center justify-center h-screen">

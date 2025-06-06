@@ -3,9 +3,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 
+// Función para obtener todos los perfiles que estan asociados a un usuario específico
 export async function GET(request: Request, { params }: { params: { id: string } }) {
     try {
-
+        // Verificamos si hay un ID en los parámetros
         if (!params.id) {
             return NextResponse.json(
                 { message: "No autorizado" },
@@ -13,10 +14,12 @@ export async function GET(request: Request, { params }: { params: { id: string }
             );
         }
 
+        // Buscamos el perfil del usuario por su ID
         const profile = await prisma.profiles.findUnique({
             where: { userId: Number(params.id) },
         });
 
+        // Si no se encuentra el perfil, devolvemos un mensaje de error 404
         if (!profile) {
             return NextResponse.json(
                 { message: "Perfil no encontrado" },
@@ -24,8 +27,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
             );
         }
 
+        // Si se encuentra el perfil, devolvemos sus datos en formato JSON
         return NextResponse.json(profile);
     } catch (error) {
+        // En caso de error, registrar el error y devolver un mensaje de error 500
         console.error("Error al obtener el perfil:", error);
         return NextResponse.json(
             { message: "Error al obtener el perfil" },

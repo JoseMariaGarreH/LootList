@@ -1,17 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { AlignJustify, X, ChevronDown } from "lucide-react";
-import Link from "next/link";
+// Componentes
 import Logo from "@/components/ui/Logo";
+// Hooks
+import { useState } from "react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useProfileById } from "@/hooks/useProfileById";
+// Iconos
+import { AlignJustify, X, ChevronDown } from "lucide-react";
+// Next.js
+import Link from "next/link";
+import Image from "next/image";
+
 
 export default function Navbar() {
-    const [estaAbierto, setEstaAbierto] = useState(false);
-    const [dropdownAbierto, setDropdownAbierto] = useState(false);
+    // Estados para manejar la apertura del menú y el dropdown
+    const [isOpen, setIsOpen] = useState(false);
+    // Estado para manejar la apertura del dropdown del perfil
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
+    // Obtener la sesión actual y el perfil del usuario
     const { data: session } = useSession();
     const { profile } = useProfileById(session?.user?.id || "");
 
@@ -19,6 +27,7 @@ export default function Navbar() {
         <nav className="w-full bg-[#e63946] shadow-md">
             <div className="container mx-auto px-4 py-2">
                 <div className="flex items-center justify-between">
+                    {/* Logo y título de la aplicación */}
                     <div className="flex items-center">
                         <Link href="/">
                             <div className="flex items-center">
@@ -27,13 +36,13 @@ export default function Navbar() {
                             </div>
                         </Link>
                     </div>
-
+                    {/* Menú de navegación */}
                     <ul className="hidden md:flex space-x-4 items-center">
                         {session ? (
                             <>
                                 <li className="relative">
                                     <button
-                                        onClick={() => setDropdownAbierto(!dropdownAbierto)}
+                                        onClick={() => setDropdownOpen(!dropdownOpen)}
                                         className="flex items-center text-[#f1faee] hover:text-[#1d3557] transition-colors"
                                     >
                                         {profile?.profileImage && (
@@ -48,7 +57,7 @@ export default function Navbar() {
                                         {session.user?.username}
                                         <ChevronDown className="ml-1 w-4 h-4" />
                                     </button>
-                                    {dropdownAbierto && (
+                                    {dropdownOpen && (
                                         <ul
                                             className="absolute right-0 mt-2 w-48 bg-[#1d3557] rounded shadow-lg z-50"
                                             style={{ top: "100%" }}
@@ -152,14 +161,14 @@ export default function Navbar() {
                             </Link>
                         </li>
                     </ul>
-
+                    {/* Botón de menú para dispositivos móviles */}
                     <div className="md:hidden">
                         <button
-                            onClick={() => setEstaAbierto(!estaAbierto)}
+                            onClick={() => setIsOpen(!isOpen)}
                             className="text-[#1d3557] focus:outline-none"
                             aria-label="Toggle menu"
                         >
-                            {estaAbierto ? (
+                            {isOpen ? (
                                 <X className="w-6 h-6 text-[#1d3557]" />
                             ) : (
                                 <AlignJustify className="w-6 h-6 text-[#1d3557]" />
@@ -168,13 +177,13 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {estaAbierto && (
+                {isOpen && (
                     <ul className="md:hidden mt-2 space-y-2 pb-2">
                         {session ? (
                             <>
                                 <li>
                                     <button
-                                        onClick={() => setDropdownAbierto(!dropdownAbierto)}
+                                        onClick={() => setDropdownOpen(!dropdownOpen)}
                                         className="flex items-center text-[#f1faee] hover:text-[#1d3557] transition-colors"
                                     >
                                         {profile?.profileImage && (
@@ -189,7 +198,7 @@ export default function Navbar() {
                                         {session.user?.username}
                                         <ChevronDown className="ml-1 w-4 h-4" />
                                     </button>
-                                    {dropdownAbierto && (
+                                    {dropdownOpen && (
                                         <ul className="mt-2 bg-[#1d3557] rounded shadow-lg">
                                             <li>
                                                 <Link

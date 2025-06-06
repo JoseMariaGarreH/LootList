@@ -1,9 +1,12 @@
 "use client"
 
+// Componentes
 import Footer from "@/components/menu/Footer";
 import Navbar from "@/components/menu/Navbar";
+// Iconos
 import { HelpCircle, Compass, Star, Info } from "lucide-react";
 
+// Página de ayuda, para informar al usuario sobre el uso de la aplicación, y que se puede esperar de ella
 export default function HelpPage() {
     return (
         <>  

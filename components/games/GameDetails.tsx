@@ -1,9 +1,21 @@
+"use client"
+
+// Componentes
+import AjaxLoader from "../ui/AjaxLoader";
+import { CommentGame } from "./CommentGame";
+import GamePopUp from "./GamePopUp";
+// Hooks
 import { useComments } from "@/hooks/useComments";
 import useGames from "@/hooks/useGames";
 import { useGlobalProfileGames } from "@/hooks/useGlobalProfileGames";
 import { useProfileGame } from "@/hooks/useProfileGame";
 import { useUpdateProfileGame } from "@/hooks/useUpdateProfileGame";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { useProfileById } from "@/hooks/useProfileById";
+// Tipos
 import { Comment, Games, ProfileGame } from "@/src/types";
+// Iconos
 import {
     ArrowLeftCircle,
     Calendar,
@@ -17,35 +29,42 @@ import {
     Users,
     X,
 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { useState, useEffect } from "react";
+// Librerías
 import toast, { Toaster } from "react-hot-toast";
-import GamePopUp from "./GamePopUp";
-import { CommentGame } from "./CommentGame";
-import AjaxLoader from "../ui/AjaxLoader";
-import { useProfileById } from "@/hooks/useProfileById";
+// Next.js
+import Image from "next/image";
+// Acciones
 import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
 import { updateComment } from "@/src/actions/put-comments-action";
 
+// Componente principal que muestra los detalles de un juego
 export default function GameDetails({ id }: { id: string }) {
+    // Obtiene la sesión del usuario
     const { data: session } = useSession();
     const userId = session?.user?.id || "";
+    // Obtiene el perfil del usuario
     const { profile } = useProfileById(userId);
 
+    // Obtiene la lista de juegos y el estado de carga
     const { games = [], loading } = useGames();
+    // Obtiene los juegos del perfil y función para refrescar los datos 
     const { profileGames = [], refetch } = useProfileGame(userId);
+    // Obtiene los datos globales de los juegos de todos los perfiles registrados
     const { globalProfileGames } = useGlobalProfileGames(id);
+    // Obtiene los comentarios, función para añadir/actualizar y el comentario del usuario
     const { comments, loading: loadingComments, addOrUpdateComment, userComment } = useComments(id, userId);
 
+    // Funciones para actualizar los estados del juego en el perfil
     const { setRating, setPlayed, setPlaying, setWishlist, setLike } =
         useUpdateProfileGame(userId);
 
+    // Busca el juego actual y el estado del juego en el perfil del usuario
     const game: Games | undefined = games.find((g) => g.id.toString() === id);
     const profileGame: ProfileGame | undefined = profileGames.find(
         (pg) => pg.gameId.toString() === id
     );
 
+    // Estados locales para rating y flags de usuario
     const [rating, setRatingState] = useState(0);
     const [hover, setHover] = useState(0);
     const [played, setPlayedState] = useState(false);
@@ -55,6 +74,7 @@ export default function GameDetails({ id }: { id: string }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [showClear, setShowClear] = useState(false);
 
+    // Función para actualizar los estados locales desde el popup
     const handleUpdateStates = (states: { rating: number; liked: boolean; played: boolean; playing: boolean; wishlist: boolean; }) => {
         setRatingState(states.rating);
         setPlayedState(states.played);
@@ -63,6 +83,7 @@ export default function GameDetails({ id }: { id: string }) {
         setLikedState(states.liked);
     };
 
+    // Sincroniza los estados locales con el estado del juego en el perfil
     useEffect(() => {
         if (profileGame) {
             setRatingState(profileGame.rating || 0);
@@ -79,7 +100,7 @@ export default function GameDetails({ id }: { id: string }) {
         }
     }, [profileGame, id]);
 
-    // Calculando estadísticas globales usando globalProfileGames
+    // Calcula estadísticas globales del juego
     const totalLikes = globalProfileGames.filter((pg) => pg.liked).length;
     const ratings = globalProfileGames
         .map((pg) => pg.rating)
@@ -90,14 +111,17 @@ export default function GameDetails({ id }: { id: string }) {
             : "N/A";
     const totalPlayed = globalProfileGames.filter((pg) => pg.played).length;
 
+    // Muestra loader si los datos están cargando
     if (loading) {
         return <AjaxLoader />
     }
 
+    // Si no se encuentra el juego, muestra mensaje
     if (!game) {
         return <p className="text-center text-[#f1faee]">Juego no encontrado.</p>;
     }
 
+    // Función para actualizar la valoración del juego
     const handleSetRating = async (newRating: number) => {
         if (!session?.user?.id) {
             toast.error("Debes iniciar sesión para valorar un juego.");
@@ -113,6 +137,7 @@ export default function GameDetails({ id }: { id: string }) {
         }
     };
 
+    // Funciones para alternar los estados de jugado, jugando, wishlist y like
     const handleTogglePlayed = async () => {
         if (!session?.user?.id) {
             toast.error("Debes iniciar sesión para marcar como jugado.");
@@ -153,7 +178,7 @@ export default function GameDetails({ id }: { id: string }) {
         await setLike(game.id, newValue);
     };
 
-    // Nueva función para guardar comentario y estados
+    // Función para guardar comentario y estados desde el popup
     const handleAddOrUpdateComment = async (
         profileId: string,
         content: string,
@@ -185,6 +210,7 @@ export default function GameDetails({ id }: { id: string }) {
         }
     };
 
+    // Botones de estado del usuario
     const userStatusButtons = [
         {
             active: played,
@@ -216,6 +242,7 @@ export default function GameDetails({ id }: { id: string }) {
         },
     ];
 
+    // Función para abrir el popup de reseña
     const handleOpenModal = async () => {
         if (!session?.user?.id) {
             toast.error("Debes iniciar sesión para registrar o reseñar.");
@@ -225,8 +252,10 @@ export default function GameDetails({ id }: { id: string }) {
         await refetch(); // Refresca los datos del perfil del usuario
     };
 
+    // Renderizado del componente
     return (
         <>
+            {/* Notificaciones */}
             <Toaster position="top-left" reverseOrder={false} />
 
             {/* Botón Volver */}
@@ -240,7 +269,7 @@ export default function GameDetails({ id }: { id: string }) {
 
             {/* Card principal del juego */}
             <div className="bg-gradient-to-br from-[#1d3557] to-[#264470] rounded-3xl shadow-xl flex flex-col md:flex-row overflow-hidden border border-[#a8dadc]/20 max-w-6xl mx-auto mt-20">
-                {/* Columna izquierda */}
+                {/* Columna izquierda: imagen y acciones */}
                 <div className="flex-shrink-0 flex flex-col items-center bg-[#355f7a] p-8 md:p-10 text-white w-full md:w-[380px] gap-6">
                     <Image
                         src={game.imageUrl || ""}
@@ -251,6 +280,7 @@ export default function GameDetails({ id }: { id: string }) {
                         priority
                     />
 
+                    {/* Botón para abrir el popup de reseña */}
                     <button
                         className="mt-0.5 py-2 px-4 w-52 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
                         onClick={() =>handleOpenModal()}
@@ -260,7 +290,7 @@ export default function GameDetails({ id }: { id: string }) {
 
                     {/* Rating */}
                     <div className="text-center space-y-2">
-                        {/* Botón para abrir el modal */}
+                        {/* Estrellas de valoración */}
                         <div
                             className="relative w-full flex items-center justify-center mb-2"
                             style={{ minHeight: 40 }}
@@ -271,6 +301,7 @@ export default function GameDetails({ id }: { id: string }) {
                                 className="flex justify-center items-center gap-1 mx-auto relative mr-5"
                                 style={{ width: "fit-content" }}
                             >
+                                {/* Botón para quitar valoración */}
                                 <button
                                     type="button"
                                     style={{ visibility: showClear ? "visible" : "hidden" }}
@@ -285,6 +316,7 @@ export default function GameDetails({ id }: { id: string }) {
                                 >
                                     <X className="w-5 h-5 text-[#e63946] transition-transform duration-150" />
                                 </button>
+                                {/* Mapeo de estrellas */}
                                 {[1, 2, 3, 4, 5].map((star) => {
                                     const filled = (hover || rating) >= star;
                                     const halfFilled = !filled && (hover || rating) >= star - 0.5;
@@ -340,7 +372,7 @@ export default function GameDetails({ id }: { id: string }) {
                     </div>
                 </div>
 
-                {/* Columna derecha */}
+                {/* Columna derecha: información y estadísticas */}
                 <div className="flex-1 p-8 md:p-10 text-[#f1faee] space-y-6">
                     <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{game.title}</h1>
 
@@ -418,7 +450,7 @@ export default function GameDetails({ id }: { id: string }) {
                     </ul>
                 )}
 
-                {/* Modal */}
+                {/* Modal para registrar o editar reseña */}
                 {modalOpen && (
                     <GamePopUp
                         setModalOpen={setModalOpen}
@@ -437,6 +469,5 @@ export default function GameDetails({ id }: { id: string }) {
                 )}
             </div>
         </>
-
     );
 }
