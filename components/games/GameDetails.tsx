@@ -35,7 +35,6 @@ import toast, { Toaster } from "react-hot-toast";
 import Image from "next/image";
 // Acciones
 import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
-import { updateComment } from "@/src/actions/put-comments-action";
 
 // Componente principal que muestra los detalles de un juego
 export default function GameDetails({ id }: { id: string }) {
@@ -191,12 +190,9 @@ export default function GameDetails({ id }: { id: string }) {
         }
     ) => {
         try {
-            // Busca si ya existe un comentario del usuario
-            if (userComment) {
-                await updateComment(userComment.id, content);
-            } else {
-                await addOrUpdateComment(profileId, content);
-            }
+            // Solo usa el hook, él decide si crea o actualiza
+            await addOrUpdateComment(profileId, content);
+
             // Actualiza los estados del juego
             await updateProfileGame(profileId, Number(id), {
                 rating: states.rating,
@@ -283,7 +279,7 @@ export default function GameDetails({ id }: { id: string }) {
                     {/* Botón para abrir el popup de reseña */}
                     <button
                         className="mt-0.5 py-2 px-4 w-52 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
-                        onClick={() =>handleOpenModal()}
+                        onClick={() => handleOpenModal()}
                     >
                         {userComment ? "Editar tu registro" : "Registrar o Reseñar"}
                     </button>

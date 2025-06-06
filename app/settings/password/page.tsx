@@ -1,11 +1,13 @@
 "use client"
 
+// Componentes
 import PasswordForm from "@/components/settings/password/PasswordForm";
 import NavbarSettings from "@/components/settings/NavbarSettings";
 import Navbar from "@/components/menu/Navbar";
 import Footer from "@/components/menu/Footer";
 
-export default function NavbarProfile() {
+// Página para cambiar la contraseña del usuario en la configuración de la cuenta
+export default function PasswordPage() {
     return (
         <>
             <Navbar />

@@ -1,9 +1,12 @@
 "use client";
 
+// Componentes
 import RequestEmailForm from "@/components/auth/requestemail/RequestEmailForm";
 import Logo from "@/components/ui/Logo";
+// Next.js
 import Link from "next/link";
 
+// Página para solicitar el restablecimiento de contraseña
 export default function RequestEmailPage() {
     return (
         <>

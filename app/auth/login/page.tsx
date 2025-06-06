@@ -4,8 +4,8 @@ import LoginForm from "@/components/auth/login/LoginForm";
 import Logo from "@/components/ui/Logo";
 import Link from "next/link";
 
+// Página de inicio de sesión
 export default function LoginPage() {
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#457b9d]">
             <div className="w-full max-w-md p-8 space-y-6">

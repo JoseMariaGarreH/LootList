@@ -1,17 +1,14 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import GameDetails from "@/components/games/GameDetails";
 
-export default function GameDetailPage() {
-    const { id } = useParams() as { id: string };
+// Página para mostrar los detalles de un juego específico
+export default function GameDetailPage({params}: {params: {id: string}}) {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center py-8 px-2">
             <div className="w-full max-w-5xl">
-                <GameDetails id={id} />
+                <GameDetails id={params.id} />
             </div>
         </div>
     );

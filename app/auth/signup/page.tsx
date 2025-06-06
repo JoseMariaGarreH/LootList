@@ -1,11 +1,13 @@
 "use client"
 
+// Componentes
 import SignUpForm from "@/components/auth/signup/SignUpForm";
 import Logo from "@/components/ui/Logo";
+// Next.js
 import Link from "next/link";
 
+// Página de registro de usuario
 export default function SignupPage() {
-
     return (
         <>
             <div className="min-h-screen flex items-center justify-center bg-[#457b9d]">

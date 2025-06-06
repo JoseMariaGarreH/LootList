@@ -4,6 +4,7 @@ import GameList from "@/components/games/GameList";
 import Footer from "@/components/menu/Footer";
 import Navbar from "@/components/menu/Navbar";
 
+// Página para mostrar la lista de juegos disponibles
 export default function GamesPage() {
     return (
         <>

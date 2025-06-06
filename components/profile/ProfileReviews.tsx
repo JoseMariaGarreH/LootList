@@ -6,13 +6,12 @@ import Pagination from "../games/Pagination";
 import GamePopUp from "@/components/games/GamePopUp";
 // Hooks
 import { useEffect, useState } from "react";
-import { updateComment } from "@/src/actions/put-comments-action";
 import { useProfileGame } from "@/hooks/useProfileGame";
 import { useUserComments } from "@/hooks/useUserComments";
+import { useUpdateProfileGame } from "@/hooks/useUpdateProfileGame";
+import { useComments } from "@/hooks/useComments";
 // Tipos 
 import { Comment } from "@/src/types";
-// Actions
-import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
 // Iconos
 import { Star, Heart, Gamepad2, Play, Gift, NotebookPen } from "lucide-react";
 // Next.js
@@ -68,6 +67,7 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
     // Hooks personalizados para obtener los comentarios del usuario y los juegos del perfil
     const { comments: initialComments, loading } = useUserComments(profileId);
     const { profileGames } = useProfileGame(String(profileId));
+    const { setRating, setPlayed, setPlaying, setWishlist, setLike } = useUpdateProfileGame(String(profileId));
 
     // Estados locales para manejar los comentarios, la paginación y el modal de edición
     const [comments, setComments] = useState<Comment[]>(initialComments);
@@ -86,6 +86,12 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
     // Estados para manejar la apertura de la ventana emergente y el comentario que se está editando
     const [modalOpen, setModalOpen] = useState(false);
     const [editingComment, setEditingComment] = useState<Comment | null>(null);
+
+    // Hook para añadir o actualizar un comentario, pasando el ID del juego si está disponible
+    const { addOrUpdateComment: addOrUpdateGameComment } = useComments(
+        editingComment?.gameId ? String(editingComment.gameId) : "",
+        String(profileId)
+    );
 
     // Función para manejar la edición de un comentario
     const handleEditComment = (comment: Comment) => {
@@ -107,32 +113,22 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
     ) => {
         try {
             if (editingComment) {
-                // Actualiza el comentario
-                await updateComment(editingComment.id, content);
+                // Usa el hook useComments para actualizar el comentario
+                await addOrUpdateGameComment(profileId, content);
 
-                // Actualiza los estados del juego en ProfileGame
-                await updateProfileGame(
-                    profileId,
-                    editingComment.gameId,
-                    {
-                        rating: states.rating,
-                        liked: states.liked,
-                        played: states.played,
-                        playing: states.playing,
-                        wishlist: states.wishlist,
-                    }
-                );
-
-                // Actualiza el comentario en el estado local
-                setComments((prev) =>
-                    prev.map((c) =>
-                        c.id === editingComment.id ? { ...c, content } : c
-                    )
-                );
+                // Actualiza los estados del juego usando el hook
+                await Promise.all([
+                    setRating(editingComment.gameId, states.rating),
+                    setPlayed(editingComment.gameId, states.played),
+                    setPlaying(editingComment.gameId, states.playing),
+                    setWishlist(editingComment.gameId, states.wishlist),
+                    setLike(editingComment.gameId, states.liked),
+                ]);
             } else {
                 toast.error("No se puede añadir comentario sin juego asociado.");
                 return;
             }
+            // Cuando se guarda el comentario, quita el comentario que se está editando y cierra el modal
             setModalOpen(false);
             setEditingComment(null);
         } catch {

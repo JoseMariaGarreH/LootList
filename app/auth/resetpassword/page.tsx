@@ -1,9 +1,12 @@
 "use client"
 
+// Componentes
 import ResetPasswordForm from "@/components/auth/resetpassword/ResetPasswordForm";
 import Logo from "@/components/ui/Logo";
-import Link from "next/link";
 import { Suspense } from "react";
+// Next.js
+import Link from "next/link";
+
 
 export default function ResetPasswordPage() {
     return (
