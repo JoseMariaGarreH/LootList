@@ -252,7 +252,7 @@ export default function GameDetails({ id }: { id: string }) {
     return (
         <>
             {/* Notificaciones */}
-            <Toaster position="top-left" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
 
             {/* Botón Volver */}
             <button

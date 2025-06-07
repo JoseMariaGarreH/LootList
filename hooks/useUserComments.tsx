@@ -19,7 +19,8 @@ export function useUserComments(profileId: number) : { comments: Comment[], load
         // Si no hay profileId, no hace nada
         if (!profileId) return;
         getUserComments(profileId) // Llama a la acción para obtener los comentarios del usuario
-            .then(data => setComments(data)) // Si hay datos, los guarda en el estado
+            .then(data => setComments(data)) // Si hay datos, los guarda en el estado de comentarios
+            .catch(error => console.error("Error al obtener comentarios:", error)) // Maneja el error si ocurre un problema al obtener los comentarios
             .finally(() => setLoading(false)); // Cuando termina la carga, actualiza el estado de carga a false
     }, [profileId]);
 

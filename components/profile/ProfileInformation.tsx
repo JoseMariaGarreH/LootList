@@ -1,10 +1,10 @@
 'use client'
 
+import { formatCounter } from "@/src/utils/formatNumber";
 // Componentes
 import Graphic from "./Graphic";
 // Tipos
 import { Profile, ProfileGame } from "@/src/types";
-
 
 // Definición de las propiedades del componente
 interface ProfileInformationProps {
@@ -40,19 +40,19 @@ export default function ProfileInformation({ profileGames, profile }: ProfileInf
                         <div className="grid grid-cols-3 gap-4 text-center">
                             <div>
                                 <p className="text-7xl text-white">
-                                    {(gamesPlayed || 0).toLocaleString("es-ES", { minimumIntegerDigits: 3, useGrouping: false })}
+                                    {formatCounter(gamesPlayed)}
                                 </p>
                                 <p className="text-sm text-[#f1faee] mt-1">Juegos jugados</p>
                             </div>
                             <div>
                                 <p className="text-7xl text-[#f1faee]">
-                                    {(gamesPlaying || 0).toLocaleString("es-ES", { minimumIntegerDigits: 3, useGrouping: false })}
+                                    {formatCounter(gamesPlaying)}
                                 </p>
                                 <p className="text-sm text-[#f1faee] mt-1">Juegos que estas jugando</p>
                             </div>
                             <div>
                                 <p className="text-7xl text-[#f1faee]">
-                                    {(gamesLiked || 0).toLocaleString("es-ES", { minimumIntegerDigits: 3, useGrouping: false })}
+                                    {formatCounter(gamesLiked)}
                                 </p>
                                 <p className="text-sm text-[#f1faee] mt-1">Juegos que te han gustado</p>
                             </div>

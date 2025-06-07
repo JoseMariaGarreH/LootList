@@ -7,6 +7,7 @@ interface PaginationProps {
     setPage: (p: number) => void;
 }
 
+// Componente de paginación que permite navegar entre páginas de resultados
 export default function Pagination({ page, totalPages, setPage }: PaginationProps) {
     return (
         <div className="flex justify-center items-center gap-4 mt-6 mb-5">

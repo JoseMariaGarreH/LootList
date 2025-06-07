@@ -8,6 +8,7 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+// Tabla de usuarios
 model Users {
   id        Int       @id @default(autoincrement())
   email     String    @unique
@@ -19,6 +20,7 @@ model Users {
   passwordResetTokens PasswordResetToken[]
 }
 
+// Tabla de perfiles
 model Profiles {
   id            Int    @id @default(autoincrement())
   userId        Int    @unique
@@ -37,6 +39,7 @@ model Profiles {
   comments      Comments[]
 }
 
+// Tabla de juegos
 model Games {
   id           Int             @id @default(autoincrement())
   title        String
@@ -50,6 +53,7 @@ model Games {
   comments     Comments[]
 }
 
+// Tabla de relaciones entre perfiles y juegos
 model ProfileGame {
   id         Int           @id @default(autoincrement())
   profileId  Int
@@ -70,6 +74,7 @@ model ProfileGame {
   @@unique([profileId, gameId])
 }
 
+// Tabla de comentarios
 model Comments {
   id         Int      @id @default(autoincrement())
   profileId  Int
@@ -82,6 +87,7 @@ model Comments {
   game       Games    @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }
 
+// Tabla de tokens de restablecimiento de contraseña
 model PasswordResetToken {
   id        Int      @id @default(autoincrement())
   userId    Int

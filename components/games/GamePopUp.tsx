@@ -55,13 +55,15 @@ export default function GamePopUp({
         defaultValues: { comment: userComment || "" }
     });
 
-    // Estados para rating y otros flags
+    // Estados para manejar distintas propiedades del comentario, que se le asignarán al perfil del usuario
     const [rating, setRating] = useState(initialStates.rating ?? 0);
-    const [hover, setHover] = useState(0);
     const [liked, setLiked] = useState(initialStates.liked ?? false);
     const [played, setPlayed] = useState(initialStates.played ?? false);
     const [playing, setPlaying] = useState(initialStates.playing ?? false);
     const [wishlist, setWishlist] = useState(initialStates.wishlist ?? false);
+
+    // Estado para manejar las estrellas de valoración y el hover de las estrellas
+    const [hover, setHover] = useState(0);
     const [showClear, setShowClear] = useState(false);
 
     // Efecto para inicializar los valores del formulario y estados
@@ -125,7 +127,6 @@ export default function GamePopUp({
     return (
         <>
             {/* Mostramos el toaster para notificaciones */}
-            <Toaster position="top-left" reverseOrder={false} />
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                 <div className="bg-[#457b9d] rounded-lg shadow-lg w-[500px] p-6 relative">
                     <div className="flex justify-between items-center mb-4">

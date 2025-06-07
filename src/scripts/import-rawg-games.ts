@@ -1,6 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { getAllVideojuegos } from "../actions/rawg";
 
+// Script para importar juegos desde la API externa llamada RAWG, se puede ejecutar con comandos como npx tsx src/scripts/import-rawg-games.ts
 async function importGames() {
     try {
         const rawgGames = await getAllVideojuegos(""); // Puedes pasar una query si quieres filtrar
@@ -10,7 +11,7 @@ async function importGames() {
         for (const game of rawgGames) {
             // Mapea los campos de RAWG a tu modelo
             await prisma.games.upsert({
-                where: { id: game.id }, // Si RAWG id es único y quieres evitar duplicados
+                where: { id: game.id }, 
                 update: {
                     title: game.name,
                     description: game.description_raw || "",

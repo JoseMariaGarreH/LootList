@@ -23,7 +23,7 @@ export default async function putAvatarAction(formData: FormData){
         return data.url; // Retornamos la URL del nuevo avatar
     } catch (error) {
         // Log del error para depuración
-        console.error("Error al actualizar el avatar:", error);
+        console.error("Error al actualizar el avatar, en el action de [putAvatarAction]:", error);
         throw error;
     }
 }
