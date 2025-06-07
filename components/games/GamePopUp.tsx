@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 // Iconos
 import { X, Star, Heart, Gamepad2, Play, Gift } from "lucide-react";
 // Librerías
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 
 // Definición de las props para el componente GamePopUp

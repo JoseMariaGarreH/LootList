@@ -98,7 +98,7 @@ export default function PasswordForm() {
 
     return (
         <>
-            <Toaster position="top-left" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
             <form onSubmit={onSubmit} className="space-y-4">
                 <div>
                     <label htmlFor="current-password-label" className="text-white block text-sm font-semibold">Contraseña actual</label>

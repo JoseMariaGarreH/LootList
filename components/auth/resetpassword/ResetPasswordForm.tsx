@@ -58,7 +58,7 @@ export default function ResetPasswordForm() {
 
     return (
         <>
-            <Toaster position="top-left" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="text-left">
                     <label htmlFor="password" className="block text-sm font-semibold text-white mb-1">

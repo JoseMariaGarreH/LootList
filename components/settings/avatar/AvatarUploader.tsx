@@ -146,7 +146,7 @@ export default function AvatarUploader() {
 
     return (
         <>
-            <Toaster position="top-left" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
             <div className="max-w-2xl mt-32 mb-32 mx-auto p-6 bg-[#1d3557] rounded-lg shadow-lg text-white">
                 <h2 className="text-xl font-semibold mb-4">Avatar</h2>
                 <div

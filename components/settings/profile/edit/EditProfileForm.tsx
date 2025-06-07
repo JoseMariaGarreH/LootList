@@ -159,7 +159,7 @@ export default function ProfileForm() {
 
     return (
         <>
-            <Toaster position="top-left" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
             <form onSubmit={onSubmit} className="max-w-4xl mx-auto p-6 text-white space-y-6">
                 <h1 className="text-2xl font-bold">Perfil</h1>
                 <div className="grid grid-cols-2 gap-4">

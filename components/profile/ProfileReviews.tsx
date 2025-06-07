@@ -147,7 +147,7 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
 
     return (
         <>
-            <Toaster position="top-left" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
 
             <div className="w-full mt-8 mb-8 space-y-10 max-w-4xl mx-auto px-2">
                 {displayedComments.map((comment: Comment) => {

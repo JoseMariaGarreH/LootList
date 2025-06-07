@@ -38,7 +38,7 @@ export default function LoginForm() {
 
     return (
         <>
-            <Toaster position="top-left" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
             <form onSubmit={onSubmit} className="space-y-4 border rounded border-[#a8dadc] bg-[#355f7a] shadow-lg p-5">
                 <div>
                     <label htmlFor="email_label" className="block text-sm font-semibold text-white">

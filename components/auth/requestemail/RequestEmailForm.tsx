@@ -41,7 +41,7 @@ export default function RequestEmailForm() {
 
     return (
         <>
-            <Toaster position="top-left" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
             <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                 <input
                     type="email"
