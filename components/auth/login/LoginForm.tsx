@@ -28,7 +28,7 @@ export default function LoginForm() {
 
         // Si la respuesta contiene un error, mostramos un mensaje de error
         if (respuesta?.error) {
-            toast.error("Error al iniciar sesión");
+            toast.error("Error al iniciar sesión, la contraseña o el correo electrónico son incorrectos");
         } else { // Si no hay error, mostramos un mensaje de éxito
             router.push("/"); // Y redirigimos al usuario a la página principal
         }

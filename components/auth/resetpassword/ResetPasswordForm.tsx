@@ -48,6 +48,8 @@ export default function ResetPasswordForm() {
             if (result) {
                 // Si la solicitud es exitosa, mostramos un mensaje de éxito
                 router.push("/auth/login");
+            } else {
+                toast.error("El enlace de restablecimiento es inválido o ya ha sido utilizado.");
             }
         } catch (e: any) {
             toast.error(e?.message || "Error al cambiar la contraseña");

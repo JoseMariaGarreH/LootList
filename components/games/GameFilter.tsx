@@ -1,7 +1,10 @@
 "use client"
 
+// Hooks
+import { useState } from "react";
 // Iconos
 import { Search, FilterX } from "lucide-react";
+
 
 // Importamos los tipos de las props para el componente de filtros de juegos
 interface GameFiltersProps {
@@ -30,6 +33,8 @@ export default function GameFilters({
     platforms, years, genres,
     onClear
 }: GameFiltersProps) {
+    const [isFocused, setIsFocused] = useState(false);
+
     return (
         <div className="flex flex-wrap items-center justify-between gap-4 bg-white/10 backdrop-blur-md border-b border-white/20 px-6 py-4">
             {/* Título */}
@@ -41,13 +46,20 @@ export default function GameFilters({
             <div className="flex flex-wrap items-center gap-4 flex-1">
                 {/* Buscar */}
                 <div className="relative">
-                    <Search className="absolute left-3 top-2.5 text-white/70 w-4 h-4" />
+                    <Search className={`absolute left-3 top-2.5 w-4 h-4 transition-colors ${
+                            isFocused
+                                ? "text-black"
+                                : "text-white/70"
+                        }`}
+                    />
                     <input
                         type="text"
                         placeholder="Buscar..."
                         value={search}
                         onChange={e => setSearch(e.target.value)}
-                        className="pl-9 pr-4 py-1.5 rounded-md bg-[#1d3557] border border-white/20 text-white text-sm placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-[#a8dadc] transition"
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
+                        className="pl-9 pr-4 py-1.5 rounded-md bg-[#1d3557] border border-white/20 text-white text-sm placeholder-white/50 focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none transition"
                     />
                 </div>
 
@@ -101,7 +113,7 @@ export default function GameFilters({
             {/* Limpiar */}
             <button
                 onClick={onClear}
-                className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white text-sm font-medium py-1.5 px-3 rounded-md transition shadow-sm"
+                className="flex items-center gap-1  py-1.5 px-3 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a8dadc] transition"
             >
                 <FilterX className="w-4 h-4" />
                 Limpiar

@@ -13,6 +13,7 @@ import { useProfileGame } from "@/hooks/useProfileGame";
 import useGames from "@/hooks/useGames";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { Gift } from "lucide-react";
 
 // Página para mostrar los juegos que el usuario ha quiere jugar en algún momento
 export default function WishlistPage() {
@@ -48,8 +49,9 @@ export default function WishlistPage() {
                 <UserProfileLayout profile={profile} session={session}>
                     <ProfileGameListSection
                         games={displayedGames}
-                        emptyText="No tienes juegos marcados como en tu lista de deseos."
+                        emptyText="No tienes juegos marcados como en tu lista de deseos"
                         title={`${countWishlistGames} juego${countWishlistGames !== 1 ? "s" : ""} en tu lista de deseos`}
+                        icon={<Gift className="mr-2" size={50} />}
                     />
                     <Pagination page={page} totalPages={totalPages} setPage={setPage} />
                 </UserProfileLayout>

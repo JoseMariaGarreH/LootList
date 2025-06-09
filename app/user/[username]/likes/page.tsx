@@ -13,6 +13,7 @@ import { useProfileGame } from "@/hooks/useProfileGame";
 import useGames from "@/hooks/useGames";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { Heart } from "lucide-react";
 
 // Página para mostrar los juegos que le gustaron al usuario
 export default function LikesPage() {
@@ -49,8 +50,9 @@ export default function LikesPage() {
                 <UserProfileLayout profile={profile} session={session}>
                     <ProfileGameListSection
                         games={displayedGames}
-                        emptyText="No tienes juegos marcados como te gustaron."
-                        title={`${countLikedGames} juego${countLikedGames !== 1 ? "s" : ""} que le gustó a ${session?.user?.username}`}
+                        emptyText="No tienes juegos marcados como te gustaron"
+                        title={`${countLikedGames} juego${countLikedGames !== 1 ? "s" : ""} que le gustaron a ${session?.user?.username}`}
+                        icon={<Heart className="mr-2" size={50} />}
                     />
                     <Pagination page={page} totalPages={totalPages} setPage={setPage} />
                 </UserProfileLayout>

@@ -13,6 +13,7 @@ import { useProfileGame } from "@/hooks/useProfileGame";
 import useGames from "@/hooks/useGames";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { Gamepad2 } from "lucide-react";
 
 // Página para mostrar los juegos que el usuario ha jugado
 export default function PlayedPage() {
@@ -48,8 +49,9 @@ export default function PlayedPage() {
                 <UserProfileLayout profile={profile} session={session}>
                     <ProfileGameListSection
                         games={displayedGames}
-                        emptyText="No tienes juegos marcados como jugados."
+                        emptyText="No tienes juegos marcados como jugados"
                         title={`${countPlayedGames} juego${countPlayedGames !== 1 ? "s" : ""} que has jugado`}
+                        icon={<Gamepad2 className="mr-2" size={50} />}
                     />
                     <Pagination page={page} totalPages={totalPages} setPage={setPage} />
                 </UserProfileLayout>

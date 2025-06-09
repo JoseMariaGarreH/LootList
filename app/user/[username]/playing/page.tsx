@@ -13,6 +13,7 @@ import { useProfileGame } from "@/hooks/useProfileGame";
 import useGames from "@/hooks/useGames";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { Play } from "lucide-react";
 
 // Página para mostrar los juegos que el usuario está jugando
 export default function PlayingPage() {
@@ -49,8 +50,9 @@ export default function PlayingPage() {
                 <UserProfileLayout profile={profile} session={session}>
                     <ProfileGameListSection
                         games={displayedGames}
-                        emptyText="No tienes juegos marcados como jugando."
+                        emptyText="No tienes juegos marcados como jugando"
                         title={`${countPlayingGames} juego${countPlayingGames !== 1 ? "s" : ""} que estás jugando`}
+                        icon={<Play className="mr-2" size={50} />}
                     />
                     <Pagination page={page} totalPages={totalPages} setPage={setPage} />
                 </UserProfileLayout>

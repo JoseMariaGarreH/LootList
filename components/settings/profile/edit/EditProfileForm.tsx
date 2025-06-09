@@ -279,7 +279,7 @@ export default function ProfileForm() {
                     </div>
                 </div>
 
-                <button type="submit" className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-green-600 text-sm text-white font-medium rounded transition">
+                <button type="submit" className="px-4 py-1.5 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a8dadc] transition">
                     Guardar cambios
                 </button>
             </form>
