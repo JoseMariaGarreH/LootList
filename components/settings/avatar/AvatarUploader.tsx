@@ -14,7 +14,6 @@ import { getCroppedImg } from "@/src/utils/cropImage";
 // Librerías
 import Cropper from "react-easy-crop";
 import toast, { Toaster } from "react-hot-toast";
-import clsx from "clsx";
 
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dyczqjlew/image/upload/v1747501573/jybzlcwtyskmwk3azgxu.jpg";
 
@@ -150,10 +149,10 @@ export default function AvatarUploader() {
             <div className="max-w-2xl mt-32 mb-32 mx-auto p-6 bg-[#1d3557] rounded-lg shadow-lg text-white">
                 <h2 className="text-xl font-semibold mb-4">Avatar</h2>
                 <div
-                    className={clsx(
-                        "relative w-full h-96 border-2 border-dashed border-gray-600 rounded-md flex items-center justify-center cursor-pointer transition-colors duration-200",
-                        isDragActive && "border-blue-400 bg-blue-100/10"
-                    )}
+                    className={
+                        "relative w-full h-96 border-2 border-dashed border-gray-600 rounded-md flex items-center justify-center cursor-pointer transition-colors duration-200" +
+                        (isDragActive ? " border-blue-400 bg-blue-100/10" : "")
+                    }
                     onClick={() => {
                         if (!preview && !croppedImage) {
                             fileInputRef.current?.click();
@@ -167,69 +166,69 @@ export default function AvatarUploader() {
                     {/* Si hay preview pero no imagen recortada, muestra el cropper */}
                     {
                         loading ? (
-                                <AjaxLoader />
+                            <AjaxLoader />
                         ) : preview && !croppedImage ? (
-                        <div className="flex flex-col items-center gap-4">
-                            <div className="w-60 h-60 rounded-full overflow-hidden relative flex items-center justify-center border-4 border-white shadow-lg">
-                                <Cropper
-                                    image={preview}
-                                    crop={crop}
-                                    zoom={zoom}
-                                    aspect={1}
-                                    cropShape="round"
-                                    showGrid={false}
-                                    onCropChange={setCrop}
-                                    onZoomChange={setZoom}
-                                    onCropComplete={onCropComplete}
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="w-60 h-60 rounded-full overflow-hidden relative flex items-center justify-center border-4 border-white shadow-lg">
+                                    <Cropper
+                                        image={preview}
+                                        crop={crop}
+                                        zoom={zoom}
+                                        aspect={1}
+                                        cropShape="round"
+                                        showGrid={false}
+                                        onCropChange={setCrop}
+                                        onZoomChange={setZoom}
+                                        onCropComplete={onCropComplete}
+                                    />
+                                </div>
+                                <input
+                                    type="range"
+                                    min={1}
+                                    max={3}
+                                    step={0.01}
+                                    value={zoom}
+                                    onChange={(e) => setZoom(Number(e.target.value))}
+                                    className="w-48 h-2 rounded bg-[#a8dadc] outline-none accent-[#a8dadc] transition"
                                 />
+                                <div className="flex gap-2">
+                                    <button
+                                        className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-blue-600 text-sm text-white font-medium rounded transition"
+                                        onClick={showCroppedImage}
+                                    >
+                                        Guardar imagen
+                                    </button>
+                                    <button
+                                        className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-red-600 text-sm text-white font-medium rounded transition"
+                                        onClick={() => {
+                                            setPreview(profile?.profileImage || DEFAULT_AVATAR_URL);
+                                            setCroppedImage(profile?.profileImage || DEFAULT_AVATAR_URL);
+                                            setImageName(null);
+                                            setCrop({ x: 0, y: 0 });
+                                            setZoom(1);
+                                            setCroppedAreaPixels(null);
+                                        }}
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
                             </div>
-                            <input
-                                type="range"
-                                min={1}
-                                max={3}
-                                step={0.01}
-                                value={zoom}
-                                onChange={(e) => setZoom(Number(e.target.value))}
-                                className="w-48 h-2 rounded bg-[#a8dadc] outline-none accent-[#a8dadc] transition"
-                            />
-                            <div className="flex gap-2">
-                                <button
-                                    className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-blue-600 text-sm text-white font-medium rounded transition"
-                                    onClick={showCroppedImage}
-                                >
-                                    Guardar imagen
-                                </button>
-                                <button
-                                    className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-red-600 text-sm text-white font-medium rounded transition"
-                                    onClick={() => {
-                                        setPreview(profile?.profileImage || DEFAULT_AVATAR_URL);
-                                        setCroppedImage(profile?.profileImage || DEFAULT_AVATAR_URL);
-                                        setImageName(null);
-                                        setCrop({ x: 0, y: 0 });
-                                        setZoom(1);
-                                        setCroppedAreaPixels(null);
-                                    }}
-                                >
-                                    Cancelar
-                                </button>
+                        ) : croppedImage ? (
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="rounded-full overflow-hidden flex items-center justify-center bg-[linear-gradient(45deg,#e0e0e0_25%,transparent_25%,transparent_75%,#e0e0e0_75%,#e0e0e0),linear-gradient(-45deg,#f8f8f8_25%,transparent_25%,transparent_75%,#f8f8f8_75%,#f8f8f8)] bg-[length:24px_24px] border-4 border-white shadow-lg">
+                                    <Image
+                                        src={croppedImage}
+                                        width={180}
+                                        height={180}
+                                        alt="Avatar Preview"
+                                        className="object-cover"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    ) : croppedImage ? (
-                        <div className="flex flex-col items-center gap-4">
-                            <div className="rounded-full overflow-hidden flex items-center justify-center bg-[linear-gradient(45deg,#e0e0e0_25%,transparent_25%,transparent_75%,#e0e0e0_75%,#e0e0e0),linear-gradient(-45deg,#f8f8f8_25%,transparent_25%,transparent_75%,#f8f8f8_75%,#f8f8f8)] bg-[length:24px_24px] border-4 border-white shadow-lg">
-                                <Image
-                                    src={croppedImage}
-                                    width={180}
-                                    height={180}
-                                    alt="Avatar Preview"
-                                    className="object-cover"
-                                />
-                            </div>
-                        </div>
-                    ) : (
-                        // Si no hay imagen, muestra el mensaje para cargar una
-                        <p>Arrastrar y soltar una imagen</p>
-                    )}
+                        ) : (
+                            // Si no hay imagen, muestra el mensaje para cargar una
+                            <p>Arrastrar y soltar una imagen</p>
+                        )}
                     {isDragActive && (
                         <div className="absolute inset-0 flex items-center justify-center bg-blue-400/30 z-10 rounded-md pointer-events-none">
                             <span className="text-white text-lg font-bold">¡Suelta la imagen aquí!</span>
