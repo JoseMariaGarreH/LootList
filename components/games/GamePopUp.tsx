@@ -110,9 +110,13 @@ export default function GamePopUp({
                 playing,
                 wishlist,
             });
+            // Si se ha actualizado el comentario, se actualizan los estados
             setModalOpen(false);
+            // Llamamos a la función onUpdateStates para actualizar los estados en el componente padre
             onUpdateStates({ rating, liked, played, playing, wishlist });
+            // Recargamos la página para reflejar los cambios
             setTimeout(() => {
+                // Solo recargamos si el profileId es válido y no es nulo o undefined
                 if (
                     typeof profileId === "string" && 
                     profileId.trim() !== "" && 
