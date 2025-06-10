@@ -440,6 +440,7 @@ export default function GameDetails({ id }: { id: string }) {
                                     key={idx}
                                     comment={comment}
                                     rating={rating}
+                                    liked={profileGame?.liked ?? false}
                                 />
                             );
                         })}

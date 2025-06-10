@@ -1,11 +1,12 @@
 "use client"
 
-// Icono
-import { Star } from "lucide-react";
+// Iconos
+import { Circle, Heart, Star } from "lucide-react";
 // Tipos
 import { Comment } from "@/src/types";
 
-export function CommentGame({ comment, rating }: { comment: Comment, rating: number }) {
+export function CommentGame({ comment, rating, liked }: { comment: Comment, rating: number, liked?: boolean}) {
+    // Si no hay comentario, no renderizamos nada
     return (
         <div className="bg-[#264470] rounded-lg px-4 py-3 shadow-md flex items-start gap-4">
             {/* Imagen del usuario que hay registrado en ese momento en la página*/}
@@ -51,6 +52,9 @@ export function CommentGame({ comment, rating }: { comment: Comment, rating: num
                             );
                         })}
                     </span>
+                    {liked && (
+                        <Heart className="w-4 h-4 text-[#e63946] ml-2" fill="#e63946"/>
+                    )}
                 </div>
                 <p className="text-white">{comment.content}</p>
             </div>
