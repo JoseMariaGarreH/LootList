@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 // Hooks
 import { useEffect, useState } from "react";
 // Iconos
-import { X, Star, Heart, Gamepad2, Play, Gift, Trash2 } from "lucide-react";
+import { X, Star, Heart, Gamepad2, Play, Gift, Trash2, Eraser } from "lucide-react";
 // Librerías
 import toast from "react-hot-toast";
 import { deleteComment } from "@/src/actions/delete-comment-action";
@@ -102,7 +102,7 @@ export default function GamePopUp({
         }
 
         try {
-            // Permite comentario vacío, pero guarda los estados
+            // Guardamos o actualizamos el comentario del usuario, con los estados correspondientes
             await addOrUpdateComment(profileId, data.comment?.trim() ?? "", {
                 rating,
                 liked,
@@ -118,9 +118,9 @@ export default function GamePopUp({
             setTimeout(() => {
                 // Solo recargamos si el profileId es válido y no es nulo o undefined
                 if (
-                    typeof profileId === "string" && 
-                    profileId.trim() !== "" && 
-                    profileId !== "null" && 
+                    typeof profileId === "string" &&
+                    profileId.trim() !== "" &&
+                    profileId !== "null" &&
                     profileId !== "undefined"
                 ) {
                     window.location.reload();
@@ -150,12 +150,12 @@ export default function GamePopUp({
     // Si el comentario del usuario no está vacío, o si hay algún estado marcado, mostramos el modal
     // Si no hay datos, no mostramos nada
     const hasAnyData =
-    (userComment?.trim() !== "" && userComment !== null && userComment !== undefined) ||
-    (initialStates.rating ?? 0) > 0 ||
-    initialStates.liked ||
-    initialStates.played ||
-    initialStates.playing ||
-    initialStates.wishlist;
+        (userComment?.trim() !== "" && userComment !== null && userComment !== undefined) ||
+        (initialStates.rating ?? 0) > 0 ||
+        initialStates.liked ||
+        initialStates.played ||
+        initialStates.playing ||
+        initialStates.wishlist;
 
     // Si no se debe mostrar el modal, no mostramos nada
     if (!setModalOpen) return "";
@@ -187,7 +187,14 @@ export default function GamePopUp({
                     {/* Cabecera con título y botón de cerrar */}
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl text-white font-bold">
-                            {userComment ? "Editar tu comentario" : "Nuevo comentario"}
+                            {(userComment && userComment.trim() !== "") ||
+                                (initialStates.rating ?? 0) > 0 ||
+                                initialStates.liked ||
+                                initialStates.played ||
+                                initialStates.playing ||
+                                initialStates.wishlist
+                                ? "Editar tu comentario"
+                                : "Nuevo comentario"}
                         </h2>
                         {/* Botón limpiar campos */}
                         <button
@@ -203,7 +210,7 @@ export default function GamePopUp({
                                 setWishlist(false);
                             }}
                         >
-                            <Trash2 className="w-5 h-5 text-white" />
+                            <Eraser className="w-5 h-5 text-white" />
                         </button>
                     </div>
                     {/* Formulario para agregar o editar el comentario */}
