@@ -24,7 +24,6 @@ export function useAvatar(userId: string) {
             // Llama a la acción que realiza la petición
             const url = await putAvatarAction(formData);
             if (url) {
-                toast.success("Avatar actualizado con éxito"); // Notifica éxito
                 return url; // Devuelve la URL del nuevo avatar
             }
         } catch {

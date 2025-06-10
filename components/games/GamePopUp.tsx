@@ -5,10 +5,10 @@ import { useForm } from "react-hook-form";
 // Hooks
 import { useEffect, useState } from "react";
 // Iconos
-import { X, Star, Heart, Gamepad2, Play, Gift } from "lucide-react";
+import { X, Star, Heart, Gamepad2, Play, Gift, Trash2 } from "lucide-react";
 // Librerías
 import toast from "react-hot-toast";
-
+import { deleteComment } from "@/src/actions/delete-comment-action";
 
 // Definición de las props para el componente GamePopUp
 interface GamePopUpProps {
@@ -40,6 +40,8 @@ interface GamePopUpProps {
         playing: boolean;
         wishlist: boolean;
     }) => void;
+    gameImageUrl: string | null;
+    commentId?: number;
 }
 
 export default function GamePopUp({
@@ -49,6 +51,8 @@ export default function GamePopUp({
     addOrUpdateComment,
     initialStates = {},
     onUpdateStates = () => { },
+    gameImageUrl,
+    commentId,
 }: GamePopUpProps) {
     // Hook de formulario para manejar el comentario del usuario
     const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<{ comment: string }>({
@@ -78,32 +82,36 @@ export default function GamePopUp({
 
     // Función para manejar el envío del formulario
     const onSubmit = async (data: { comment: string }) => {
-        // Comprobamos que el usuario esté autenticado
         if (!profileId) {
-            toast.error("Debes iniciar sesión para comentar.");
+            toast.error("Debes iniciar sesión para guardar.");
             return;
         }
-        // Comprobamos que el comentario no esté vacío
-        if (!data.comment.trim()) {
-            toast.error("El comentario no puede estar vacío.");
+
+        // Solo borra si comentario Y TODOS los estados están vacíos
+        const isAllEmpty =
+            (data.comment?.trim() === "" || !data.comment) &&
+            rating === 0 &&
+            !liked &&
+            !played &&
+            !playing &&
+            !wishlist;
+
+        if (isAllEmpty && commentId) {
+            await handleDelete();
             return;
         }
 
         try {
-            // Llamamos a la función para agregar o actualizar el comentario
-            await addOrUpdateComment(profileId, data.comment.trim(), {
+            // Permite comentario vacío, pero guarda los estados
+            await addOrUpdateComment(profileId, data.comment?.trim() ?? "", {
                 rating,
                 liked,
                 played,
                 playing,
                 wishlist,
             });
-            // Mostramos un mensaje de éxito
-            setModalOpen(false)
-            // Actualizamos los estados en el componente padre
+            setModalOpen(false);
             onUpdateStates({ rating, liked, played, playing, wishlist });
-            // Actualizamos lá página después de un breve retraso
-            // Esto es para asegurarnos de que el estado se haya actualizado correctamente
             setTimeout(() => {
                 if (
                     typeof profileId === "string" && 
@@ -114,12 +122,36 @@ export default function GamePopUp({
                     window.location.reload();
                 }
             }, 200);
-
         } catch {
-            // Si ocurre un error, mostramos un mensaje de error
-            toast.error("Error al guardar el comentario.");
+            toast.error("Error al guardar los datos.");
         }
     };
+
+    // Función para manejar la eliminación del comentario
+    const handleDelete = async () => {
+        // Comprobamos que el usuario esté autenticado
+        if (!commentId) return;
+        try {
+            // Llamamos a la función para eliminar el comentario
+            await deleteComment(commentId);
+            // Mostramos un mensaje de éxito y cerramos el modal
+            setModalOpen(false);
+            setTimeout(() => window.location.reload(), 200);
+        } catch {
+            toast.error("Error al borrar el comentario.");
+        }
+    };
+
+    // Comprobamos si hay algún dato que mostrar en el modal
+    // Si el comentario del usuario no está vacío, o si hay algún estado marcado, mostramos el modal
+    // Si no hay datos, no mostramos nada
+    const hasAnyData =
+    (userComment?.trim() !== "" && userComment !== null && userComment !== undefined) ||
+    (initialStates.rating ?? 0) > 0 ||
+    initialStates.liked ||
+    initialStates.played ||
+    initialStates.playing ||
+    initialStates.wishlist;
 
     // Si no se debe mostrar el modal, no mostramos nada
     if (!setModalOpen) return "";
@@ -129,18 +161,45 @@ export default function GamePopUp({
             {/* Mostramos el toaster para notificaciones */}
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                 <div className="bg-[#457b9d] rounded-lg shadow-lg w-[500px] p-6 relative">
+                    {/* Imagen del juego */}
+                    {gameImageUrl && (
+                        <div className="relative flex justify-center mb-4">
+                            <img
+                                src={gameImageUrl}
+                                alt="Imagen del juego"
+                                className="w-full h-96 object-cover rounded shadow border border-[#a8dadc]/30"
+                            />
+                            {/* Botón de cerrar la pestaña modal */}
+                            <button
+                                type="button"
+                                onClick={() => setModalOpen(false)}
+                                className="absolute top-2 right-2 bg-black/60 rounded-full p-1 hover:bg-[#a8dadc]/80 transition"
+                                aria-label="Cerrar"
+                            >
+                                <X className="w-6 h-6 text-[#f1faee]" />
+                            </button>
+                        </div>
+                    )}
+                    {/* Cabecera con título y botón de cerrar */}
                     <div className="flex justify-between items-center mb-4">
-                        {/* Título de la ventana emergente */}
                         <h2 className="text-xl text-white font-bold">
                             {userComment ? "Editar tu comentario" : "Nuevo comentario"}
                         </h2>
-                        {/* Botón para cerrar la ventana emergente */}
+                        {/* Botón limpiar campos */}
                         <button
-                            onClick={() => setModalOpen(false)}
-                            className="text-gray-500 hover:text-gray-700"
-                            aria-label="Cerrar"
+                            type="button"
+                            title="Limpiar campos"
+                            className="ml-2 p-2 rounded-full bg-gray-600 hover:bg-gray-700 transition flex items-center justify-center"
+                            onClick={() => {
+                                setValue("comment", "");
+                                setRating(0);
+                                setLiked(false);
+                                setPlayed(false);
+                                setPlaying(false);
+                                setWishlist(false);
+                            }}
                         >
-                            <X className="w-6 h-6 text-[#d9d9d9]" />
+                            <Trash2 className="w-5 h-5 text-white" />
                         </button>
                     </div>
                     {/* Formulario para agregar o editar el comentario */}
@@ -256,14 +315,14 @@ export default function GamePopUp({
                             className="w-full h-32 p-3 rounded-lg bg-white/10 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#e63946] resize-none mb-4"
                             placeholder="Escribe tu comentario..."
                             maxLength={500}
-                            {...register("comment", { required: "El comentario no puede estar vacío" })}
+                            {...register("comment")} // Quita la validación { required: ... }
                         />
                         {errors.comment && (
                             <span className="text-red-800 text-xs font-semibold mt-2 block">
                                 {errors.comment.message}
                             </span>
                         )}
-                        {/* Botón para confirmar los datos del formulario */}
+                        {/* Botón para confirmar o borrar si hay datos */}
                         <div className="mt-4 flex justify-end space-x-4">
                             <button
                                 type="submit"
@@ -272,6 +331,16 @@ export default function GamePopUp({
                             >
                                 Confirmar
                             </button>
+                            {hasAnyData && (
+                                <button
+                                    type="button"
+                                    className="py-2 px-4 w-full flex items-center justify-center gap-2 text-white rounded-md bg-gray-600 hover:bg-gray-700 transition"
+                                    onClick={handleDelete}
+                                >
+                                    <Trash2 className="w-5 h-5" />
+                                    Borrar datos
+                                </button>
+                            )}
                         </div>
                     </form>
                 </div>

@@ -81,7 +81,9 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
 
     // Calcula la cantidad total de páginas y los comentarios a mostrar en la página actual
     const totalPages = Math.ceil(comments.length / pageSize);
-    const displayedComments = comments.slice((page - 1) * pageSize, page * pageSize);
+    const displayedComments = comments
+        .filter(comment => comment.content && comment.content.trim() !== "") // Solo comentarios con texto
+        .slice((page - 1) * pageSize, page * pageSize);
 
     // Estados para manejar la apertura de la ventana emergente y el comentario que se está editando
     const [modalOpen, setModalOpen] = useState(false);
@@ -139,11 +141,16 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
     // Si los comentarios están cargando, muestra un loader
     if (loading) return <AjaxLoader />;
     // Si no hay comentarios, muestra un mensaje indicando que no se han escrito reseñas
-    if (!comments.length) return (
-        <div className="w-full mt-8 mb-8 max-w-4xl mx-auto px-2">
-            <p className="text-center text-white">No has escrito ninguna reseña</p>
-        </div>
-    );
+    if (
+        !comments.length ||
+        comments.every(comment => !comment.content || comment.content.trim() === "")
+    ) {
+        return (
+            <div className="w-full mt-8 mb-8 max-w-4xl mx-auto px-2">
+                <p className="text-center text-white">No has escrito ninguna reseña</p>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -213,7 +220,7 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                     setPage={setPage}
                 />
             </div>
-            
+
             {/* Componente de ventana emergente para editar comentarios */}
             {modalOpen && editingComment && (
                 <GamePopUp
@@ -228,6 +235,8 @@ export default function ProfileReviews({ profileId }: { profileId: number }) {
                         playing: profileGames.find(pg => pg.gameId === editingComment.gameId)?.playing ?? false,
                         wishlist: profileGames.find(pg => pg.gameId === editingComment.gameId)?.wishlist ?? false,
                     }}
+                    gameImageUrl={editingComment.game?.imageUrl || ""}
+                    commentId={editingComment.id}
                 />
             )}
         </>

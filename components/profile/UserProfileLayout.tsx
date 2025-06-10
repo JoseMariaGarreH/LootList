@@ -19,14 +19,15 @@ interface UserProfileLayoutProps {
 export default function UserProfileLayout({ profile, session, children }: UserProfileLayoutProps) {
     // Obtiene la ruta actual para resaltar la pestaña activa
     const pathname = usePathname();
+    const username = encodeURIComponent(session?.user.username || "");
     // Define las pestañas de navegación del perfil
     const tabs = [
-        { name: "Perfil", href: `/user/${session?.user.username}` },
-        { name: "Jugados", href: `/user/${session?.user.username}/played` },
-        { name: "Jugando", href: `/user/${session?.user.username}/playing` },
-        { name: "Lista de Deseos", href: `/user/${session?.user.username}/wishlist` },
-        { name: "Reseñas", href: `/user/${session?.user.username}/reviews` },
-        { name: "Me Gusta", href: `/user/${session?.user.username}/likes` },
+        { name: "Perfil", href: `/user/${username}` },
+        { name: "Jugados", href: `/user/${username}/played` },
+        { name: "Jugando", href: `/user/${username}/playing` },
+        { name: "Lista de Deseos", href: `/user/${username}/wishlist` },
+        { name: "Reseñas", href: `/user/${username}/reviews` },
+        { name: "Me Gusta", href: `/user/${username}/likes` },
     ];
 
     return (
@@ -68,7 +69,7 @@ export default function UserProfileLayout({ profile, session, children }: UserPr
                 <div className="max-w-7xl mx-auto">
                     <nav className="flex space-x-8 overflow-x-auto">
                         {tabs.map((tab) => {
-                            const isActive = pathname === tab.href;
+                            const isActive = pathname == tab.href;
                             return (
                                 <Link
                                     key={tab.name}

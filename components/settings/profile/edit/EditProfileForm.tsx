@@ -86,8 +86,10 @@ export default function ProfileForm() {
         // Si la contraseña es correcta, permite la edición del campo correspondiente
         if (campoEditable === 'username') {
             setModificarUsername(true);
+            toast.success("Puedes editar tu nombre de usuario");
         } else if (campoEditable === 'email') {
             setModificarEmail(true);
+            toast.success("Puedes editar tu correo electrónico");
         }
 
         // Cierra la ventana de autenticación
@@ -125,7 +127,7 @@ export default function ProfileForm() {
             email
         } = data;
 
-        
+
         try {
             // Actualiza el perfil del usuario con los datos del formulario
             const updateResponse = await changeProfile(
@@ -165,7 +167,7 @@ export default function ProfileForm() {
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <div className='flex justify-between'>
-                            <label htmlFor="username" className="block text-sm font-semibold">Username</label>
+                            <label htmlFor="username" className="block text-sm font-semibold">Nombre de usuario</label>
                             {!modificarUsername && (
                                 <button
                                     type="button"
@@ -183,6 +185,10 @@ export default function ProfileForm() {
                                     value: true,
                                     message: 'El nombre de usuario es obligatorio',
                                 },
+                                pattern: {
+                                    value: /^[a-zA-Z0-9_-]+$/,
+                                    message: "Solo letras, números, guiones y guiones bajos"
+                                }
                             })}
                             className="w-full px-4 py-2 rounded transition-all bg-[#1d3557] text-[#F1FAEE] focus:bg-white focus:text-black focus:border focus:border-black focus:outline-none"
                             disabled={!modificarUsername}

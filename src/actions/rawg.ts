@@ -5,7 +5,7 @@ const BASE_URL = process.env.RAWG_API_URL;
 
 // Action para obtener videojuegos desde una API externa (RAWG), através de una API Key 
 // y una URL base de la API externa
-export async function getAllVideojuegos(query = "", maxPages = 10) {
+export async function getAllVideojuegos(query = "", maxPages = 50) {
   let allGames: any[] = [];
   for (let page = 1; page <= maxPages; page++) {
     const url = `${BASE_URL}/games?key=${API_KEY}&search=${encodeURIComponent(query)}&page_size=40&page=${page}`;

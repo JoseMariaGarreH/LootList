@@ -68,7 +68,12 @@ export default function UserForm() {
                             required: {
                                 value: true,
                                 message: "El nombre de usuario es obligatorio"
+                            },
+                            pattern: {
+                                value: /^[a-zA-Z0-9_-]+$/,
+                                message: "Solo letras, números, guiones y guiones bajos"
                             }
+
                         })}
 
                     />

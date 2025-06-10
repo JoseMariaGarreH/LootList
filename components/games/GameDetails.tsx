@@ -109,6 +109,8 @@ export default function GameDetails({ id }: { id: string }) {
             ? (ratings.reduce((sum, r) => sum + r, 0) / ratings.length).toFixed(2)
             : "N/A";
     const totalPlayed = globalProfileGames.filter((pg) => pg.played).length;
+    const totalPlaying = globalProfileGames.filter((pg) => pg.playing).length;
+    const totalWishlist = globalProfileGames.filter((pg) => pg.wishlist).length;
 
     // Muestra loader si los datos están cargando
     if (loading) {
@@ -372,7 +374,7 @@ export default function GameDetails({ id }: { id: string }) {
                 <div className="flex-1 p-8 md:p-10 text-[#f1faee] space-y-6">
                     <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{game.title}</h1>
 
-                    {/* Estadísticas */}
+                    {/* Estadísticas globales de la gente */}
                     <div className="flex flex-wrap gap-3">
                         <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-semibold shadow">
                             <ThumbsUp className="w-4 h-4" />
@@ -385,6 +387,14 @@ export default function GameDetails({ id }: { id: string }) {
                         <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-semibold shadow">
                             <Users className="w-4 h-4" />
                             {totalPlayed === 1 ? "1 persona lo ha jugado" : `${totalPlayed} personas lo han jugado`}
+                        </span>
+                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-semibold shadow">
+                            <Play className="w-4 h-4" />
+                            {totalPlaying === 1 ? "1 persona está jugando" : `${totalPlaying} personas están jugando`}
+                        </span>
+                        <span className="flex items-center gap-2 bg-[#a8dadc] text-[#1d3557] px-4 py-1.5 rounded-md text-sm font-semibold shadow">
+                            <Gift className="w-4 h-4" />
+                            {totalWishlist === 1 ? "1 persona lo tiene en su lista de deseos" : `${totalWishlist} personas lo tienen en su lista de deseos`}
                         </span>
                     </div>
 
@@ -417,33 +427,38 @@ export default function GameDetails({ id }: { id: string }) {
                 <h2 className="text-2xl font-bold mb-4 border-b border-white/20 pb-2 text-white">Comentarios</h2>
                 {loadingComments ? (
                     <p className="text-white/80">Cargando comentarios...</p>
-                ) : comments.length === 0 ? (
-                    <p className="text-white/50 italic">Sé el primero en comentar este juego.</p>
+                ) : comments.length === 0 || comments.every(comment => !comment.content || comment.content.trim() === "") ? (
+                    <p className="text-white/80">No hay comentarios para este juego.</p>
                 ) : (
                     <ul className="space-y-3 max-h-[250px] overflow-y-auto pr-1">
-                        {comments.map((comment: Comment, idx: number) => {
-                            // Convertimos los IDs a número para evitar problemas de tipo
-                            const commentProfileId = Number(comment.profileId);
-                            const commentGameId = Number(comment.gameId);
+                        {/* Mapeamos los comentarios, para mostrar los comentarios mas recientes y luego cargamos el componente commentGame */}
+                        {comments
+                            .filter(comment => comment.content && comment.content.trim() !== "")
+                            .slice()
+                            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                            .map((comment: Comment, idx: number) => {
+                                // Convertimos los IDs a número para evitar problemas de tipo
+                                const commentProfileId = Number(comment.profileId);
+                                const commentGameId = Number(comment.gameId);
 
-                            // Buscamos el profileGame correspondiente a este comentario
-                            const profileGame = globalProfileGames.find(pg =>
-                                Number(pg.profileId) === commentProfileId &&
-                                Number(pg.gameId) === commentGameId
-                            );
+                                // Buscamos el profileGame correspondiente a este comentario
+                                const profileGame = globalProfileGames.find(pg =>
+                                    Number(pg.profileId) === commentProfileId &&
+                                    Number(pg.gameId) === commentGameId
+                                );
 
-                            // Obtenemos el rating, si existe
-                            const rating = typeof profileGame?.rating === "number" ? profileGame.rating : 0;
+                                // Obtenemos el rating, si existe
+                                const rating = typeof profileGame?.rating === "number" ? profileGame.rating : 0;
 
-                            return (
-                                <CommentGame
-                                    key={idx}
-                                    comment={comment}
-                                    rating={rating}
-                                    liked={profileGame?.liked ?? false}
-                                />
-                            );
-                        })}
+                                return (
+                                    <CommentGame
+                                        key={idx}
+                                        comment={comment}
+                                        rating={rating}
+                                        liked={profileGame?.liked ?? false}
+                                    />
+                                );
+                            })}
                     </ul>
                 )}
 
@@ -462,6 +477,8 @@ export default function GameDetails({ id }: { id: string }) {
                             wishlist,
                         }}
                         onUpdateStates={handleUpdateStates}
+                        gameImageUrl={game.imageUrl}
+                        commentId={userComment?.id}
                     />
                 )}
             </div>

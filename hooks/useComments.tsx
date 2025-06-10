@@ -11,7 +11,7 @@ import { Comment } from "@/src/types";
 
 
 // Hook personalizado para manejar las acciones que puede tener un usuario sobre los comentarios de un juego
-export function useComments(gameId: string, userId?: string) : {
+export function useComments(gameId: string, userId?: string): {
     comments: Comment[];
     loading: boolean;
     addOrUpdateComment: (profileId: string, content: string) => Promise<void>;
@@ -43,13 +43,10 @@ export function useComments(gameId: string, userId?: string) : {
     };
     // Función para añadir o actualizar un comentario
     const addOrUpdateComment = async (profileId: string, content: string) => {
-        // Recoge los comentarios que ya existen y verifica si el usuario ya ha comentado
         const existing = comments.find(c => c.profileId === Number(profileId));
         if (existing) {
-            // Actualiza el comentario existente
             await updateComment(existing.id, content);
         } else {
-            // Crea uno nuevo
             await postComment(profileId, gameId, content);
         }
         await fetchComments();

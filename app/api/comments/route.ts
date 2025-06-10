@@ -16,8 +16,8 @@ export async function POST(request: Request) {
         if (!gameId) {
             return NextResponse.json({ message: "gameId es requerido" }, { status: 400 });
         }
-        if (!content || typeof content !== "string" || !content.trim()) {
-            return NextResponse.json({ message: "El contenido del comentario es requerido" }, { status: 400 });
+        if (typeof content !== "string") {
+            return NextResponse.json({ message: "El contenido del comentario debe ser un string" }, { status: 400 });
         }
 
         // Creamos el nuevo comentario en la base de datos, según los datos proporcionados

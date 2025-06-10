@@ -134,6 +134,8 @@ export default function AvatarUploader() {
             const reader = new FileReader();
             reader.onloadend = () => setPreview(reader.result as string);
             reader.readAsDataURL(file);
+        }else{
+            toast.error("El archivo arrastrado no es una imagen válida.");
         }
     };
 
@@ -257,7 +259,10 @@ export default function AvatarUploader() {
                         type="button"
                         className="px-4 py-1.5 border border-white/30 hover:border-white hover:bg-red-600 text-sm text-white font-medium rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={handleDeleteAvatar}
-                        disabled={!preview && !croppedImage}
+                        disabled={
+                            (!preview && !croppedImage) ||
+                            profile?.profileImage === DEFAULT_AVATAR_URL
+                        }
                     >
                         Borrar imagen
                     </button>

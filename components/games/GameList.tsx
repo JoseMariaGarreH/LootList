@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import useGames from "@/hooks/useGames";
 
 
-
 // Definiciones de una lista de géneros y plataformas
 const genres = [
     "Action",
@@ -28,6 +27,10 @@ const genres = [
     "Fighting",
     "Casual",
     "Family",
+    "Card",
+    "Arcade",
+    "Massively Multiplayer",
+    "Educational",
 ];
 
 const platforms = [
@@ -36,22 +39,35 @@ const platforms = [
     "Dreamcast",
     "iOS",
     "Linux",
-    "Mac",
+    "macOS",
+    "Apple II",
     "Nintendo 3DS",
     "Nintendo Switch",
     "PC",
+    "PlayStation",
     "PlayStation 2",
     "PlayStation 3",
     "PlayStation 4",
     "PlayStation 5",
     "PS Vita",
+    "PSP",
     "Web",
     "Wii U",
     "Xbox",
     "Xbox 360",
     "Xbox One",
     "Xbox Series S/X",
-    "SEGA Saturn"
+    "SEGA Saturn",
+    "Nintendo 64",
+    "Nintendo DS",
+    "NES",
+    "Game Boy Advance",
+    "Game Boy Color",
+    "SNES",
+    "GameCube",
+    "SEGA 32X",
+    "3DO",
+    "Jaguar"
 ];
 
 // Función para obtener los filtros iniciales desde localStorage
