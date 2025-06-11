@@ -326,7 +326,7 @@ export default function GamePopUp({
                             className="w-full h-32 p-3 rounded-lg bg-white/10 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#e63946] resize-none mb-4"
                             placeholder="Escribe tu comentario..."
                             maxLength={500}
-                            {...register("comment")} // Quita la validación { required: ... }
+                            {...register("comment")}
                         />
                         {errors.comment && (
                             <span className="text-red-800 text-xs font-semibold mt-2 block">
@@ -349,7 +349,7 @@ export default function GamePopUp({
                                     onClick={handleDelete}
                                 >
                                     <Trash2 className="w-5 h-5" />
-                                    Borrar datos
+                                    Borrar todo
                                 </button>
                             )}
                         </div>
