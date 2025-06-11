@@ -2,7 +2,6 @@
 
 import { prisma } from "@/src/lib/prisma";
 import { NextResponse } from "next/server";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import bcrypt from "bcrypt";
 
 // Definimos los parámetros que recibirá la función GET, DELETE y PUT
@@ -42,46 +41,6 @@ export async function GET(request : Request, { params }: Params) {
         }, { 
             status: 500 
         });
-    }
-}
-
-export async function DELETE(request : Request, { params }: Params){
-    try{
-        const deletedUser = await prisma.users.delete({
-            where: {
-                id: Number(params.id)
-            }
-        })
-
-        if(!deletedUser) {
-            return NextResponse.json({
-                message: "User not found"
-            }, { 
-                status: 404 
-            });
-        }
-
-        return NextResponse.json({
-            user: deletedUser
-        })
-    } catch (error) {
-
-        if (error instanceof PrismaClientKnownRequestError) {
-            
-            if (error.code === 'P2025') {
-                return NextResponse.json({
-                    message: "User not found"
-                }, { 
-                    status: 404 
-                });
-            }
-
-            return NextResponse.json({
-                message: "Error fetching user"
-            }, { 
-                status: 500 
-            });
-        }
     }
 }
 

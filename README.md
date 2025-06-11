@@ -39,4 +39,4 @@ Esta aplicación se puede desplegar siguiendo estos pasos:
 
 ### Licencia
 
-Este proyecto está licenciado bajo [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/).
+Este proyecto está licenciado bajo [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/), en la que se permite a los usuarios usar obras protegidas por derecho de autor sin solicitar el permiso del autor de la obra.
