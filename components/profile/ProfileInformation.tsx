@@ -37,26 +37,26 @@ export default function ProfileInformation({ profileGames, profile }: ProfileInf
 
                     {/* Estadísticas */}
                     <div className="md:col-span-2 p-4 flex flex-col justify-center">
-                        <div className="grid grid-cols-3 gap-4 text-center">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-y-4 gap-x-4 text-center">
                             <div>
-                                <p className="text-7xl text-white">
+                                <p className="text-5xl md:text-7xl text-white">
                                     {formatCounter(gamesPlayed)}
                                 </p>
                                 <p className="text-sm text-[#f1faee] mt-1">Juegos jugados</p>
                             </div>
                             <div>
-                                <p className="text-7xl text-[#f1faee]">
+                                <p className="text-5xl md:text-7xl text-[#f1faee]">
                                     {formatCounter(gamesPlaying)}
                                 </p>
                                 <p className="text-sm text-[#f1faee] mt-1">Juegos que estas jugando</p>
                             </div>
                             <div>
-                                <p className="text-7xl text-[#f1faee]">
+                                <p className="text-5xl md:text-7xl text-[#f1faee]">
                                     {formatCounter(gamesLiked)}
                                 </p>
                                 <p className="text-sm text-[#f1faee] mt-1">Juegos que te han gustado</p>
                             </div>
-                            <hr className="col-span-3 border-t border-[#f1faee] my-4" />
+                            <hr className="col-span-1 md:col-span-3 border-t border-[#f1faee] my-4" />
                         </div>
                         {/* Añade el gráfico debajo de los contadores */}
                         <div className="mt-8">
