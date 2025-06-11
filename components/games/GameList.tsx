@@ -201,7 +201,7 @@ export default function GameList() {
                     <AjaxLoader />
                 </div>
             ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-5 px-1 pt-4 pb-10 max-w-7xl mx-auto">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-5 px-1 pt-4 pb-10 max-w-7xl mx-auto">
                     {displayedGames.length === 0 ? (
                         <p className="text-center text-[#f1faee] w-full col-span-full">No hay juegos que coincidan con los filtros.</p>
                     ) : (

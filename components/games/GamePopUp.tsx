@@ -171,7 +171,7 @@ export default function GamePopUp({
                             <img
                                 src={gameImageUrl}
                                 alt="Imagen del juego"
-                                className="w-full h-96 object-cover rounded shadow border border-[#a8dadc]/30"
+                                className="w-full h-52 object-cover rounded-md shadow border border-[#a8dadc]/30"
                             />
                             {/* Botón de cerrar la pestaña modal */}
                             <button

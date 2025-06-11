@@ -18,7 +18,12 @@ export default function Footer() {
                             <a href="/games" className="hover:text-gray-600 font-medium text-sm">Juegos</a>
                         </div>
                         {/* Texto de derechos de autor y mensaje de la aplicación */}
-                        <p className="text-gray-800 text-xs mt-1">©LootList hecho por gente que hace lo que le gusta.</p>
+                        <p className="text-gray-800 text-xs mt-1">
+                            <a href="https://creativecommons.org" target="_blank" rel="noopener noreferrer" className="underline">LootList</a> © 2025 by <a href="https://creativecommons.org" target="_blank" rel="noopener noreferrer" className="underline">Jose Maria</a> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer" className="underline">CC BY-SA 4.0</a>
+                            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style={{ maxWidth: "1em", maxHeight: "1em", marginLeft: ".2em", display: "inline" }} alt="cc" />
+                            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style={{ maxWidth: "1em", maxHeight: "1em", marginLeft: ".2em", display: "inline" }} alt="by" />
+                            <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" style={{ maxWidth: "1em", maxHeight: "1em", marginLeft: ".2em", display: "inline" }} alt="sa" />
+                        </p>
                     </div>
                     {/* los iconos de redes sociales */}
                     <div className="flex gap-3 mt-3 sm:mt-0 sm:ml-16">

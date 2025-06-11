@@ -34,9 +34,12 @@ Esta aplicación se puede desplegar siguiendo estos pasos:
 9. **Notas adicionales**
    - Para funciones como el guardado de imágenes de avatar, necesitarás una cuenta en Cloudinary (servicio utilizado en este proyecto).
    - Para importar juegos desde la API de RAWG, deberás registrarte y obtener una API key, luego podrás ejecutar el script correspondiente en la carpeta de scripts.
+   - Lo mismo para importar usuarios, para ello tendrás que ejecutar el mismo script pero con diferente nombre para agregar los datos. No lo recomiendo porque habrá alguna función como es la de enviar email que no se podrá probar. Yo recomendaría crearte uno desde cero en la parte visual o desde base de datos.
    - **Nota:** Al presentar el proyecto, se incluirá un archivo `.env` con los valores necesarios para facilitar el despliegue local.
 
 
 ### Licencia
 
 Este proyecto está licenciado bajo [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/), en la que se permite a los usuarios usar obras protegidas por derecho de autor sin solicitar el permiso del autor de la obra.
+
+LootList  © 2025 by Jose Maria Garre Hermosilla is licensed under CC BY-SA 4.0. To view a copy of this license
