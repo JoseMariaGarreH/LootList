@@ -25,11 +25,11 @@ export async function POST(request: Request, { params }: { params: { id: string 
                 },
             },
             update: {
-                played,
-                playing,
-                wishlist,
-                liked,
-                rating,
+                played: !!played,
+                playing: !!playing,
+                wishlist: !!wishlist,
+                liked: !!liked,
+                rating: rating ?? null,
                 updatedAt: new Date(),
             },
             create: {
@@ -46,8 +46,10 @@ export async function POST(request: Request, { params }: { params: { id: string 
         // Si la operación es exitosa, devuelve el registro actualizado o creado
         return NextResponse.json(profileGame);
     } catch (error) {
-        // Si ocurre un error, devuelve un mensaje de error y status 500
-        return NextResponse.json({ message: "Error al actualizar el estado" }, { status: 500 });
+        // Loguea el error real para depuración
+        console.error("Error real al actualizar el estado:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return NextResponse.json({ message: "Error al actualizar el estado", error: errorMessage }, { status: 500 });
     }
 }
 

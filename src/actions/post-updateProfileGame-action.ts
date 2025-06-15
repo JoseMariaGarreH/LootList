@@ -4,7 +4,7 @@
 const baseUrl = process.env.NEXT_PUBLIC_URL;
 
 export default async function updateProfileGame(
-    userId: string,
+    profileId: string,
     gameId: number,
     data: {
         rating?: number;
@@ -17,12 +17,12 @@ export default async function updateProfileGame(
     try {
         // Generamos la URL completa para la API, con la que llamaremos al endpoint
         // declarado en app/api/profileGame/[userId]/route.ts
-        const res = await fetch(`${baseUrl}/api/profileGame/${userId}`, {
+        const res = await fetch(`${baseUrl}/api/profileGame/${profileId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ gameId, ...data }),
         });
-        
+
         // Verificamos si la respuesta es exitosa
         if (!res.ok) {
             const error = await res.json();

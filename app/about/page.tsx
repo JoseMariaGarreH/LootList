@@ -11,7 +11,7 @@ export default function AboutPage() {
     return (
         <>  
             <Navbar />
-            <div className="flex flex-col items-center justify-center min-h-screen px-4">
+            <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 mb-3 mt-2">
                 <section className="w-full max-w-3xl mb-8">
                     <h1 className="text-4xl font-bold mb-4 text-white flex items-center justify-center gap-2">
                         <Info size={32} />  Sobre Nosotros

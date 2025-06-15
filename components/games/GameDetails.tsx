@@ -8,13 +8,14 @@ import GamePopUp from "./GamePopUp";
 import { useComments } from "@/hooks/useComments";
 import useGames from "@/hooks/useGames";
 import { useGlobalProfileGames } from "@/hooks/useGlobalProfileGames";
-import { useProfileGame } from "@/hooks/useProfileGame";
-import { useUpdateProfileGame } from "@/hooks/useUpdateProfileGame";
+
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useProfileById } from "@/hooks/useProfileById";
 // Tipos
 import { Comment, Games, ProfileGame } from "@/src/types";
+// Acciones
+import { useProfileGame } from "@/hooks/useProfileGame";
 // Iconos
 import {
     ArrowLeftCircle,
@@ -51,11 +52,7 @@ export default function GameDetails({ id }: { id: string }) {
     // Obtiene los datos globales de los juegos de todos los perfiles registrados
     const { globalProfileGames } = useGlobalProfileGames(id);
     // Obtiene los comentarios, función para añadir/actualizar y el comentario del usuario
-    const { comments, loading: loadingComments, addOrUpdateComment, userComment } = useComments(id, userId);
-
-    // Funciones para actualizar los estados del juego en el perfil
-    const { setRating, setPlayed, setPlaying, setWishlist, setLike } =
-        useUpdateProfileGame(userId);
+    const { comments, loading: loadingComments, addOrUpdateComment, userComment } = useComments(id, String(profile?.id || ""));
 
     // Busca el juego actual y el estado del juego en el perfil del usuario
     const game: Games | undefined = games.find((g) => g.id.toString() === id);
@@ -122,6 +119,20 @@ export default function GameDetails({ id }: { id: string }) {
         return <p className="text-center text-[#f1faee]">Juego no encontrado.</p>;
     }
 
+    // Función para actualizar todos los estados del juego en el perfil
+    const updateAllStates = async (states: Partial<{ rating: number; liked: boolean; played: boolean; playing: boolean; wishlist: boolean; }>) => {
+        if (!profile?.id) return;
+        await updateProfileGame(String(profile.id), Number(id), {
+            rating,
+            liked,
+            played,
+            playing,
+            wishlist,
+            ...states,
+        });
+        await refetch();
+    };
+
     // Función para actualizar la valoración del juego
     const handleSetRating = async (newRating: number) => {
         if (!session?.user?.id) {
@@ -129,12 +140,12 @@ export default function GameDetails({ id }: { id: string }) {
             return;
         }
         setRatingState(newRating);
-        await setRating(game.id, newRating);
+        await updateAllStates({ rating: newRating });
 
         // Marca como jugado automáticamente si la valoración es mayor que 0
         if (newRating > 0 && !played) {
             setPlayedState(true);
-            await setPlayed(game.id, true);
+            await updateAllStates({ rating: newRating, played: true });
         }
     };
 
@@ -146,7 +157,7 @@ export default function GameDetails({ id }: { id: string }) {
         }
         const newValue = !played;
         setPlayedState(newValue);
-        await setPlayed(game.id, newValue);
+        await updateAllStates({ played: newValue });
     };
 
     const handleTogglePlaying = async () => {
@@ -156,7 +167,7 @@ export default function GameDetails({ id }: { id: string }) {
         }
         const newValue = !playing;
         setPlayingState(newValue);
-        await setPlaying(game.id, newValue);
+        await updateAllStates({ playing: newValue });
     };
 
     const handleToggleWishlist = async () => {
@@ -166,7 +177,7 @@ export default function GameDetails({ id }: { id: string }) {
         }
         const newValue = !wishlist;
         setWishlistState(newValue);
-        await setWishlist(game.id, newValue);
+        await updateAllStates({ wishlist: newValue });
     };
 
     const handleToggleLike = async () => {
@@ -176,7 +187,7 @@ export default function GameDetails({ id }: { id: string }) {
         }
         const newValue = !liked;
         setLikedState(newValue);
-        await setLike(game.id, newValue);
+        await updateAllStates({ liked: newValue });
     };
 
     // Función para guardar comentario y estados desde el popup

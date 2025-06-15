@@ -17,22 +17,19 @@ export default function ReviewsPage() {
     // Obtener la sesión del usuario actual
     const { data: session } = useSession();
     const userId = session?.user?.id || "";
-    // Obtener el perfil del usuario
     const { profile } = useProfileById(userId);
+
+    if (!profile) return <AjaxLoader />;
 
     return (
         <>
             <Navbar />
-            {profile ? (
-                <UserProfileLayout profile={profile} session={session}>
-                    <div className="max-w-7xl mx-auto mt-8 px-2 sm:px-4">
-                        <h1 className="text-2xl font-bold mb-4 flex items-center"> <Quote className="mr-2" size={50} /> Reseñas de {session?.user.username}</h1>
-                    </div>
-                        <ProfileReviews profileId={profile.id} />
-                </UserProfileLayout>
-            ) : (
-                <AjaxLoader />
-            )}
+            <UserProfileLayout profile={profile} session={session}>
+                <div className="max-w-7xl mx-auto mt-8 px-2 sm:px-4">
+                    <h1 className="text-2xl font-bold mb-4 flex items-center"> <Quote className="mr-2" size={50} /> Reseñas de {session?.user.username}</h1>
+                </div>
+                <ProfileReviews profileId={String(profile.id)} userId={String(profile.userId)} />
+            </UserProfileLayout>
             <Footer />
         </>
     );
