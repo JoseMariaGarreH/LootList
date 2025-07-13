@@ -1,7 +1,7 @@
 "use client"
 
 // Iconos
-import { Circle, Heart, Star } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 // Tipos
 import { Comment } from "@/src/types";
 

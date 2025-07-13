@@ -8,14 +8,13 @@ import GamePopUp from "./GamePopUp";
 import { useComments } from "@/hooks/useComments";
 import useGames from "@/hooks/useGames";
 import { useGlobalProfileGames } from "@/hooks/useGlobalProfileGames";
-
+import { useProfileGame } from "@/hooks/useProfileGame";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useProfileById } from "@/hooks/useProfileById";
+import useUpdateProfileGame from "@/hooks/useUpdateProfileGame";
 // Tipos
 import { Comment, Games, ProfileGame } from "@/src/types";
-// Acciones
-import { useProfileGame } from "@/hooks/useProfileGame";
 // Iconos
 import {
     ArrowLeftCircle,
@@ -34,8 +33,7 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 // Next.js
 import Image from "next/image";
-// Acciones
-import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
+
 
 // Componente principal que muestra los detalles de un juego
 export default function GameDetails({ id }: { id: string }) {
@@ -122,7 +120,7 @@ export default function GameDetails({ id }: { id: string }) {
     // Función para actualizar todos los estados del juego en el perfil
     const updateAllStates = async (states: Partial<{ rating: number; liked: boolean; played: boolean; playing: boolean; wishlist: boolean; }>) => {
         if (!profile?.id) return;
-        await updateProfileGame(String(profile.id), Number(id), {
+        await useUpdateProfileGame(String(profile.id), Number(id), {
             rating,
             liked,
             played,
@@ -207,7 +205,7 @@ export default function GameDetails({ id }: { id: string }) {
             await addOrUpdateComment(profileId, content);
 
             // Actualiza los estados del juego
-            await updateProfileGame(profileId, Number(id), {
+            await useUpdateProfileGame(profileId, Number(id), {
                 rating: states.rating,
                 liked: states.liked,
                 played: states.played,
