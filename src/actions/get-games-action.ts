@@ -21,7 +21,8 @@ export default async function getGames() {
         }
 
         // Si lo es, devolvemos los datos en formato JSON
-        return await res.json();
+        const data = await res.json();
+        return data;
     } catch (error) {
         // Log del error para depuración
         console.error("Error en el action [getGames]:", error);
