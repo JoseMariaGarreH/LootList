@@ -4,15 +4,19 @@
 import { Heart, Star } from "lucide-react";
 // Tipos
 import { Comment } from "@/src/types";
+// Next.js
+import Image from "next/image";
 
 export function CommentGame({ comment, rating, liked }: { comment: Comment, rating: number, liked?: boolean}) {
     // Si no hay comentario, no renderizamos nada
     return (
         <div className="bg-[#264470] rounded-lg px-4 py-3 shadow-md flex items-start gap-4">
             {/* Imagen del usuario que hay registrado en ese momento en la página*/}
-            <img
+            <Image
                 src={comment.profile?.profileImage || "/default-avatar.png"}
                 alt={comment.profile?.user?.username || "Usuario"}
+                width={40}
+                height={40}
                 className="w-10 h-10 rounded-full object-cover border border-white/20"
             />
             <div className="flex-1">

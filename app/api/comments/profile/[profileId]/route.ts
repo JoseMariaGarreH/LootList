@@ -4,10 +4,11 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 
 // Función que devolverá todos los comentarios de un perfil específico
-export async function GET(request: Request, { params }: { params: { profileId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ profileId: string }> }) {
     try {
+        const { profileId } = await params;
         const comments = await prisma.comments.findMany({
-            where: { profileId: Number(params.profileId) },
+            where: { profileId: Number(profileId) },
             include: { game: true }, // Incluye los detalles del juego asociado al comentario
         });
         return NextResponse.json(comments);

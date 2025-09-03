@@ -9,6 +9,8 @@ import { X, Star, Heart, Gamepad2, Play, Gift, Trash2, Eraser } from "lucide-rea
 // Librerías
 import toast from "react-hot-toast";
 import { deleteComment } from "@/src/actions/delete-comment-action";
+// Next.js
+import Image from "next/image";
 
 // Definición de las props para el componente GamePopUp
 interface GamePopUpProps {
@@ -168,9 +170,11 @@ export default function GamePopUp({
                     {/* Imagen del juego */}
                     {gameImageUrl && (
                         <div className="relative flex justify-center mb-4">
-                            <img
+                            <Image
                                 src={gameImageUrl}
                                 alt="Imagen del juego"
+                                width={500}
+                                height={208}
                                 className="w-full h-52 object-cover rounded-md shadow border border-[#a8dadc]/30"
                             />
                             {/* Botón de cerrar la pestaña modal */}

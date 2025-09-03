@@ -4,19 +4,14 @@ import { prisma } from "@/src/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
-// Definimos los parámetros que recibirá la función GET, DELETE y PUT
-interface Params {
-    params: {
-        id: string
-    }
-}
 // Esta función recoge los datos de un usuario específico por su ID
-export async function GET(request : Request, { params }: Params) {
-    try{
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    try {
+        const { id } = await params;
         // Recuperamos un usuario de la base de datos usando el ID proporcionado en los parámetros
         const user = await prisma.users.findFirst({
             where: {
-                id: Number(params.id)
+                id: Number(id)
             }
         })
 
@@ -44,8 +39,9 @@ export async function GET(request : Request, { params }: Params) {
     }
 }
 
-export async function PUT(request: Request, { params }: Params) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const { password } = await request.json();
 
         // Hashear la nueva contraseña
@@ -53,7 +49,7 @@ export async function PUT(request: Request, { params }: Params) {
 
         const updateUserPassword = await prisma.users.update({
             where: {
-                id: Number(params.id),
+                id: Number(id),
             },
             data: {
                 password: hashedPassword,

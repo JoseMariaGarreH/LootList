@@ -138,7 +138,7 @@ export default function Home() {
 
           <div className="w-full md:w-1/3 order-2 md:order-4 p-4">
             <h4 className="text-center text-[16px] text-[#f1faee]">
-              Muestra un poco de amor por tus juegos favoritos con un "me gusta".
+              Muestra un poco de amor por tus juegos favoritos con un &quot;me gusta&quot;.
             </h4>
           </div>
 

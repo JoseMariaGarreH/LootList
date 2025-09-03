@@ -3,16 +3,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 
-// Definimos los parámetros que recibirá la función POST y GET
-interface Params {
-    params: {
-        id: string
-    }
-}
-
 // Esta función actualiza o crea un registro de ProfileGame para un usuario específico
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         // Extrae los datos del cuerpo de la solicitud
         const { gameId, played, playing, wishlist, liked, rating } = await request.json();
 
@@ -20,7 +14,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
         const profileGame = await prisma.profileGame.upsert({
             where: {
                 profileId_gameId: {
-                    profileId: Number(params.id),
+                    profileId: Number(id),
                     gameId: Number(gameId),
                 },
             },
@@ -33,7 +27,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
                 updatedAt: new Date(),
             },
             create: {
-                profileId: Number(params.id),
+                profileId: Number(id),
                 gameId: Number(gameId),
                 played: !!played,
                 playing: !!playing,
@@ -53,13 +47,14 @@ export async function POST(request: Request, { params }: { params: { id: string 
     }
 }
 
-// Esta función obtiene todos los juegos que estan asiociados a un perfil de juego específico
-export async function GET(request: Request, { params }: Params) {
+// Esta función obtiene todos los juegos que están asociados a un perfil de juego específico
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         // Busca el perfil de usuario por su ID
         const profile = await prisma.profiles.findUnique({
             where: {
-                userId: Number(params.id)
+                userId: Number(id)
             }
         });
 

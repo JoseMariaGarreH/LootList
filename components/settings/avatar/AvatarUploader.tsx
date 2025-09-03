@@ -102,7 +102,7 @@ export default function AvatarUploader() {
         } catch (error) {
             toast.error("Error al guardar el avatar");
         }
-    }, [preview, croppedAreaPixels, imageName, session]);
+    }, [preview, croppedAreaPixels, imageName, session, updateAvatar]); // Añadida updateAvatar como dependencia
 
     // Maneja el evento de arrastre dentro del área de recorte
     const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {

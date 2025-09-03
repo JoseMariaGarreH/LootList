@@ -15,15 +15,12 @@ import toast, { Toaster } from "react-hot-toast";
 export default function PasswordForm() {
     // Obtener la sesión del usuario
     const { data: session } = useSession();
-    // Si no hay sesión, mostrar un mensaje para iniciar sesión
-    if (!session?.user) {
-        return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
-    }
-    // Hooks personalizados para verificar y actualizar la contraseña
+    
+    // Hooks personalizados para verificar y actualizar la contraseña (SIEMPRE se llaman)
     const { checkPassword } = useVerifyPassword();
     const { changePassword } = useUpdatePassword();
 
-    // Configuración del formulario con react-hook-form
+    // Configuración del formulario con react-hook-form (SIEMPRE se llama)
     const { register, handleSubmit, getValues, reset, formState: { errors } } = useForm({
         defaultValues: {
             currentPassword: '',
@@ -32,9 +29,14 @@ export default function PasswordForm() {
         }
     });
 
-    // Estado para manejar la ventana de confirmación
+    // Estado para manejar la ventana de confirmación (SIEMPRE se llama)
     const [seAbreVentana, setSeAbreVentana] = useState(false);
     const [mensajeVentana, setMensajeVentana] = useState('');
+
+    // Si no hay sesión, mostrar un mensaje para iniciar sesión
+    if (!session?.user) {
+        return <div className="text-center text-white">Por favor, inicia sesión para ver tu perfil.</div>;
+    }
 
     // Función para manejar el envío del formulario
     const onSubmit = handleSubmit(() => {

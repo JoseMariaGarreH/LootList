@@ -4,10 +4,11 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 
 // Función para obtener todos los comentarios de un juego específico por su ID
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         // Verifica que el ID del juego sea un número válido
-        const gameId = Number(params.id);
+        const gameId = Number(id);
         // Si el ID no es un número, devuelve un error 400
         if (isNaN(gameId)) {
             return NextResponse.json(
@@ -39,12 +40,13 @@ export async function GET(request: Request, { params }: { params: { id: string }
 }
 
 // Función que actualiza un comentario específico por su ID
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         // Verifica que el ID sea un número válido
-        const id = Number(params.id);
+        const commentId = Number(id);
         // Si el ID no es un número, devuelve un error 400
-        if (isNaN(id)) {
+        if (isNaN(commentId)) {
             return NextResponse.json(
                 { message: "ID de comentario inválido" },
                 { status: 400 }
@@ -63,7 +65,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
         // Actualiza el comentario en la base de datos
         const updatedComment = await prisma.comments.update({
-            where: { id },
+            where: { id: commentId },
             data: { content }
         });
 
@@ -80,10 +82,11 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 }
 
 // Función que elimina un comentario específico por su ID
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const id = Number(params.id);
-        if (isNaN(id)) {
+        const { id } = await params;
+        const commentId = Number(id);
+        if (isNaN(commentId)) {
             return NextResponse.json(
                 { message: "ID de comentario inválido" },
                 { status: 400 }
@@ -91,7 +94,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
         }
 
         // Busca el comentario para obtener profileId y gameId
-        const comment = await prisma.comments.findUnique({ where: { id } });
+        const comment = await prisma.comments.findUnique({ where: { id: commentId } });
         if (!comment) {
             return NextResponse.json(
                 { message: "Comentario no encontrado" },
@@ -100,7 +103,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
         }
 
         // Borra el comentario
-        await prisma.comments.delete({ where: { id } });
+        await prisma.comments.delete({ where: { id: commentId } });
 
         // Resetea los datos de ProfileGame asociados al comentario eliminado
         await prisma.profileGame.updateMany({

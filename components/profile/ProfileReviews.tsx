@@ -9,13 +9,14 @@ import { useEffect, useState } from "react";
 import { useUserComments } from "@/hooks/useUserComments";
 import { useComments } from "@/hooks/useComments";
 import { useProfileGame } from "@/hooks/useProfileGame";
-import useUpdateProfileGame from "@/hooks/useUpdateProfileGame";
+import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
 // Tipos 
 import { Comment } from "@/src/types";
 // Iconos
 import { Star, Heart, Gamepad2, Play, Gift, NotebookPen } from "lucide-react";
 // Next.js
 import Link from "next/link";
+import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 
 // Función que se utiliza en el componente para mostrar los iconos de estado del juego
@@ -118,7 +119,7 @@ export default function ProfileReviews({ profileId, userId }: { profileId: strin
                 await addOrUpdateGameComment(profileId, content);
 
                 // Actualiza todos los estados juntos
-                await useUpdateProfileGame(profileId, editingComment.gameId, {
+                await updateProfileGame(profileId, editingComment.gameId, {
                     rating: states.rating,
                     liked: states.liked,
                     played: states.played,
@@ -181,9 +182,11 @@ export default function ProfileReviews({ profileId, userId }: { profileId: strin
 
                             <div className="flex flex-col sm:flex-row gap-4">
                                 <Link href={`/games/${comment.game?.id}`} className="flex-shrink-0 self-center sm:self-start ">
-                                    <img
+                                    <Image
                                         src={comment.game?.imageUrl || ""}
                                         alt={comment.game?.title || ""}
+                                        width={128}
+                                        height={176}
                                         className="w-full h-44 sm:w-32 object-cover rounded-xl border border-white/20 hover:scale-105 transition-transform duration-300 shadow-inner"
                                     />
                                 </Link>

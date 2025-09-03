@@ -13,16 +13,16 @@ export default function Footer() {
                     <div className="flex flex-col items-start">
                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-black">
                             {/* Enlaces de navegación, de la aplicación en la parte inferior */}
-                            <a href="/about" className="hover:text-gray-600 font-medium text-sm">Sobre nosotros</a>
-                            <a href="/help" className="hover:text-gray-600 font-medium text-sm">Ayuda</a>
-                            <a href="/games" className="hover:text-gray-600 font-medium text-sm">Juegos</a>
+                            <Link href="/about" className="hover:text-gray-600 font-medium text-sm">Sobre nosotros</Link>
+                            <Link href="/help" className="hover:text-gray-600 font-medium text-sm">Ayuda</Link>
+                            <Link href="/games" className="hover:text-gray-600 font-medium text-sm">Juegos</Link>
                         </div>
                         {/* Texto de derechos de autor y mensaje de la aplicación */}
                         <p className="text-gray-800 text-xs mt-1">
-                            <a href="https://creativecommons.org" target="_blank" rel="noopener noreferrer" className="underline">LootList</a> © 2025 by <a href="https://creativecommons.org" target="_blank" rel="noopener noreferrer" className="underline">Jose Maria</a> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer" className="underline">CC BY-SA 4.0</a>
-                            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style={{ maxWidth: "1em", maxHeight: "1em", marginLeft: ".2em", display: "inline" }} alt="cc" />
-                            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style={{ maxWidth: "1em", maxHeight: "1em", marginLeft: ".2em", display: "inline" }} alt="by" />
-                            <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" style={{ maxWidth: "1em", maxHeight: "1em", marginLeft: ".2em", display: "inline" }} alt="sa" />
+                            <Link href="https://creativecommons.org" target="_blank" rel="noopener noreferrer" className="underline">LootList</Link> © 2025 by <Link href="https://creativecommons.org" target="_blank" rel="noopener noreferrer" className="underline">Jose Maria</Link> is licensed under <Link href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer" className="underline">CC BY-SA 4.0</Link>
+                            <Image src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" width={16} height={16} style={{ maxWidth: "1em", maxHeight: "1em", marginLeft: ".2em", display: "inline" }} alt="cc" />
+                            <Image src="https://mirrors.creativecommons.org/presskit/icons/by.svg" width={16} height={16} style={{ maxWidth: "1em", maxHeight: "1em", marginLeft: ".2em", display: "inline" }} alt="by" />
+                            <Image src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" width={16} height={16} style={{ maxWidth: "1em", maxHeight: "1em", marginLeft: ".2em", display: "inline" }} alt="sa" />
                         </p>
                     </div>
                     {/* los iconos de redes sociales */}

@@ -3,11 +3,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 
-// Función para obtener todos los perfiles que estan asociados a un usuario específico
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+// Función para obtener todos los perfiles que están asociados a un usuario específico
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         // Verificamos si hay un ID en los parámetros
-        if (!params.id) {
+        if (!id) {
             return NextResponse.json(
                 { message: "No autorizado" },
                 { status: 401 }
@@ -16,7 +17,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
         // Buscamos el perfil del usuario por su ID
         const profile = await prisma.profiles.findUnique({
-            where: { userId: Number(params.id) },
+            where: { userId: Number(id) },
         });
 
         // Si no se encuentra el perfil, devolvemos un mensaje de error 404
@@ -39,10 +40,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
-        console.log("params", params);
-        if (!params.id) {
+        const { id } = await params;
+        if (!id) {
             return NextResponse.json(
                 { message: "No autorizado" },
                 { status: 401 }
@@ -50,7 +51,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         }
 
         const user = await prisma.users.findUnique({
-            where: { id: Number(params.id) },
+            where: { id: Number(id) },
         });
 
         if (!user) {
@@ -70,8 +71,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
                 { status: 404 }
             );
         }
-
-        
 
         const body = await request.json();
         const {

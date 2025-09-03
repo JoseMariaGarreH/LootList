@@ -4,11 +4,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 
 // Función para obtener todos los perfiles de juego asociados a un gameId específico
-export async function GET(request: Request, { params }: { params: { gameId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ gameId: string }> }) {
     try {
+        const { gameId } = await params;
         // Busca todos los registros de profileGame que correspondan al gameId recibido por parámetro
         const profileGames = await prisma.profileGame.findMany({
-            where: { gameId: Number(params.gameId) },
+            where: { gameId: Number(gameId) },
         });
         // Si todo sale bien, devuelve los registros encontrados en formato JSON
         return NextResponse.json(profileGames);
