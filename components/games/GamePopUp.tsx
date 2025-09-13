@@ -72,7 +72,7 @@ export default function GamePopUp({
     const [hover, setHover] = useState(0);
     const [showClear, setShowClear] = useState(false);
 
-    // Hook para eliminar comentarios - DEBE estar en el nivel superior del componente
+    // Hook para eliminar comentarios
     const { deleteComment, loading: deleteLoading } = useDeleteComment(commentId || 0);
 
     // Efecto para inicializar los valores del formulario y estados
