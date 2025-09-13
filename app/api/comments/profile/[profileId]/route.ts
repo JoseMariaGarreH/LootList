@@ -7,7 +7,7 @@ import { prisma } from "@/src/lib/prisma";
 export async function GET(request: Request, { params }: { params: Promise<{ profileId: string }> }) {
     try {
         const { profileId } = await params;
-        const comments = await prisma.comments.findMany({
+        const comments = await prisma.comment.findMany({
             where: { profileId: Number(profileId) },
             include: { game: true }, // Incluye los detalles del juego asociado al comentario
         });

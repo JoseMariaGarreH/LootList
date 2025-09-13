@@ -12,7 +12,7 @@ export async function POST(request: Request) {
         const { email } = await request.json();
 
         // Verifica que el email exista en la base de datos
-        const user = await prisma.users.findUnique({
+        const user = await prisma.consumer.findUnique({
             where: { email },
         });
 

@@ -6,7 +6,7 @@ import { NextResponse } from "next/server"
 // Esta función recoge todos los juegos de la base de datos
 export async function GET() {
     try {
-        const games = await prisma.games.findMany()
+        const games = await prisma.game.findMany()
         return NextResponse.json(games)
     } catch (error) {
         return NextResponse.json({

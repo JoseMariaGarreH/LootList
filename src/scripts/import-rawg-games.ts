@@ -10,7 +10,7 @@ async function importGames() {
 
         for (const game of rawgGames) {
             // Mapea los campos de RAWG a tu modelo
-            await prisma.games.upsert({
+            await prisma.game.upsert({
                 where: { id: game.id }, 
                 update: {
                     title: game.name,

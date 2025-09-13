@@ -16,7 +16,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         }
 
         // Buscamos el perfil del usuario por su ID
-        const profile = await prisma.profiles.findUnique({
+        const profile = await prisma.profile.findUnique({
             where: { userId: Number(id) },
         });
 
@@ -50,7 +50,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
             );
         }
 
-        const user = await prisma.users.findUnique({
+        const user = await prisma.consumer.findUnique({
             where: { id: Number(id) },
         });
 
@@ -61,7 +61,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
             );
         }
 
-        const profile = await prisma.profiles.findUnique({
+        const profile = await prisma.profile.findUnique({
             where: { userId: user.id },
         });
 
@@ -86,7 +86,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
         // Actualiza el usuario si hay cambios en username o email
         if (username || email) {
-            await prisma.users.update({
+            await prisma.consumer.update({
                 where: { id: user.id },
                 data: {
                     username: username,
@@ -95,7 +95,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
             });
         }
 
-        const updatedProfile = await prisma.profiles.update({
+        const updatedProfile = await prisma.profile.update({
             where: { userId: user.id },
             data: {
                 name,

@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         }
 
         // Buscar el usuario por email
-        const user = await prisma.users.findUnique({
+        const user = await prisma.consumer.findUnique({
             where: { email: resetToken.email },
         });
 
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
         // Hashear la nueva contraseña y actualizar
         const hashedPassword = await bcrypt.hash(password, 10);
-        await prisma.users.update({
+        await prisma.consumer.update({
             where: { id: user.id },
             data: { password: hashedPassword },
         });

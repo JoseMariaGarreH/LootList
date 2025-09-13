@@ -17,12 +17,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
             );
         }
         // Busca todos los comentarios asociados al gameId proporcionado
-        const comments = await prisma.comments.findMany({
+        const comments = await prisma.comment.findMany({
             where: { gameId },
             include: {
                 profile: {
                     include: {
-                        user: true,
+                        consumers: true,
                     }
                 }
             }
@@ -64,7 +64,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
         }
 
         // Actualiza el comentario en la base de datos
-        const updatedComment = await prisma.comments.update({
+        const updatedComment = await prisma.comment.update({
             where: { id: commentId },
             data: { content }
         });
@@ -94,7 +94,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         }
 
         // Busca el comentario para obtener profileId y gameId
-        const comment = await prisma.comments.findUnique({ where: { id: commentId } });
+        const comment = await prisma.comment.findUnique({ where: { id: commentId } });
         if (!comment) {
             return NextResponse.json(
                 { message: "Comentario no encontrado" },
@@ -103,7 +103,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         }
 
         // Borra el comentario
-        await prisma.comments.delete({ where: { id: commentId } });
+        await prisma.comment.delete({ where: { id: commentId } });
 
         // Resetea los datos de ProfileGame asociados al comentario eliminado
         await prisma.profileGame.updateMany({

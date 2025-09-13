@@ -3,11 +3,11 @@
 // Componentes
 import GameCard from "@/components/games/GameCard";
 // Tipos
-import { Games } from "@/src/types";
+import { Game } from "@/src/types";
 
 // Definición de las propiedades del componente
 interface ProfileGameListSectionProps {
-    games: Games[];
+    games: Game[];
     emptyText: string;
     title: string;
     icon: React.ReactNode;

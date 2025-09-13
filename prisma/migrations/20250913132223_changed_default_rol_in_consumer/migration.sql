@@ -1,0 +1,20 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- AlterTable
+ALTER TABLE [dbo].[Consumer] DROP CONSTRAINT [Consumer_rolId_df];
+ALTER TABLE [dbo].[Consumer] ADD CONSTRAINT [Consumer_rolId_df] DEFAULT 2 FOR [rolId];
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

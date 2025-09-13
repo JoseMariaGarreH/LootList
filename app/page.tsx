@@ -7,7 +7,7 @@ import Navbar from "@/components/menu/Navbar";
 import useGames from "@/hooks/useGames";
 import { useMemo } from "react";
 // Tipos
-import { Games } from "@/src/types";
+import { Game } from "@/src/types";
 // Fuentes
 import { roboto } from "@/app/font";
 // Librerías
@@ -21,7 +21,7 @@ export default function Home() {
   const { games } = useGames();
 
   // Devuelve un array de N juegos aleatorios (sin repetir)
-  function getRandomGames(arr: Games[], n: number) {
+  function getRandomGames(arr: Game[], n: number) {
     if (arr.length < n) return arr;
     const shuffled = [...arr].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, n);

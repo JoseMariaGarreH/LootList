@@ -9,7 +9,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     try {
         const { id } = await params;
         // Recuperamos un usuario de la base de datos usando el ID proporcionado en los parámetros
-        const user = await prisma.users.findFirst({
+        const user = await prisma.consumer.findFirst({
             where: {
                 id: Number(id)
             }
@@ -47,7 +47,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
         // Hashear la nueva contraseña
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const updateUserPassword = await prisma.users.update({
+        const updateUserPassword = await prisma.consumer.update({
             where: {
                 id: Number(id),
             },

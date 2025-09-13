@@ -29,7 +29,7 @@ export async function PUT(request: Request) {
 
         // Si image es una URL (string), solo actualiza el campo en la base de datos
         if (typeof image === "string" && image.startsWith("https")) {
-            await prisma.profiles.update({
+            await prisma.profile.update({
                 where: { userId },
                 data: { profileImage: image }
             });
@@ -60,7 +60,7 @@ export async function PUT(request: Request) {
             }
 
             // Actualiza el perfil del usuario con la URL de la imagen subida en Cloudinary
-            await prisma.profiles.update({
+            await prisma.profile.update({
                 where: { userId },
                 data: { profileImage: response.secure_url }
             });

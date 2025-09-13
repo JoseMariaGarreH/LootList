@@ -4,11 +4,11 @@
 import { useForm } from "react-hook-form";
 // Hooks
 import { useEffect, useState } from "react";
+import { useDeleteComment } from "@/hooks/useDeleteComment";
 // Iconos
 import { X, Star, Heart, Gamepad2, Play, Gift, Trash2, Eraser } from "lucide-react";
 // Librerías
 import toast from "react-hot-toast";
-import { deleteComment } from "@/src/actions/delete-comment-action";
 // Next.js
 import Image from "next/image";
 
@@ -139,7 +139,7 @@ export default function GamePopUp({
         if (!commentId) return;
         try {
             // Llamamos a la función para eliminar el comentario
-            await deleteComment(commentId);
+            await useDeleteComment(commentId);
             // Mostramos un mensaje de éxito y cerramos el modal
             setModalOpen(false);
             setTimeout(() => window.location.reload(), 200);

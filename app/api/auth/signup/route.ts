@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         const { username, email, password } = await request.json()
 
         // Validar que se hayan proporcionado todos los campos necesarios
-        const userEmailFound = await prisma.users.findUnique({
+        const userEmailFound = await prisma.consumer.findUnique({
             where: {
                 email: email
             }
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
         }
 
         // Buscamos el nombre de usuario en la base de datos, según el nombre de usuario proporcionado
-        const userNameFound = await prisma.users.findUnique({
+        const userNameFound = await prisma.consumer.findUnique({
             where: {
                 username: username
             }
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
 
         // Crear usuario y perfil asociado al usuario que se acaba de registrar
         const newUser = await prisma.$transaction(async () => {
-            const user = await prisma.users.create({
+            const user = await prisma.consumer.create({
                 data: {
                     username,
                     email,
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
                 },
             });
 
-            await prisma.profiles.create({
+            await prisma.profile.create({
                 data: {
                     userId: user.id,
                     bio: "",

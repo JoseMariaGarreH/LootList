@@ -1,13 +1,13 @@
 "use client";
 
 // Tipos
-import { Games } from "@/src/types";
+import { Game } from "@/src/types";
 // Next.js
 import Image from "next/image";
 import Link from "next/link";
 
 // Componente que representa una tarjeta de juego
-export default function GameCard({ game }: { game: Games }) {
+export default function GameCard({ game }: { game: Game }) {
     return (
         <Link
             href={`/games/${game.id}`}

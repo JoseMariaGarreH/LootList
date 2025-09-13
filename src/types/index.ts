@@ -1,11 +1,15 @@
-export interface User {
+export interface Consumer {
     id: number;
     email: string;
     username: string;
     password: string;
+    roleId: number;
     createdAt: Date;
     updatedAt: Date;
+    role?: Role;
+    profile?: Profile;
 }
+
 
 export interface Profile {
     id: number;
@@ -19,10 +23,12 @@ export interface Profile {
     profileImage: string | null;
     createdAt: Date;
     updatedAt: Date;
-    user?: User;
+    user?: Consumer;
+    games?: ProfileGame[];
+    comments?: Comment[];
 }
 
-export interface Games {
+export interface Game {
     id: number;
     title: string;
     description: string | null;
@@ -54,5 +60,11 @@ export interface Comment {
     createdAt: Date;
     updatedAt: Date;
     profile?: Profile;
-    game?: Games;
+    game?: Game;
+}
+
+export interface Role {
+    id: number;
+    name: string;
+    users?: Consumer[];
 }

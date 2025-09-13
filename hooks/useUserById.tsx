@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 // Acciones
 import getUserById from "@/src/actions/get-usersById-action";
 // Tipos
-import { User } from "@/src/types";
+import { Consumer } from "@/src/types";
 
 // Hook personalizado para obtener un usuario por su ID
-export function useUserById(userId: string) : { user: User | null } {
-    const [user, setUser] = useState<User | null>(null);
+export function useUserById(userId: string) : { user: Consumer | null } {
+    const [user, setUser] = useState<Consumer | null>(null);
 
     // useEffect para cargar el usuario cuando cambia el userId
     useEffect(() => {

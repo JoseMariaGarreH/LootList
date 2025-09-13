@@ -12,9 +12,9 @@ import { useProfileGame } from "@/hooks/useProfileGame";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useProfileById } from "@/hooks/useProfileById";
-import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
+
 // Tipos
-import { Comment, Games, ProfileGame } from "@/src/types";
+import { Comment, Game, ProfileGame } from "@/src/types";
 // Iconos
 import {
     ArrowLeftCircle,
@@ -33,6 +33,7 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 // Next.js
 import Image from "next/image";
+import useUpdateProfileGame from "@/hooks/useUpdateProfileGame";
 
 
 // Componente principal que muestra los detalles de un juego
@@ -53,7 +54,7 @@ export default function GameDetails({ id }: { id: string }) {
     const { comments, loading: loadingComments, addOrUpdateComment, userComment } = useComments(id, String(profile?.id || ""));
 
     // Busca el juego actual y el estado del juego en el perfil del usuario
-    const game: Games | undefined = games.find((g) => g.id.toString() === id);
+    const game: Game | undefined = games.find((g) => g.id.toString() === id);
     const profileGame: ProfileGame | undefined = profileGames.find(
         (pg) => pg.gameId.toString() === id
     );
@@ -120,7 +121,7 @@ export default function GameDetails({ id }: { id: string }) {
     // Función para actualizar todos los estados del juego en el perfil
     const updateAllStates = async (states: Partial<{ rating: number; liked: boolean; played: boolean; playing: boolean; wishlist: boolean; }>) => {
         if (!profile?.id) return;
-        await updateProfileGame(String(profile.id), Number(id), {
+        await useUpdateProfileGame(String(profile.id), Number(id), {
             rating,
             liked,
             played,
@@ -205,7 +206,7 @@ export default function GameDetails({ id }: { id: string }) {
             await addOrUpdateComment(profileId, content);
 
             // Actualiza los estados del juego
-            await updateProfileGame(profileId, Number(id), {
+            await useUpdateProfileGame(profileId, Number(id), {
                 rating: states.rating,
                 liked: states.liked,
                 played: states.played,

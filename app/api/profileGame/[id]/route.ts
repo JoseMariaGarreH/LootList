@@ -52,7 +52,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     try {
         const { id } = await params;
         // Busca el perfil de usuario por su ID
-        const profile = await prisma.profiles.findUnique({
+        const profile = await prisma.profile.findUnique({
             where: {
                 userId: Number(id)
             }

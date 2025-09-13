@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 // Acciones
 import getGames from "@/src/actions/get-games-action";
 // Tipos
-import { Games } from "@/src/types";
+import { Game } from "@/src/types";
 
 
 // Hook personalizado para obtener la lista de juegos
-export default function useGames(): { games: Games[]; loading: boolean } {
+export default function useGames(): { games: Game[]; loading: boolean } {
     // Estados para manejar la lista de juegos y el estado de carga
-    const [games, setGames] = useState<Games[]>([]);
+    const [games, setGames] = useState<Game[]>([]);
     const [loading, setLoading] = useState(true);
 
     // useEffect para cargar los juegos al montar el componente
