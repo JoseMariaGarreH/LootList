@@ -61,7 +61,7 @@ export default function GamePopUp({
         defaultValues: { comment: userComment || "" }
     });
 
-    // Estados para manejar distintas propiedades del comentario, que se le asignarán al perfil del usuario
+    // Estados para manejar distintas propiedades del comentario
     const [rating, setRating] = useState(initialStates.rating ?? 0);
     const [liked, setLiked] = useState(initialStates.liked ?? false);
     const [played, setPlayed] = useState(initialStates.played ?? false);
@@ -71,6 +71,9 @@ export default function GamePopUp({
     // Estado para manejar las estrellas de valoración y el hover de las estrellas
     const [hover, setHover] = useState(0);
     const [showClear, setShowClear] = useState(false);
+
+    // Hook para eliminar comentarios - DEBE estar en el nivel superior del componente
+    const { deleteComment, loading: deleteLoading } = useDeleteComment(commentId || 0);
 
     // Efecto para inicializar los valores del formulario y estados
     useEffect(() => {
@@ -104,7 +107,7 @@ export default function GamePopUp({
         }
 
         try {
-            // Guardamos o actualizamos el comentario del usuario, con los estados correspondientes
+            // Guardamos o actualizamos el comentario del usuario
             await addOrUpdateComment(profileId, data.comment?.trim() ?? "", {
                 rating,
                 liked,
@@ -112,13 +115,11 @@ export default function GamePopUp({
                 playing,
                 wishlist,
             });
-            // Si se ha actualizado el comentario, se actualizan los estados
+            
             setModalOpen(false);
-            // Llamamos a la función onUpdateStates para actualizar los estados en el componente padre
             onUpdateStates({ rating, liked, played, playing, wishlist });
-            // Recargamos la página para reflejar los cambios
+            
             setTimeout(() => {
-                // Solo recargamos si el profileId es válido y no es nulo o undefined
                 if (
                     typeof profileId === "string" &&
                     profileId.trim() !== "" &&
@@ -135,12 +136,12 @@ export default function GamePopUp({
 
     // Función para manejar la eliminación del comentario
     const handleDelete = async () => {
-        // Comprobamos que el usuario esté autenticado
         if (!commentId) return;
+        
         try {
-            // Llamamos a la función para eliminar el comentario
-            await useDeleteComment(commentId);
-            // Mostramos un mensaje de éxito y cerramos el modal
+            // Ahora usamos la función del hook, no el hook directamente
+            await deleteComment();
+            toast.success("Comentario eliminado correctamente.");
             setModalOpen(false);
             setTimeout(() => window.location.reload(), 200);
         } catch {
@@ -149,14 +150,11 @@ export default function GamePopUp({
     };
 
     // Comprobamos si hay algún dato que mostrar en el modal
-    // Si el comentario del usuario no está vacío, o si hay algún estado marcado, mostramos el modal
-    // Si no hay datos, no mostramos nada
     const hasAnyData =
         (userComment?.trim() !== "" && userComment !== null && userComment !== undefined) ||
         (initialStates.rating ?? 0) > 0 ||
         initialStates.liked ||
         initialStates.played ||
-        initialStates.playing ||
         initialStates.wishlist;
 
     // Si no se debe mostrar el modal, no mostramos nada
@@ -188,6 +186,7 @@ export default function GamePopUp({
                             </button>
                         </div>
                     )}
+
                     {/* Cabecera con título y botón de cerrar */}
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl text-white font-bold">
@@ -195,7 +194,6 @@ export default function GamePopUp({
                                 (initialStates.rating ?? 0) > 0 ||
                                 initialStates.liked ||
                                 initialStates.played ||
-                                initialStates.playing ||
                                 initialStates.wishlist
                                 ? "Editar tu comentario"
                                 : "Nuevo comentario"}
@@ -217,6 +215,7 @@ export default function GamePopUp({
                             <Eraser className="w-5 h-5 text-white" />
                         </button>
                     </div>
+                    
                     {/* Formulario para agregar o editar el comentario */}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         {/* Valoración */}
@@ -227,7 +226,7 @@ export default function GamePopUp({
                                 onMouseLeave={() => setShowClear(false)}
                                 className="flex items-center gap-1"
                             >
-                                {/* Botón que borra la valoración y la pone a cero, visualmente es una equis */}
+                                {/* Botón que borra la valoración y la pone a cero */}
                                 <button
                                     type="button"
                                     style={{ visibility: showClear ? "visible" : "hidden" }}
@@ -237,37 +236,28 @@ export default function GamePopUp({
                                 >
                                     <X className="w-5 h-5 text-[#e63946] transition-transform duration-150" />
                                 </button>
+                                
                                 {/* Mapeamos las estrellas para mostrar la valoración */}
-                                {/* Cada estrella tiene un evento onMouseMove para cambiar el hover y onClick para cambiar el rating */}
                                 {[1, 2, 3, 4, 5].map((star) => {
-                                    // Comprobamos si la estrella está llena o medio llena
                                     const filled = (hover || rating) >= star;
-                                    // Comprobamos si la estrella está medio llena
                                     const halfFilled = !filled && (hover || rating) >= star - 0.5;
 
-                                    // Devolvemos el componente de estrellas
-                                    // y el color de la estrella según si está llena, medio llena o vacía
                                     return (
                                         <span
                                             key={star}
                                             className="relative w-7 h-7 cursor-pointer"
                                             onMouseMove={e => {
-                                                // Calculamos la posición del ratón dentro del elemento
                                                 const { left, width } = e.currentTarget.getBoundingClientRect();
                                                 const x = e.clientX - left;
-                                                // Y actualizamos el hover según la posición del ratón
                                                 setHover(x < width / 2 ? star - 0.5 : star);
                                             }}
                                             onMouseLeave={() => setHover(0)}
                                             onClick={e => {
-                                                // Al hacer click, calculamos la posición del ratón dentro del elemento
                                                 const { left, width } = e.currentTarget.getBoundingClientRect();
                                                 const x = e.clientX - left;
-                                                // Y actualizamos el rating según la posición del ratón
                                                 const newRating = x < width / 2 ? star - 0.5 : star;
-                                                // Actualizamos el estado del rating y si se ha jugado
                                                 setRating(newRating);
-                                                if (newRating > 0) setPlayed(true); // Esto marca el juego como jugado si se le da una valoración al juego
+                                                if (newRating > 0) setPlayed(true);
                                             }}
                                         >
                                             <Star className="absolute w-7 h-7 text-white opacity-30" />
@@ -286,6 +276,7 @@ export default function GamePopUp({
                                 })}
                             </div>
                         </div>
+                        
                         {/* Estados */}
                         <div className="flex flex-wrap gap-3 mb-4">
                             {/* Estado de juego completado */}
@@ -325,6 +316,7 @@ export default function GamePopUp({
                                 Me gusta
                             </button>
                         </div>
+                        
                         {/* Comentario */}
                         <textarea
                             className="w-full h-32 p-3 rounded-lg bg-white/10 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#e63946] resize-none mb-4"
@@ -337,12 +329,13 @@ export default function GamePopUp({
                                 {errors.comment.message}
                             </span>
                         )}
-                        {/* Botón para confirmar o borrar si hay datos */}
+                        
+                        {/* Botones de acción */}
                         <div className="mt-4 flex justify-end space-x-4">
                             <button
                                 type="submit"
                                 className="py-2 px-4 w-full text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a62633] transition"
-                                disabled={isSubmitting}
+                                disabled={isSubmitting || deleteLoading}
                             >
                                 Confirmar
                             </button>
@@ -351,6 +344,7 @@ export default function GamePopUp({
                                     type="button"
                                     className="py-2 px-4 w-full flex items-center justify-center gap-2 text-white rounded-md bg-gray-600 hover:bg-gray-700 transition"
                                     onClick={handleDelete}
+                                    disabled={deleteLoading}
                                 >
                                     <Trash2 className="w-5 h-5" />
                                     Borrar todo

@@ -17,7 +17,7 @@ import { Star, Heart, Gamepad2, Play, Gift, NotebookPen } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
-import useUpdateProfileGame from "@/hooks/useUpdateProfileGame";
+import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
 
 // Función que se utiliza en el componente para mostrar los iconos de estado del juego
 function StatusIcons({ liked, played, playing, wishlist }: { liked: boolean, played: boolean, playing: boolean, wishlist: boolean }) {
@@ -68,6 +68,8 @@ export default function ProfileReviews({ profileId, userId }: { profileId: strin
     // Hooks personalizados para obtener los comentarios del usuario y los juegos del perfil
     const { comments: initialComments, loading } = useUserComments(Number(profileId));
     const { profileGames } = useProfileGame(userId);
+    
+    // No hook needed, use updateProfileGame directly
 
     // Estados locales para manejar los comentarios, la paginación y el modal de edición
     const [comments, setComments] = useState<Comment[]>(initialComments);
@@ -118,8 +120,8 @@ export default function ProfileReviews({ profileId, userId }: { profileId: strin
                 // Actualiza el comentario
                 await addOrUpdateGameComment(profileId, content);
 
-                // Actualiza todos los estados juntos
-                await useUpdateProfileGame(profileId, editingComment.gameId, {
+                // Actualiza todos los estados juntos usando la función del hook
+                await updateProfileGame(profileId, editingComment.gameId, {
                     rating: states.rating,
                     liked: states.liked,
                     played: states.played,

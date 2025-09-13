@@ -6,9 +6,6 @@ import { requireRole } from "@/src/utils/auth";
 
 export async function POST(request: Request) {
 
-    const authResult = await requireRole(['ADMIN', 'USER']);
-    if (authResult instanceof NextResponse) return authResult;
-
     try {
         const { profileId, gameId, content } = await request.json();
 
