@@ -1,5 +1,7 @@
 "use client"
 
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
+
 // Definición de las propiedades del componente Pagination
 interface PaginationProps {
     page: number;
@@ -17,7 +19,7 @@ export default function Pagination({ page, totalPages, setPage }: PaginationProp
                 disabled={page === 1 || totalPages === 0}
                 className="px-4 py-2 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a8dadc] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                Anterior
+                <ArrowBigLeft />
             </button>
             {/* Texto que muestra la página actual y el total de páginas */}
             <span className="text-white">
@@ -29,7 +31,7 @@ export default function Pagination({ page, totalPages, setPage }: PaginationProp
                 disabled={page === totalPages || totalPages === 0}
                 className="px-4 py-2 text-white rounded-md hover:bg-[#1d3557] bg-[#e63946] active:bg-[#a8dadc] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                Siguiente
+                <ArrowBigRight />
             </button>
         </div>
     );

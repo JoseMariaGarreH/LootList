@@ -23,7 +23,7 @@ export interface Profile {
     profileImage: string | null;
     createdAt: Date;
     updatedAt: Date;
-    user?: Consumer;
+    consumer?: Consumer;
     games?: ProfileGame[];
     comments?: Comment[];
 }
@@ -66,5 +66,5 @@ export interface Comment {
 export interface Role {
     id: number;
     name: string;
-    users?: Consumer[];
+    consumers?: Consumer[];
 }

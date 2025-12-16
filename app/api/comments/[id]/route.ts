@@ -22,7 +22,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
             include: {
                 profile: {
                     include: {
-                        consumers: true,
+                        consumer: true,
                     }
                 }
             }

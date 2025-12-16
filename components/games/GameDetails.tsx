@@ -33,7 +33,7 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 // Next.js
 import Image from "next/image";
-import updateProfileGame from "@/src/actions/post-updateProfileGame-action";
+import { useUpdateProfileGame } from "@/hooks/useUpdateProfileGame";
 
 
 // Componente principal que muestra los detalles de un juego
@@ -43,6 +43,7 @@ export default function GameDetails({ id }: { id: string }) {
     const userId = session?.user?.id || "";
     // Obtiene el perfil del usuario
     const { profile } = useProfileById(userId);
+    const { changeProfileGame } = useUpdateProfileGame();
 
     // Obtiene la lista de juegos y el estado de carga
     const { games = [], loading } = useGames();
@@ -93,7 +94,7 @@ export default function GameDetails({ id }: { id: string }) {
             setWishlistState(false);
             setLikedState(false);
         }
-    }, [profileGame, id]);
+    }, [profileGame]);
 
     // Calcula estadísticas globales del juego
     const totalLikes = globalProfileGames.filter((pg) => pg.liked).length;
@@ -120,8 +121,11 @@ export default function GameDetails({ id }: { id: string }) {
 
     // Función para actualizar todos los estados del juego en el perfil
     const updateAllStates = async (states: Partial<{ rating: number; liked: boolean; played: boolean; playing: boolean; wishlist: boolean; }>) => {
-        if (!profile?.id) return;
-        await updateProfileGame(String(profile.id), Number(id), {
+        if (!session?.user?.id || !profile?.id) {
+            toast.error ("Debes iniciar sesión para actualizar tu registro.");
+            return;
+        }
+        await changeProfileGame(String(profile.id), Number(id), {
             rating,
             liked,
             played,
@@ -206,7 +210,7 @@ export default function GameDetails({ id }: { id: string }) {
             await addOrUpdateComment(profileId, content);
 
             // Actualiza los estados del juego
-            await updateProfileGame(profileId, Number(id), {
+            await changeProfileGame(profileId, Number(id), {
                 rating: states.rating,
                 liked: states.liked,
                 played: states.played,
@@ -315,7 +319,6 @@ export default function GameDetails({ id }: { id: string }) {
                                     style={{ visibility: showClear ? "visible" : "hidden" }}
                                     tabIndex={showClear ? 0 : -1}
                                     onClick={() => {
-                                        setRatingState(0);
                                         handleSetRating(0);
                                     }}
                                     onMouseEnter={() => setShowClear(true)}

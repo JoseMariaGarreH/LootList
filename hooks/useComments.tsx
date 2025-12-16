@@ -28,12 +28,13 @@ export function useComments(gameId: string, userId?: string): {
         try {
             // Recupera los comentarios del juego usando la acción getComments
             const data = await getComments(gameId);
+            console.log("Datos del comentario:", data);
             // Si no hay comentarios, inicializa un array vacío
             const safeData = Array.isArray(data) ? data : [];
             // Mapea los comentarios para añadir el nombre del autor, si no tiene, usa "Usuario"
             const mapped = safeData.map((comment: Comment) => ({
                 ...comment,
-                authorName: comment.profile?.user?.username || "Usuario",
+                authorName: comment.profile?.consumer?.username || "Usuario",
             }));
             // Actualiza el estado de los comentarios con los datos obtenidos
             setComments(mapped);

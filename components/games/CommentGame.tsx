@@ -9,12 +9,15 @@ import Image from "next/image";
 
 export function CommentGame({ comment, rating, liked }: { comment: Comment, rating: number, liked?: boolean}) {
     // Si no hay comentario, no renderizamos nada
+
+    console.log("Rendering CommentGame with comment:", comment, "rating:", rating, "liked:", liked);
+
     return (
         <div className="bg-[#264470] rounded-lg px-4 py-3 shadow-md flex items-start gap-4">
             {/* Imagen del usuario que hay registrado en ese momento en la página*/}
             <Image
                 src={comment.profile?.profileImage || "/default-avatar.png"}
-                alt={comment.profile?.user?.username || "Usuario"}
+                alt={comment.profile?.consumer?.username || "Usuario"}
                 width={40}
                 height={40}
                 className="w-10 h-10 rounded-full object-cover border border-white/20"
@@ -24,7 +27,7 @@ export function CommentGame({ comment, rating, liked }: { comment: Comment, rati
                 <div className="flex items-center gap-2 mb-1">
                     {/* Nombre del usuario que esta registrado en ese momento */}
                     <span className="text-sm text-white/80 font-semibold">
-                        {comment.profile?.user?.username || "Usuario"}
+                        {comment.profile?.consumer?.username || "Usuario"}
                     </span>
                     {/* Estrellas de valoración */}
                     <span className="flex items-center">

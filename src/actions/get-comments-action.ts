@@ -13,6 +13,7 @@ export async function getComments(gameId: string) {
                 "Content-Type": "application/json",
             },
         });
+
         // Verificamos si la respuesta es exitosa
         if (!res.ok) throw new Error("Error al obtener comentarios");
         // Retornamos los datos en formato JSON
