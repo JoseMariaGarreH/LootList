@@ -157,7 +157,7 @@ export default function ProfileReviews({ profileId, userId }: { profileId: strin
     return (
         <>
             <Toaster position="top-right" reverseOrder={false} />
-
+            
             <div className="w-full mt-8 mb-8 space-y-10 max-w-4xl mx-auto px-2">
                 {displayedComments.map((comment: Comment) => {
                     const profileGame = profileGames.find(pg => pg.gameId === comment.gameId);
@@ -167,54 +167,81 @@ export default function ProfileReviews({ profileId, userId }: { profileId: strin
                     const playing = profileGame?.playing ?? false;
                     const wishlist = profileGame?.wishlist ?? false;
 
+                    const gameTitle = comment.game?.title || "Juego";
+                    const gameHref = `/games/${comment.game?.id}`;
+                    const gameYear = comment.game?.releaseDate ? new Date(comment.game.releaseDate).getFullYear() : null;
+                    const gameImageSrc = comment.game?.imageUrl || "/assets/logo.svg";
+
                     return (
-                        <div
+                        <article
                             key={comment.id}
-                            className="flex flex-col gap-4 bg-[#1d3557] border border-white/10 p-4 sm:p-5 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
+                            className="group bg-[#1d3557] border border-white/10 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden"
                         >
-                            <div className="mb-2 flex flex-col sm:flex-row sm:items-center">
-                                <Link href={`/games/${comment.game?.id}`} className="hover:text-[#e63946] transition-all duration-200 ease-in-out">
-                                    <h3 className="text-lg sm:text-2xl font-semibold leading-snug">
-                                        {comment.game?.title}
-                                    </h3>
-                                </Link>
-                                <span className="text-sm text-[#a8dadc] sm:ml-3 sm:mt-0.5">
-                                    {comment.game?.releaseDate ? new Date(comment.game.releaseDate).getFullYear() : ""}
-                                </span>
-                            </div>
-
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <Link href={`/games/${comment.game?.id}`} className="flex-shrink-0 self-center sm:self-start ">
-                                    <Image
-                                        src={comment.game?.imageUrl || ""}
-                                        alt={comment.game?.title || ""}
-                                        width={128}
-                                        height={176}
-                                        className="w-full h-44 sm:w-32 object-cover rounded-xl border border-white/20 hover:scale-105 transition-transform duration-300 shadow-inner"
-                                    />
-                                </Link>
-
-                                <div className="flex flex-col justify-between flex-1 text-white">
-                                    <div>
-                                        <StatusIcons liked={liked} played={played} playing={playing} wishlist={wishlist} />
-                                        <p className="text-white/90 text-base leading-relaxed mt-2 break-words">{comment.content}</p>
+                            <div className="p-4 sm:p-5">
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="min-w-0">
+                                        <Link
+                                            href={gameHref}
+                                            className="block text-white hover:text-[#e63946] transition-colors duration-200"
+                                        >
+                                            <h3 className="text-lg sm:text-2xl font-semibold leading-snug truncate">
+                                                {gameTitle}
+                                            </h3>
+                                        </Link>
+                                        {gameYear && (
+                                            <div className="mt-1 inline-flex items-center rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-xs text-[#a8dadc]">
+                                                {gameYear}
+                                            </div>
+                                        )}
                                     </div>
 
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 mt-4 text-sm text-white/80">
-                                        <RatingStars rating={rating} />
-                                        <button
-                                            className="px-3 py-1.5 rounded-md bg-[#e63946] hover:bg-[#d62839] text-white text-sm font-medium shadow-sm transition w-full sm:w-auto"
-                                            onClick={() => handleEditComment(comment)}
-                                        >
-                                            <div className="flex items-center gap-2 justify-center">
-                                                <NotebookPen size={16} />
-                                                Editar reseña
+                                    <button
+                                        className="shrink-0 px-3 py-2 rounded-md bg-[#e63946] hover:bg-[#d62839] text-white text-sm font-medium shadow-sm transition"
+                                        onClick={() => handleEditComment(comment)}
+                                        type="button"
+                                    >
+                                        <span className="flex items-center gap-2">
+                                            <NotebookPen size={16} />
+                                            Editar
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <div className="mt-4 flex flex-col sm:flex-row gap-4">
+                                    <Link
+                                        href={gameHref}
+                                        className="relative shrink-0 w-full sm:w-28 h-44 sm:h-40 rounded-xl overflow-hidden border border-white/20 bg-black/20"
+                                        aria-label={`Ver detalles de ${gameTitle}`}
+                                    >
+                                        <Image
+                                            src={gameImageSrc}
+                                            alt={gameTitle}
+                                            fill
+                                            sizes="(max-width: 640px) 100vw, 112px"
+                                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                                        />
+                                    </Link>
+
+                                    <div className="flex-1 min-w-0 text-white">
+                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                            <div className="flex items-center justify-between sm:justify-start gap-3">
+                                                <StatusIcons liked={liked} played={played} playing={playing} wishlist={wishlist} />
                                             </div>
-                                        </button>
+                                            <div className="flex items-center gap-2 text-sm text-white/80">
+                                                <span className="whitespace-nowrap">Tu valoración</span>
+                                                <RatingStars rating={rating} />
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-3 border-t border-white/10 pt-3">
+                                            <p className="text-white/90 text-base leading-relaxed break-words">
+                                                {comment.content}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     );
                 })}
                 {/* Componente de paginación */}

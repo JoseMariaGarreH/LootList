@@ -51,7 +51,7 @@ export default function LikesPage() {
                     <ProfileGameListSection
                         games={displayedGames}
                         emptyText="No tienes juegos marcados como te gustaron"
-                        title={`${countLikedGames} juego${countLikedGames !== 1 ? "s" : ""} que le gustaron a ${session?.user?.username}`}
+                        title={`${countLikedGames} juego${countLikedGames !== 1 ? "s que le gustaron" : " que le gustó"} a ${session?.user?.username}`}
                         icon={<Heart className="mr-2" size={50} />}
                     />
                     <Pagination page={page} totalPages={totalPages} setPage={setPage} />
