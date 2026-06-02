@@ -3,22 +3,23 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlserver"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // Tabla de usuarios
 model Consumer {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  username  String    @unique
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String   @unique
   password  String
-  rolId     Int       @default(2)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  rolId     Int      @default(2)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  profile   Profile?
-  role      Role      @relation(fields: [rolId], references: [id])
+  profile             Profile?
+  role                Role                 @relation(fields: [rolId], references: [id])
   passwordResetTokens PasswordResetToken[]
 }
 
@@ -34,60 +35,60 @@ model Profile {
   pronoun       String @default("")
   profileImage  String @default("")
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  consumer     Consumer  @relation(fields: [userId], references: [id])
-  games         ProfileGame[]
-  comments      Comment[]
+  consumer Consumer      @relation(fields: [userId], references: [id])
+  games    ProfileGame[]
+  comments Comment[]
 }
 
 // Tabla de juegos
 model Game {
-  id           Int             @id @default(autoincrement())
-  title        String
-  description  String?
-  platform     String?
-  genre        String?
-  releaseDate  DateTime?
-  imageUrl     String?
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  platform    String?
+  genre       String?
+  releaseDate DateTime?
+  imageUrl    String?
 
-  profiles     ProfileGame[]
-  comments     Comment[]
+  profiles ProfileGame[]
+  comments Comment[]
 }
 
 // Tabla de relaciones entre perfiles y juegos
 model ProfileGame {
-  id         Int           @id @default(autoincrement())
-  profileId  Int
-  gameId     Int
+  id        Int @id @default(autoincrement())
+  profileId Int
+  gameId    Int
 
-  rating     Float?  
-  liked      Boolean?
-  played     Boolean?
-  playing    Boolean?
-  wishlist   Boolean?
+  rating   Float?
+  liked    Boolean?
+  played   Boolean?
+  playing  Boolean?
+  wishlist Boolean?
 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  profile    Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  game       Game         @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  game    Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
   @@unique([profileId, gameId])
 }
 
 // Tabla de comentarios
 model Comment {
-  id         Int      @id @default(autoincrement())
-  profileId  Int
-  gameId     Int
-  content    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  profileId Int
+  gameId    Int
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  game    Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }
 
 // Tabla de tokens de restablecimiento de contraseña
@@ -99,13 +100,12 @@ model PasswordResetToken {
   expires   DateTime
   createdAt DateTime @default(now())
 
-  consumer      Consumer    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consumer Consumer @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // Tabla donde se definen los roles del usuario en la aplicación
 model Role {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
   consumers Consumer[]
 }
-
